@@ -1,0 +1,1 @@
+<span class="badge {{ isset($color) ? $color : '' }} {{ isset($class) ? $class : '' }}">{{ isset($content) ? $content : '' }}</span>

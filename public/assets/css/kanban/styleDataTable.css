@@ -1,0 +1,30 @@
+.dt-search {
+    display: none !important;
+}
+
+.dt-start,
+.dt-end {
+    display: none !important;
+}
+
+.dt-layout-cell {
+    padding: 0 !important;
+}
+
+.dt-scroll-body {
+    border: none !important;
+}
+
+.dt-scroll-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dt-scroll-body::-webkit-scrollbar-track {
+    background: #F3F7FD;
+    border-radius: 30px;
+}
+
+.dt-scroll-body::-webkit-scrollbar-thumb {
+    background-color: #6C757D;
+    border-radius: 30px;
+}

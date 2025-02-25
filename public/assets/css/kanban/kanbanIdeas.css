@@ -1,0 +1,90 @@
+.kanbanColumn {
+    transition: all 0.5s ease-in-out;
+}
+
+.small {
+    transition: all 0.5s ease-in-out;
+    min-width: 40px !important;
+    max-width: 40px !important;
+}
+
+.card-title {
+    font-size: 13px !important;
+    line-height: 16px;
+}
+
+.card-title span.title-column {
+    max-width: 172px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.small .card-title {
+    position: absolute;
+    width: 310px;
+    transform: rotate(90deg);
+    left: -135px !important;
+    top: 135px;
+    cursor: pointer;
+    padding-left: 8px;
+    text-align: center;
+    height: 40px;
+}
+
+.small .card-title .title-column {
+    max-width: 100% !important;
+}
+
+.small hr,
+.small .recallColumn,
+.small .card {
+    display: none !important;
+}
+
+.recallColumn:hover {
+    transition: all 0.3s ease-in-out;
+    color: #144272;
+}
+
+.card.AGAJUDA {
+    background-color: rgba(220, 53, 69, 0.15) !important;
+}
+
+.card.EMAJUDA {
+    background-color: rgba(28, 187, 140, 0.15) !important;
+}
+
+.dt-scroll-body::-webkit-scrollbar,
+.ideas::-webkit-scrollbar,
+.helpers::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+.dt-scroll-body::-webkit-scrollbar-track,
+.ideas::-webkit-scrollbar-track,
+.helpers::-webkit-scrollbar-track {
+    background: #f3f7fd !important;
+    border-radius: 30px !important;
+}
+
+.dt-scroll-body::-webkit-scrollbar-thumb,
+.ideas::-webkit-scrollbar-thumb,
+.helpers::-webkit-scrollbar-thumb {
+    background-color: #6c757d !important;
+    border-radius: 30px !important;
+}
+
+section::-webkit-scrollbar {
+    height: 10px;
+}
+
+section::-webkit-scrollbar-track {
+    background: #e2e3e5;
+    border-radius: 30px;
+}
+
+section::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 30px;
+}
