@@ -4,6 +4,7 @@ use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
+use App\Http\Controllers\System\FormsController;
 use App\Http\Controllers\System\HomeController;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +61,8 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::post('usuarios/atualizar/{id}', [UsersController::class, 'update'])->name('users.update');
         Route::delete('usuarios/deletar/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
     });
+
+    Route::get('formulario', [FormsController::class, 'index'])->name('forms.index');
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
 });

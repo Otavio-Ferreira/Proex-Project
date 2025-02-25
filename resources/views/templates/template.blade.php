@@ -79,6 +79,9 @@
                             <x-navbar.navbar-item route="{{route('home.index')}}" title="Dashboard" isActive="{{request()->routeIs(['home.*']) ? true : false}}" icon="ti-chart-bar">
                             </x-navbar.navbar-item>
 
+                            <x-navbar.navbar-item route="{{route('forms.index')}}" title="Formulário" isActive="{{request()->routeIs(['forms.*']) ? true : false}}" icon="ti-clipboard-text">
+                            </x-navbar.navbar-item>
+
                             @canany(['adicionar_obras', 'ver_obras'])
                                 <x-navbar.navbar-item route="" title="Obras" isActive="{{request()->routeIs(['construction.*', 'evolution.*','costs.*']) ? true : false}}" icon="ti-crane">
                                     <x-slot:links>
