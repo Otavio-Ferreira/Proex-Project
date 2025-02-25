@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return route('login');
+    return redirect()->to_route('login');
 });
 
 
