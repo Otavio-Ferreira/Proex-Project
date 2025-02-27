@@ -62,7 +62,21 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::delete('usuarios/deletar/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
     });
 
-    Route::get('formulario', [FormsController::class, 'index'])->name('forms.index');
+    Route::group(['middleware' => ['auth', 'permission:adicionar_cursos']], function () {
+        Route::get('cursos', [RolesController::class, 'index'])->name('courses.index');
+        // Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
+        // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
+    });
+    Route::group(['middleware' => ['auth', 'permission:adicionar_projetos']], function () {
+        Route::get('projetos', [RolesController::class, 'index'])->name('projects.index');
+        // Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
+        // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
+    });
+    
+    Route::group(['middleware' => ['auth', 'permission:ver_formulários']], function () {
+        Route::get('formulario', [FormsController::class, 'index'])->name('forms.index');
+    });
+
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
 });

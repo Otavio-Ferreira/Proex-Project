@@ -27,6 +27,10 @@ class DatabaseSeeder extends Seeder
             "1" => "adicionar_grupo",
             "2" => "adicionar_usuário",
             "3" => "ver_dashboard",
+            "4" => "adicionar_cursos",
+            "5" => "adicionar_projetos",
+            "6" => "ver_formulários",
+            "7" => "ver_respostas",
         ];
 
         foreach ($permissions as $permission) {
@@ -44,7 +48,11 @@ class DatabaseSeeder extends Seeder
         $role->givePermissionTo([
             "adicionar_grupo",
             "adicionar_usuário",
-            "ver_dashboard"
+            "ver_dashboard",
+            "adicionar_cursos",
+            "adicionar_projetos",
+            "ver_formulários",
+            "ver_respostas",
         ]);
 
         $user->assignRole($role);
