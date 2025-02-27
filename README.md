@@ -109,7 +109,7 @@ erDiagram
         STATUS BOOLEAN
     }
 
-    FORMS_RESPONSE {
+    RESPONSE_FORMS {
         ID UUID PK
         FORMS_ID UUID FK
         USER_ID UUID FK

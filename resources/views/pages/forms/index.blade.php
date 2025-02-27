@@ -11,7 +11,7 @@
             <a href="{{ route('forms.index') }}">Forms</a>
           </div>
           <h2 class="page-title">
-            Forms
+            {{ $form ? "$form->title | Prazo: " . date('d/m/Y', strtotime($form->date)) : 'Formulário indisponível' }}
           </h2>
         </div>
         <div class="col-auto ms-auto">
@@ -20,57 +20,86 @@
     </div>
   </div>
   <div class="page-body">
-    @can('ver_dashboard')
-      @include('components.form-elements.input.input', [
-          'title' => 'Email',
-          'type' => 'text',
-          'class' => 'mb-3',
-          'name' => 'email',
-          'required' => 'true',
-          'placeholder' => 'Digite o seu email',
-      ])
+    @if ($form)
       <div class="card">
-        <div class="card-header">
-          <h3 class="p-0 m-0"></h3>
-        </div>
         <div class="card-body">
+          <ol class="breadcrumb">
+            @foreach ($steps as $key => $step)
+            <li class="breadcrumb-item 
+            {{ $key == 1 || $key <= session('step') ? 'text-primary' : 'disabled' }} 
+            {{ session('step') == $key ? 'active' : '' }}">
+        
+            <a type="button" class="text-decoration-hover-underline cursor-pointer"
+                onclick="show({{ $key }})">
+                {{ $key }}ª Seção
+            </a>
+        </li>
+            @endforeach
+          </ol>
         </div>
       </div>
 
-      <div class="card mt-3">
+      @if (session()->has('step'))
+        <p>Passo atual: {{ session('step') }}</p>
+      @endif
+
+      <div class="card mt-3 card-form-step {{ !session()->has('step') || session('step') == 1 ? '' : 'd-none' }}"
+        id="card-1">
         <div class="card-header">
           <h3 class="p-0 m-0">Título da ação de extensão</h3>
         </div>
         <div class="card-body">
-          @include('components.form-elements.input.input', [
-              'title' => 'Título da ação',
-              'type' => 'text',
-              'class' => 'mb-3',
-              'name' => 'email',
-              'required' => 'true',
-              'placeholder' => 'Digite o título da ação',
-          ])
+          <form action="{{ route('forms.persist') }}" method="post">
+            @csrf
+            @include('components.form-elements.input.input', [
+                'title' => 'Título da ação',
+                'type' => 'text',
+                'class' => 'mb-3',
+                'name' => 'title_action',
+                'required' => 'true',
+                'placeholder' => 'Digite o título da ação',
+                'value' => isset($response->title_action) ? $response->title_action : '',
+            ])
 
-          <x-form-elements.select.select title="Tipo da ação" id="role" name="role">
-            <x-slot:options>
-              <option value="" selected>Selecione</option>
-              <option value="">Programa</option>
-              <option value="">Projeto</option>
-            </x-slot:options>
-          </x-form-elements.select.select>
+            <x-form-elements.select.select title="Tipo da ação" id="role" name="type_action">
+              <x-slot:options>
+                <option value="" selected>Selecione</option>
+                <option value="Programa"
+                  {{ isset($response->type_action) ? ($response->type_action == 'Programa' ? 'selected' : '') : '' }}>
+                  Programa</option>
+                <option value="Projeto"
+                  {{ isset($response->type_action) ? ($response->type_action == 'Projeto' ? 'selected' : '') : '' }}>
+                  Projeto
+                </option>
+              </x-slot:options>
+            </x-form-elements.select.select>
 
-          <x-form-elements.select.select title="Modalidade da ação" id="role" name="role">
-            <x-slot:options>
-              <option value="" selected>Selecione</option>
-              <option value="">UFCA Itinerante</option>
-              <option value="">Ampla Concorrência</option>
-              <option value="">PROPE</option>
-            </x-slot:options>
-          </x-form-elements.select.select>
+            <x-form-elements.select.select title="Modalidade da ação" id="role" name="action_modality">
+              <x-slot:options>
+                <option value="" selected>Selecione</option>
+
+                <option value="UFCA Itinerante"
+                  {{ isset($response->action_modality) ? ($response->action_modality == 'UFCA Itinerante' ? 'selected' : '') : ' ' }}>
+                  UFCA Itinerante</option>
+
+                <option value="Ampla Concorrência"
+                  {{ isset($response->action_modality) ? ($response->action_modality == 'Ampla Concorrência' ? 'selected' : '') : ' ' }}>
+                  Ampla Concorrência</option>
+
+                <option value="PROPE"
+                  {{ isset($response->action_modality) ? ($response->action_modality == 'PROPE' ? 'selected' : '') : ' ' }}>
+                  PROPE</option>
+              </x-slot:options>
+            </x-form-elements.select.select>
+            <div class="d-flex">
+              <button type="submit" class="btn btn-info ms-auto">Avançar</button>
+            </div>
+          </form>
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 card-form-step {{ session()->has('step') && session('step') == 2 ? '' : 'd-none' }}"
+        id="card-2">
         <div class="card-header">
           <h3 class="p-0 m-0">Dados do coordenador/tutor da ação de extensão</h3>
         </div>
@@ -133,7 +162,8 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 card-form-step {{ session()->has('step') && session('step') == 3 ? '' : 'd-none' }}"
+        id="card-3">
         <div class="card-header">
           <h3 class="p-0 m-0">Detalhamento de atividades</h3>
         </div>
@@ -157,7 +187,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-4">
         <div class="card-header">
           <h3 class="p-0 m-0">Identificação e quantitativo do público beneficiado</h3>
         </div>
@@ -181,7 +211,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-5">
         <div class="card-header">
           <h3 class="p-0 m-0">Avanços alcançados e impactos da ação extensionista</h3>
         </div>
@@ -197,7 +227,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-6">
         <div class="card-header">
           <h3 class="p-0 m-0">Parcerias Internas</h3>
         </div>
@@ -215,7 +245,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-7">
         <div class="card-header">
           <h3 class="p-0 m-0">Parcerias externas</h3>
         </div>
@@ -250,7 +280,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-8">
         <div class="card-header">
           <h3 class="p-0 m-0">Ações vinculadas ao programa de extensão</h3>
         </div>
@@ -264,7 +294,8 @@
               'placeholder' => 'Digite o seu nome',
           ])
 
-          <x-form-elements.select.select title="A Ação é voltada para escolas públicas? " id="role" name="role">
+          <x-form-elements.select.select title="A Ação é voltada para escolas públicas? " id="role"
+            name="role">
             <x-slot:options>
               <option value="" selected>Selecione</option>
               <option value="">Sim</option>
@@ -282,7 +313,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-9">
         <div class="card-header">
           <h3 class="p-0 m-0">A ação atuou com o desenvolvimento de alguma tecnologia social</h3>
         </div>
@@ -298,7 +329,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-10">
         <div class="card-header">
           <h3 class="p-0 m-0">Redes sociais criadas para o programa/projeto</h3>
         </div>
@@ -314,7 +345,7 @@
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3 d-none card-form-step" id="card-11">
         <div class="card-header">
           <h3 class="p-0 m-0">Disposições finais</h3>
         </div>
@@ -339,9 +370,24 @@
           ])
         </div>
       </div>
-    @endcan
+    @else
+      <div class="alert alert-info">Nenhum formulário disponível!</div>
+    @endif
   </div>
 @endsection
 @section('scripts')
   <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+  <script>
+    function show(id) {
+      let divs = document.getElementsByClassName('card-form-step');
+
+      for (let el of divs) {
+        el.classList.add('d-none');
+      }
+      let div = document.getElementById(`card-${id}`);
+      if (div) {
+        div.classList.remove('d-none');
+      }
+    }
+  </script>
 @endsection

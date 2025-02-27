@@ -85,30 +85,25 @@
                 isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-chart-bar">
               </x-navbar.navbar-item>
 
-              @can('ver_formulários')
-                <x-navbar.navbar-item route="{{ route('forms.index') }}" title="Formulário"
-                  isActive="{{ request()->routeIs(['forms.*']) ? true : false }}" icon="ti-clipboard-text">
-                </x-navbar.navbar-item>
-              @endcan
-              @canany(['adicionar_obras', 'ver_obras'])
-                <x-navbar.navbar-item route="" title="Obras"
-                  isActive="{{ request()->routeIs(['construction.*', 'evolution.*', 'costs.*']) ? true : false }}"
-                  icon="ti-crane">
+              @canany(['ver_formulário', 'adicionar_formulário'])
+                <x-navbar.navbar-item route="" title="Formulário"
+                  isActive="{{ request()->routeIs(['forms.*']) ? true : false }}"
+                  icon="ti-clipboard-text">
                   <x-slot:links>
-                    @can('adicionar_obras')
-                      <a class="dropdown-item" href="{{ route('construction.create') }}">Adicionar</a>
+                    @can('ver_formulário')
+                      <a class="dropdown-item" href="{{ route('forms.index') }}">Formulário</a>
                     @endcan
-                    @can('ver_obras')
-                      <a class="dropdown-item" href="{{ route('construction.index') }}">Ver obras</a>
+                    @can('adicionar_formulário')
+                      <a class="dropdown-item" href="{{ route('forms.create') }}">Adicionar</a>
                     @endcan
                   </x-slot:links>
                 </x-navbar.navbar-item>
               @endcanany
 
               @canany(['adicionar_cursos', 'adicionar_projetos'])
-                <x-navbar.navbar-item route="" title="Cadastros"
+                <x-navbar.navbar-item route="" title="Dados"
                   isActive="{{ request()->routeIs(['courses.*', 'projects.*']) ? true : false }}"
-                  icon="ti-clipboard-text">
+                  icon="ti-file-database">
                   <x-slot:links>
                     @can('adicionar_cursos')
                       <a class="dropdown-item" href="{{ route('courses.index') }}">Cursos</a>

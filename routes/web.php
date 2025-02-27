@@ -73,10 +73,15 @@ Route::middleware(Authenticate::class)->group(function () {
         // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
     });
     
-    Route::group(['middleware' => ['auth', 'permission:ver_formulários']], function () {
+    Route::group(['middleware' => ['auth', 'permission:ver_formulário']], function () {
         Route::get('formulario', [FormsController::class, 'index'])->name('forms.index');
     });
-
+    Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {
+        Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
+        Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
+        Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
+        Route::post('formulario/persistir', [FormsController::class, 'persist'])->name('forms.persist');
+    });
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
 });
