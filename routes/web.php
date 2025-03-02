@@ -4,6 +4,7 @@ use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
+use App\Http\Controllers\System\Forms\ActivityController;
 use App\Http\Controllers\System\FormsController;
 use App\Http\Controllers\System\HomeController;
 use App\Http\Middleware\Authenticate;
@@ -78,9 +79,14 @@ Route::middleware(Authenticate::class)->group(function () {
     });
     Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {
         Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
+        Route::get('formulario/avançar', [FormsController::class, 'advance'])->name('forms.advance');
         Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
         Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
         Route::post('formulario/persistir', [FormsController::class, 'persist'])->name('forms.persist');
+
+        Route::post('atividade/adicionar', [ActivityController::class, 'store'])->name('activitys.store');
+        Route::post('atividade/editar/{id}', [ActivityController::class, 'update'])->name('activitys.update');
+        Route::delete('atividade/deletar/{id}', [ActivityController::class, 'destroy'])->name('activitys.destroy');
     });
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');

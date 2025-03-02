@@ -4,8 +4,10 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Forms\StoreRequest;
+use App\Models\Forms\Activitys;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
+use App\Models\Parameters\Courses;
 use App\Models\Parameters\Projects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,17 +20,22 @@ class FormsController extends Controller
     {
         $user = auth()->user();
         $this->data['form'] = Forms::where('status', '1')->first();
-        $this->data['base'] = Projects::all();
-        
-        if($this->data['form']){
-            $response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $this->data['form']->id])->first();
+        $this->data['base_projects'] = Projects::all();
+        $this->data['base_courses'] = Courses::all();
+
+        if ($this->data['form']) {
+            $response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $this->data['form']->id])->with(['activitys'])->first();
             $this->data['response'] = $response;
         }
+        // dd($response);
+
+        // isset($response->title_action) && isset($response->type_action) && isset($response->action_modality)
+        // "3" => Activitys::where('response_forms_id', $response->id)->count() > 0,
 
         $steps = [
-            "1" => isset($response->title_action) && isset($response->type_action) && isset($response->action_modality),
-            "2" => isset($response->coordinator_name) && isset($response->coordinator_profile),
-            "3" => isset($response->coordinator_siape) && isset($response->coordinator_course),
+            "1" => true,
+            "2" => isset($response->coordinator_name) && isset($response->coordinator_profile) && isset($response->coordinator_course) && isset($response->coordinator_siape),
+            "3" => isset($response->activitys),
             "4" => isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
             "5" => isset($response->advances_extensionist_action),
             "6" => isset($response->social_technology_development),
@@ -39,21 +46,42 @@ class FormsController extends Controller
             "11" => isset($response->images) && count($response->images) > 0,
         ];
 
-        $enableNext = false;
-
-        foreach ($steps as $key => $step) {
-            if ($step) {
-                $enableNext = true;
-                session()->put('step', $key +1);
-            }
-            else{
-                session()->put('step', 1);
-            }
-            $steps[$key+1] = $enableNext;
-            break;
+        if(!$response){
+            session()->forget('step'); 
         }
+        
+        $step = session('step');
+
+        if (!$step) {
+            $step_actual = 0;
+
+            if($steps[3]){
+                $steps[4] = true;
+            }
+            foreach ($steps as $key => $step) {
+                if ($step) {
+                    $step_actual = $key;
+                }
+            }
+            session()->put('step', $step_actual);
+        }
+
+        // $enableNext = false;
+        // $step_actual = 0;
+        // foreach ($steps as $key => $step) {
+        //     if ($step) {
+        //         $step_actual = $key + 1;
+        //     }
+        //     // else{
+        //     //     session()->put('step', 1);
+        //     // }
+        //     // $steps[$key + 1] = $enableNext;
+        //     // break;
+        // }
+        // session()->put('step', $step_actual);
+        // dd(session('step'), $step_actual);
         // session()->forget('step'); 
-        // dd($steps);
+        // dd($step_actual);
         $this->data['steps'] = $steps;
 
         return view('pages.forms.index', $this->data);
@@ -110,6 +138,7 @@ class FormsController extends Controller
         $actual_form = Forms::where('status', '1')->first();
         $user = auth()->user();
         $form_response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $actual_form->id])->first();
+        $step = session('step');
 
         if ($form_response) {
             if (isset($request->title_action)) {
@@ -121,17 +150,21 @@ class FormsController extends Controller
             if (isset($request->action_modality)) {
                 $form_response->action_modality = $request->action_modality;
             }
-            if (isset($request->cordinator_name)) {
-                $form_response->cordinator_name = $request->cordinator_name;
+            if (isset($request->coordinator_name)) {
+                $form_response->coordinator_name = $request->coordinator_name;
+                session()->put('step', 3);
             }
-            if (isset($request->cordinator_profile)) {
-                $form_response->cordinator_profile = $request->cordinator_profile;
+            if (isset($request->coordinator_profile)) {
+                $form_response->coordinator_profile = $request->coordinator_profile;
+                session()->put('step', 3);
             }
-            if (isset($request->cordinator_siape)) {
-                $form_response->cordinator_siape = $request->cordinator_siape;
+            if (isset($request->coordinator_siape)) {
+                $form_response->coordinator_siape = $request->coordinator_siape;
+                session()->put('step', 3);
             }
             if (isset($request->coordinator_course)) {
                 $form_response->coordinator_course = $request->coordinator_course;
+                session()->put('step', 3);
             }
             if (isset($request->qtd_internal_audience)) {
                 $form_response->qtd_internal_audience = $request->qtd_internal_audience;
@@ -160,9 +193,9 @@ class FormsController extends Controller
                 'title_action' => $request->title_action ?? null,
                 'type_action' => $request->type_action ?? null,
                 'action_modality' => $request->action_modality ?? null,
-                'cordinator_name' => $request->cordinator_name ?? null,
-                'cordinator_profile' => $request->cordinator_profile ?? null,
-                'cordinator_siape' => $request->cordinator_siape ?? null,
+                'coordinator_name' => $request->coordinator_name ?? null,
+                'coordinator_profile' => $request->coordinator_profile ?? null,
+                'coordinator_siape' => $request->coordinator_siape ?? null,
                 'coordinator_course' => $request->coordinator_course ?? null,
                 'qtd_internal_audience' => $request->qtd_internal_audience ?? null,
                 'qtd_external_audience' => $request->qtd_external_audience ?? null,
@@ -171,7 +204,17 @@ class FormsController extends Controller
                 'instrument_avaliation' => $request->instrument_avaliation ?? null,
                 'was_finished' => $request->was_finished ?? 0,
             ]);
+
+            session()->put('step', 2);
         }
+
+        return redirect()->back();
+    }
+
+    public function advance()
+    {
+        $step = session('step');
+        session()->put('step', $step + 1);
 
         return redirect()->back();
     }

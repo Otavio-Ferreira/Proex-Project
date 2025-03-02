@@ -15,13 +15,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('forms_id');
             $table->uuid('user_id');
-            $table->text('title_action')->nullable();
+            $table->uuid('title_action')->nullable();
             $table->text('type_action')->nullable();
             $table->text('action_modality')->nullable();
-            $table->text('cordinator_name')->nullable();
-            $table->text('cordinator_profile')->nullable();
-            $table->text('cordinator_siape')->nullable();
-            $table->text('coordinator_course')->nullable();
+            $table->text('coordinator_name')->nullable();
+            $table->text('coordinator_profile')->nullable();
+            $table->text('coordinator_siape')->nullable();
+            $table->uuid('coordinator_course')->nullable();
             $table->bigInteger('qtd_internal_audience')->nullable();
             $table->bigInteger('qtd_external_audience')->nullable();
             $table->text('advances_extensionist_action')->nullable();

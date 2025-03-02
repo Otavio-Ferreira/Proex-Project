@@ -306,13 +306,15 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach($projects as $project){
-            Projects::create([
-                "title" => ucwords(strtolower(str_replace(["'", "`"], '', $project)))
-            ]);
+            if(!Projects::where('title', ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8')))->first()){
+                Projects::create([
+                    "title" => ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8'))
+                ]);
+            }
         }
         foreach($courses as $course){
             Courses::create([
-                "name" => ucwords(strtolower(str_replace(["'", "`"], '', $course)))
+                "name" => ucwords(mb_strtolower(str_replace(["'", "`"], '', $course), 'UTF-8'))
             ]);
         }
     }
