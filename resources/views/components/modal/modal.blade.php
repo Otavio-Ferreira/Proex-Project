@@ -1,6 +1,6 @@
 <div class="modal modal-blur fade" id="{{ isset($id) ? $id : '' }}" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog {{ isset($class) ? $class : '' }}" role="document">
-        <form action="{{ isset($route) ? $route : '' }}" method="post" class="modal-content" id="modal-form{{ isset($id) ? $id : '' }}">
+        <form action="{{ isset($route) ? $route : '' }}" method="post" class="modal-content" id="modal-form{{ isset($id) ? $id : '' }}" enctype="multipart/form-data">
             @if (isset($title))
             @csrf
             <div class="modal-header">

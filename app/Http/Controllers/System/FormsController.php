@@ -24,7 +24,7 @@ class FormsController extends Controller
         $this->data['base_courses'] = Courses::all();
 
         if ($this->data['form']) {
-            $response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $this->data['form']->id])->with(['activitys'])->first();
+            $response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $this->data['form']->id])->with(['activitys', 'internal_partners', 'internal_partners.title_action_partner', 'external_partners', 'extension_actions', 'social_medias', 'images'])->first();
             $this->data['response'] = $response;
         }
         // dd($response);
@@ -38,12 +38,13 @@ class FormsController extends Controller
             "3" => isset($response->activitys),
             "4" => isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
             "5" => isset($response->advances_extensionist_action),
-            "6" => isset($response->social_technology_development),
-            "7" => isset($response->instrument_avaliation),
-            "8" => isset($response->internal_partners) && count($response->internal_partners) > 0,
-            "9" => isset($response->external_partners) && count($response->external_partners) > 0,
-            "10" => isset($response->social_media) && count($response->social_media) > 0,
+            "6" => isset($response->internal_partners) && count($response->internal_partners) > 0,
+            "7" => isset($response->external_partners) && count($response->external_partners) > 0,
+            "8" => isset($response->extension_actions) && count($response->extension_actions) > 0,
+            "9" => isset($response->social_technology_development),
+            "10" => isset($response->social_medias) && count($response->social_medias) > 0,
             "11" => isset($response->images) && count($response->images) > 0,
+            "12" => isset($response->instrument_avaliation),
         ];
 
         if(!$response){
@@ -81,7 +82,7 @@ class FormsController extends Controller
         // session()->put('step', $step_actual);
         // dd(session('step'), $step_actual);
         // session()->forget('step'); 
-        // dd($step_actual);
+        // dd($steps);
         $this->data['steps'] = $steps;
 
         return view('pages.forms.index', $this->data);
@@ -168,15 +169,19 @@ class FormsController extends Controller
             }
             if (isset($request->qtd_internal_audience)) {
                 $form_response->qtd_internal_audience = $request->qtd_internal_audience;
+                session()->put('step', 5);
             }
             if (isset($request->qtd_external_audience)) {
                 $form_response->qtd_external_audience = $request->qtd_external_audience;
+                session()->put('step', 5);
             }
             if (isset($request->advances_extensionist_action)) {
                 $form_response->advances_extensionist_action = $request->advances_extensionist_action;
+                session()->put('step', 6);
             }
             if (isset($request->social_technology_development)) {
                 $form_response->social_technology_development = $request->social_technology_development;
+                session()->put('step', 10);
             }
             if (isset($request->instrument_avaliation)) {
                 $form_response->instrument_avaliation = $request->instrument_avaliation;

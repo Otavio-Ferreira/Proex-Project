@@ -32,4 +32,24 @@ class FormsResponse extends Model
     public function activitys() : HasMany{
         return $this->hasMany(Activitys::class, 'response_forms_id', 'id');
     }
+
+    public function internal_partners() : HasMany{
+        return $this->hasMany(InternalPartners::class, 'response_forms_id', 'id');
+    }
+
+    public function external_partners() : HasMany{
+        return $this->hasMany(ExternalPartners::class, 'response_forms_id', 'id');
+    }
+
+    public function extension_actions() : HasMany{
+        return $this->hasMany(ExtensionActions::class, 'response_forms_id', 'id');
+    }
+
+    public function social_medias() : HasMany{
+        return $this->hasMany(SocialMedia::class, 'response_forms_id', 'id');
+    }
+
+    public function images() : HasMany{
+        return $this->hasMany(Images::class, 'response_forms_id', 'id');
+    }
 }
