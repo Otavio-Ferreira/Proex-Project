@@ -26,12 +26,15 @@ class FormsController extends Controller
         if ($this->data['form']) {
             $response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $this->data['form']->id])->with(['activitys', 'internal_partners', 'internal_partners.title_action_partner', 'external_partners', 'extension_actions', 'social_medias', 'images'])->first();
             $this->data['response'] = $response;
+
+            if (!$response) {
+                session()->forget('step');
+            }
         }
-        // dd($response);
-
-        // isset($response->title_action) && isset($response->type_action) && isset($response->action_modality)
-        // "3" => Activitys::where('response_forms_id', $response->id)->count() > 0,
-
+        else{
+            $response = json_encode(['was_finished' => 0]);
+            $this->data['response'] = json_decode($response);
+        }
         $steps = [
             "1" => true,
             "2" => isset($response->coordinator_name) && isset($response->coordinator_profile) && isset($response->coordinator_course) && isset($response->coordinator_siape),
@@ -47,16 +50,12 @@ class FormsController extends Controller
             "12" => isset($response->instrument_avaliation),
         ];
 
-        if(!$response){
-            session()->forget('step'); 
-        }
-        
         $step = session('step');
 
         if (!$step) {
             $step_actual = 0;
 
-            if($steps[3]){
+            if ($steps[3]) {
                 $steps[4] = true;
             }
             foreach ($steps as $key => $step) {
@@ -67,23 +66,21 @@ class FormsController extends Controller
             session()->put('step', $step_actual);
         }
 
-        // $enableNext = false;
-        // $step_actual = 0;
-        // foreach ($steps as $key => $step) {
-        //     if ($step) {
-        //         $step_actual = $key + 1;
-        //     }
-        //     // else{
-        //     //     session()->put('step', 1);
-        //     // }
-        //     // $steps[$key + 1] = $enableNext;
-        //     // break;
-        // }
-        // session()->put('step', $step_actual);
-        // dd(session('step'), $step_actual);
-        // session()->forget('step'); 
-        // dd($steps);
         $this->data['steps'] = $steps;
+
+        $finished = 0;
+
+        foreach ($steps as $key => $step_f) {
+            if ($step) {
+                $finished++;
+            }
+        }
+
+        if ($finished == 12) {
+            $this->data['finished'] = true;
+        } else {
+            $this->data['finished'] = false;
+        }
 
         return view('pages.forms.index', $this->data);
     }
@@ -120,6 +117,15 @@ class FormsController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            if ($request->status == 1) {
+                $forms = Forms::all();
+
+                foreach ($forms as $form) {
+                    $form->status = 0;
+                    $form->save();
+                }
+            }
+            
             $form = Forms::find($id);
             $form->title = $request->title;
             $form->date = $request->date;
@@ -135,7 +141,6 @@ class FormsController extends Controller
 
     public function persist(Request $request)
     {
-
         $actual_form = Forms::where('status', '1')->first();
         $user = auth()->user();
         $form_response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $actual_form->id])->first();
@@ -144,12 +149,15 @@ class FormsController extends Controller
         if ($form_response) {
             if (isset($request->title_action)) {
                 $form_response->title_action = $request->title_action;
+                session()->put('step', 2);
             }
             if (isset($request->type_action)) {
                 $form_response->type_action = $request->type_action;
+                session()->put('step', 2);
             }
             if (isset($request->action_modality)) {
                 $form_response->action_modality = $request->action_modality;
+                session()->put('step', 2);
             }
             if (isset($request->coordinator_name)) {
                 $form_response->coordinator_name = $request->coordinator_name;
@@ -186,9 +194,6 @@ class FormsController extends Controller
             if (isset($request->instrument_avaliation)) {
                 $form_response->instrument_avaliation = $request->instrument_avaliation;
             }
-            if (isset($request->was_finished)) {
-                $form_response->was_finished = $request->was_finished;
-            }
 
             $form_response->save();
         } else {
@@ -216,11 +221,27 @@ class FormsController extends Controller
         return redirect()->back();
     }
 
-    public function advance()
+    public function advance($actual_step)
     {
-        $step = session('step');
-        session()->put('step', $step + 1);
+        session()->put('step', $actual_step + 1);
 
+        return redirect()->back();
+    }
+
+    public function return($actual_step)
+    {
+        session()->put('step', $actual_step - 1);
+
+        return redirect()->back();
+    }
+
+    public function finish()
+    {
+        $actual_form = Forms::where('status', '1')->first();
+        $user = auth()->user();
+        $form_response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $actual_form->id])->first();
+        $form_response->was_finished = 1;
+        $form_response->save();
         return redirect()->back();
     }
 }
