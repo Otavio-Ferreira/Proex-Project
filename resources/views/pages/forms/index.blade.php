@@ -15,23 +15,27 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
-            @if ($finished && !isset($response->was_finished) && $form || $finished && !$response->was_finished && $form)
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
-                  class="icon ti ti-check"></i>Finalizar Formulário</button>
+          @if($finished)
+          @if($response)
+          @if(!$response->was_finished)
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
+              class="icon ti ti-check"></i>Finalizar Formulário</button>
 
-              <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
-                class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
-                title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
-                typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
-                <x-slot:content>
-                  <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
-                  <h3>Tem certeza?</h3>
-                  <div class="text-secondary">
-                    Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
-                  </div>
-                </x-slot:content>
-              </x-modal.modal-alert>
-            @endif
+          <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
+            class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
+            title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
+            typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
+            <x-slot:content>
+              <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
+              <h3>Tem certeza?</h3>
+              <div class="text-secondary">
+                Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
+              </div>
+            </x-slot:content>
+          </x-modal.modal-alert> 
+          @endif
+          @endif
+          @endif
         </div>
       </div>
     </div>
@@ -41,7 +45,7 @@
       @if (isset($response) && $response->was_finished)
         <div class="alert alert-success">Sua resposta ja foi enviada!</div>
       @else
-        <div class="card col-2">
+        <div class="card col-12 col-md-12 col-lg-2 d-none d-lg-block">
           <div class="card-body">
             <ul class="steps steps-counter steps-vertical">
               @foreach ($steps as $key => $step)
@@ -54,7 +58,7 @@
             </ul>
           </div>
         </div>
-        <div class="col-10">
+        <div class="col-12 col-md-10">
           <div
             class="card p-0 border-top-0 border-end-0 border-bottom-0 border-4 border-primary card-form-step {{ !session()->has('step') || session('step') == 1 ? '' : 'd-none' }}"
             id="card-1">
@@ -986,7 +990,7 @@
                       'class' => 'mb-3',
                       'name' => 'image',
                       'required' => 'true',
-                      'placeholder' => 'Digite uma imagem',
+                      'accept' => 'jpeg, .jpg, .png',
                   ])
                   @include('components.form-elements.input.input', [
                       'title' => 'Local',

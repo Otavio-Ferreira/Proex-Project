@@ -6,38 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Models\Forms\Activitys;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
+use App\Services\Forms\ActivityService;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
+    private $activityService;
+
+    public function __construct(
+        ActivityService $activityService
+    )
+    {
+        $this->activityService = $activityService;
+    }
     public function store(Request $request){
-        $user = auth()->user();
-        $form = Forms::where('status', '1')->first();
-        $response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $form->id])->first();
-        
-        Activitys::create([
-            "response_forms_id" => $response->id,
-            "activity" => $request->activity,
-            "address" => $request->address
-        ]);
-
-        return redirect()->back();
+        return $this->activityService->storeResponse($request);
     }
-
+    
     public function update(Request $request, $id){
-        $activity = Activitys::find($id);
-
-        $activity->activity = $request->activity;
-        $activity->address = $request->address;
-        $activity->save();
-
-        return redirect()->back();
+        return $this->activityService->updateResponse($request, $id);
     }
-
+    
     public function destroy($id){
-        $activity = Activitys::find($id);
-        $activity->delete();
-
-        return redirect()->back();
+        return $this->activityService->destroyResponse($id);
     }
 }

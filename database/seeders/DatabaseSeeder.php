@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             "3" => "ver_dashboard",
             "4" => "adicionar_cursos",
             "5" => "adicionar_projetos",
-            "6" => "ver_formulário",
+            "6" => "responder_formulário",
             "7" => "adicionar_formulário",
             "8" => "ver_respostas",
         ];
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
             "ver_dashboard",
             "adicionar_cursos",
             "adicionar_projetos",
-            "ver_formulário",
+            "responder_formulário",
             "ver_respostas",
             "adicionar_formulário",
         ]);

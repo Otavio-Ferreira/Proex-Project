@@ -85,12 +85,12 @@
                 isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-chart-bar">
               </x-navbar.navbar-item>
 
-              @canany(['ver_formulário', 'adicionar_formulário'])
+              @canany(['responder_formulário', 'adicionar_formulário'])
                 <x-navbar.navbar-item route="" title="Formulário"
                   isActive="{{ request()->routeIs(['forms.*']) ? true : false }}"
                   icon="ti-clipboard-text">
                   <x-slot:links>
-                    @can('ver_formulário')
+                    @can('responder_formulário')
                       <a class="dropdown-item" href="{{ route('forms.index') }}">Formulário</a>
                     @endcan
                     @can('adicionar_formulário')

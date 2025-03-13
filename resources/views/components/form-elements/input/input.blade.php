@@ -5,5 +5,6 @@
         {{ isset($disabled) && $disabled == 'true' ? 'disabled' : '' }}
         {{ isset($readonly) && $readonly == 'true' ? 'readonly' : '' }}
         {{ isset($mask) ? 'data-mask=' . $mask . '' : '' }}
-        {{ isset($required) && $required == 'true' ? 'required' : '' }}>
+        {{ isset($required) && $required == 'true' ? 'required' : '' }}
+        accept="{{ isset($accept) ? $accept : '' }}">
 </div>
