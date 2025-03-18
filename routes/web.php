@@ -83,9 +83,11 @@ Route::middleware(Authenticate::class)->group(function () {
     
     Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {
         Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
+        Route::get('formulario/detalhes/{id}', [FormsController::class, 'show'])->name('forms.show');
         Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
         Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
-        
+        Route::get('resposta/editar/{id}', [FormsResponseController::class, 'edit'])->name('response.edit');
+        Route::post('resposta/editar/{id}', [FormsResponseController::class, 'update'])->name('response.update');
     });
     
     Route::group(['middleware' => ['auth', 'permission:responder_formulário']], function () {

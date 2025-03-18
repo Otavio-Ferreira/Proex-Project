@@ -87,14 +87,14 @@
 
               @canany(['responder_formulário', 'adicionar_formulário'])
                 <x-navbar.navbar-item route="" title="Formulário"
-                  isActive="{{ request()->routeIs(['forms.*']) ? true : false }}"
+                  isActive="{{ request()->routeIs(['forms.*', 'response.*']) ? true : false }}"
                   icon="ti-clipboard-text">
                   <x-slot:links>
                     @can('responder_formulário')
-                      <a class="dropdown-item" href="{{ route('forms.index') }}">Formulário</a>
+                      <a class="dropdown-item" href="{{ route('forms.index') }}">Responder</a>
                     @endcan
                     @can('adicionar_formulário')
-                      <a class="dropdown-item" href="{{ route('forms.create') }}">Adicionar</a>
+                      <a class="dropdown-item" href="{{ route('forms.create') }}">Formulários</a>
                     @endcan
                   </x-slot:links>
                 </x-navbar.navbar-item>
@@ -153,7 +153,7 @@
               <ul class="list-inline list-inline-dots mb-0">
                 <li class="list-inline-item">
                   Copyright &copy; 2024
-                  <a href="." class="link-secondary">Araripe Softwares</a>.
+                  <a href="." class="link-secondary">Proex</a>.
                   All rights reserved.
                 </li>
                 <li class="list-inline-item">

@@ -2,10 +2,15 @@
 
 namespace App\Models\Forms;
 
+use App\Models\Parameters\Courses;
+use App\Models\Parameters\Projects;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FormsResponse extends Model
 {
@@ -52,4 +57,18 @@ class FormsResponse extends Model
     public function images() : HasMany{
         return $this->hasMany(Images::class, 'response_forms_id', 'id');
     }
+
+    public function user() : BelongsTo{
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function action() : BelongsTo{
+        return $this->belongsTo(Projects::class, 'title_action', 'id');
+    }
+
+    public function course() : BelongsTo{
+        return $this->belongsTo(Courses::class, 'coordinator_course', 'id');
+    }
+
+
 }

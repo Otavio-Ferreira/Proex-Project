@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
             'guard_name' => 'web'
         ]);
 
+        
         $role->givePermissionTo([
             "adicionar_grupo",
             "adicionar_usuário",
@@ -57,6 +58,15 @@ class DatabaseSeeder extends Seeder
             "responder_formulário",
             "ver_respostas",
             "adicionar_formulário",
+        ]);
+
+        $role2 = Role::create([
+            'name' => 'Professor',
+            'guard_name' => 'web'
+        ]);
+
+        $role2->givePermissionTo([
+            "responder_formulário",
         ]);
 
         $user->assignRole($role);

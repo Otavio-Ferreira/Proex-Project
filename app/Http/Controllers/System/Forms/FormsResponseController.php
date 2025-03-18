@@ -4,6 +4,8 @@ namespace App\Http\Controllers\System\Forms;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FormsResponse\StoreRequest;
+use App\Http\Requests\FormsResponse\UpdateRequest;
+use App\Models\Forms\Comments;
 use Illuminate\Http\Request;
 use App\Models\Forms\FormsResponse;
 use App\Models\Parameters\Courses;
@@ -97,20 +99,66 @@ class FormsResponseController extends Controller
         return view('pages.forms.index', $this->data);
     }
 
-    public function persist(StoreRequest $request) {
+    public function edit($id){
+        $this->data['response'] = FormsResponse::where('id', $id)->with(['activitys', 'internal_partners', 'internal_partners.title_action_partner', 'external_partners', 'extension_actions', 'social_medias', 'images'])->first();
+
+        $type_status = [
+            0 => [
+                "TITULO" => "Andamento",
+                "COR" => "secondary",
+                "ORDEM" => 0,
+            ],
+            1 => [
+                "TITULO" => "Enviado",
+                "COR" => "blue",
+                "ORDEM" => 1,
+            ],
+            2 => [
+                "TITULO" => "Revisão",
+                "COR" => "red",
+                "ORDEM" => 2,
+            ],
+            3 => [
+                "TITULO" => "Corrigido",
+                "COR" => "green",
+                "ORDEM" => 3,
+            ],
+            4 => [
+                "TITULO" => "Aprovados",
+                "COR" => "dark",
+                "ORDEM" => 4,
+            ],
+        ];
+        
+        $this->data['info'] = [
+            "status" => $this->data['response']->was_finished,
+            "color" => $type_status[$this->data['response']->was_finished]['COR'],
+            "name" => $type_status[$this->data['response']->was_finished]['TITULO']
+        ];
+
+        $this->data['comment'] = Comments::where('form_response_id', $this->data['response']->id)->first();
+        return view('pages.response.edit', $this->data);
+    }
+
+    public function update(UpdateRequest $request, $id){
+        return $this->responseService->updateResponse($request, $id);
+    }
+
+    public function persist(StoreRequest $request)
+    {
         return $this->responseService->persistResponse($request);
     }
 
     public function advance($actual_step)
     {
         session()->put('step', $actual_step + 1);
-        return redirect()->back();
+        return redirect()->back()->with('toast_success', 'Seção enviada com sucesso!');
     }
 
     public function return($actual_step)
     {
         session()->put('step', $actual_step - 1);
-        return redirect()->back();
+        return redirect()->back()->with('toast_success', 'Seção enviada com sucesso!');
     }
 
     public function finish()

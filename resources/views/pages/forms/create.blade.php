@@ -15,6 +15,10 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
+          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#add_form"
+            aria-controls="offcanvasExample">
+            Cadastrar formulário
+          </button>
         </div>
       </div>
     </div>
@@ -23,18 +27,13 @@
     <div class="">
       <div class="">
         <div class="card">
-          <div class="card-header">
-            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#add_form"
-              aria-controls="offcanvasExample">
-              Cadastrar formulário
-            </button>
-          </div>
-          <div class="card-body">
+          <div class="card-body p-0">
             <table class="table table-vcenter table card-table table-vcenter text-nowrap datatable">
               <thead>
                 <th>Título</th>
                 <th>Data</th>
                 <th>Status</th>
+                <th width="10%"></th>
                 <th width="10%"></th>
               </thead>
               <tbody>
@@ -48,6 +47,8 @@
                           {{ $form->status == 1 ? 'Ativo' : 'Inativo' }}
                         </x-slot:content>
                       </x-badge.badge>
+                    </td>
+                    <td><a class="btn btn-info" href="{{route('forms.show', $form->id)}}">Detalhes</a>
                     </td>
                     <td><button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#forms-edit{{ $form->id }}" aria-controls="offcanvasExample">Editar</button>
@@ -69,7 +70,7 @@
                             'name' => 'title',
                             'required' => 'true',
                             'placeholder' => 'Adicone um título para o formulário',
-                            'value' => $form->title
+                            'value' => $form->title,
                         ])
                         @include('components.form-elements.input.input', [
                             'title' => 'Data de finalização',
@@ -78,7 +79,7 @@
                             'name' => 'date',
                             'required' => 'true',
                             'placeholder' => 'Adicone a data de finalização',
-                            'value' => $form->date
+                            'value' => $form->date,
                         ])
                         <x-form-elements.select.select title="Status" id="" name="status">
                           <x-slot:options>
