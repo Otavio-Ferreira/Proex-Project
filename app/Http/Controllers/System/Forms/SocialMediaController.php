@@ -3,41 +3,30 @@
 namespace App\Http\Controllers\System\Forms;
 
 use App\Http\Controllers\Controller;
-use App\Models\Forms\Forms;
-use App\Models\Forms\FormsResponse;
-use App\Models\Forms\SocialMedia;
+use App\Http\Requests\SocialMedia\StoreRequest;
+use App\Http\Requests\SocialMedia\UpdateRequest;
+use App\Services\Forms\SocialMediaService;
 use Illuminate\Http\Request;
 
 class SocialMediaController extends Controller
 {
-    public function store(Request $request){
-        $user = auth()->user();
-        $form = Forms::where('status', '1')->first();
-        $response = FormsResponse::where(['user_id' => $user->id, 'forms_id' => $form->id])->first();
-        
-        SocialMedia::create([
-            "response_forms_id" => $response->id,
-            "name" => $request->name,
-            "link" => $request->link,
-        ]);
+    protected $socialMediaService;
 
-        return redirect()->back();
+    public function __construct(
+        SocialMediaService $socialMediaService
+    ) {
+        $this->socialMediaService = $socialMediaService;
     }
-
-    public function update(Request $request, $id){
-        $social_media = SocialMedia::find($id);
-
-        $social_media->name = $request->name;
-        $social_media->link = $request->link;
-        $social_media->save();
-
-        return redirect()->back();
+    public function store(StoreRequest $request)
+    {
+        return $this->socialMediaService->storeResponse($request);
     }
-
-    public function destroy($id){
-        $social_media = SocialMedia::find($id);
-        $social_media->delete();
-
-        return redirect()->back();
+    public function update(UpdateRequest $request, $id)
+    {
+        return $this->socialMediaService->updateResponse($request, $id);
+    }
+    public function destroy($id)
+    {
+        return $this->socialMediaService->destroyResponse($id);
     }
 }

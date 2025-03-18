@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\System\Forms;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FormsResponse\StoreRequest;
 use Illuminate\Http\Request;
-use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
 use App\Models\Parameters\Courses;
 use App\Models\Parameters\Projects;
@@ -97,7 +97,7 @@ class FormsResponseController extends Controller
         return view('pages.forms.index', $this->data);
     }
 
-    public function persist(Request $request) {
+    public function persist(StoreRequest $request) {
         return $this->responseService->persistResponse($request);
     }
 

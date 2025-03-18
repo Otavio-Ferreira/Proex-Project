@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\System\Forms;
 
 use App\Http\Controllers\Controller;
-use App\Models\Forms\Activitys;
-use App\Models\Forms\Forms;
-use App\Models\Forms\FormsResponse;
+use App\Http\Requests\Activity\StoreRequest;
+use App\Http\Requests\Activity\UpdateRequest;
 use App\Services\Forms\ActivityService;
-use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
@@ -19,11 +17,11 @@ class ActivityController extends Controller
     {
         $this->activityService = $activityService;
     }
-    public function store(Request $request){
+    public function store(StoreRequest $request){
         return $this->activityService->storeResponse($request);
     }
     
-    public function update(Request $request, $id){
+    public function update(UpdateRequest $request, $id){
         return $this->activityService->updateResponse($request, $id);
     }
     

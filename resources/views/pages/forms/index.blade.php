@@ -15,26 +15,26 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
-          @if($finished)
-          @if($response)
-          @if(!$response->was_finished)
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
-              class="icon ti ti-check"></i>Finalizar Formulário</button>
+          @if ($finished)
+            @if ($response)
+              @if (!$response->was_finished)
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
+                    class="icon ti ti-check"></i>Finalizar Formulário</button>
 
-          <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
-            class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
-            title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
-            typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
-            <x-slot:content>
-              <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
-              <h3>Tem certeza?</h3>
-              <div class="text-secondary">
-                Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
-              </div>
-            </x-slot:content>
-          </x-modal.modal-alert> 
-          @endif
-          @endif
+                <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
+                  class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
+                  title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
+                  typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
+                  <x-slot:content>
+                    <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
+                    <h3>Tem certeza?</h3>
+                    <div class="text-secondary">
+                      Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
+                    </div>
+                  </x-slot:content>
+                </x-modal.modal-alert>
+              @endif
+            @endif
           @endif
         </div>
       </div>
@@ -82,7 +82,7 @@
 
                 <x-form-elements.select.select title="Tipo da ação" id="role" name="type_action">
                   <x-slot:options>
-                    <option value="" selected>Selecione</option>
+                    <option value="" selected disabled>Selecione</option>
                     <option value="Programa"
                       {{ isset($response->type_action) ? ($response->type_action == 'Programa' ? 'selected' : '') : '' }}>
                       Programa</option>
@@ -95,7 +95,7 @@
 
                 <x-form-elements.select.select title="Modalidade da ação" id="role" name="action_modality">
                   <x-slot:options>
-                    <option value="" selected>Selecione</option>
+                    <option value="" selected disabled>Selecione</option>
 
                     <option value="UFCA Itinerante"
                       {{ isset($response->action_modality) ? ($response->action_modality == 'UFCA Itinerante' ? 'selected' : '') : ' ' }}>
@@ -132,7 +132,7 @@
                     'class' => 'mb-3',
                     'name' => 'coordinator_name',
                     'required' => 'true',
-                    'placeholder' => 'Digite o seu nome',
+                    'placeholder' => 'Digite o nome do coordenador/tutor',
                     'value' => isset($response->coordinator_name) ? $response->coordinator_name : '',
                 ])
 
@@ -164,7 +164,7 @@
                 <div class="mb-3">
                   <label class="form-label">Curso</label>
                   <select class="form-select" id="select-courses" name="coordinator_course" required>
-                    <option value="" selected>Selecione</option>
+                    <option value="" selected disabled>Selecione</option>
                     @foreach ($base_courses as $base_course)
                       <option value="{{ $base_course->id }}"
                         {{ isset($response->coordinator_course) ? ($response->coordinator_course == $base_course->id ? 'selected' : '') : '' }}>
@@ -206,6 +206,7 @@
                       'class' => 'mb-3',
                       'name' => 'activity',
                       'required' => 'true',
+                      'placeholder' => 'Digite uma atividade',
                   ])
                   @include('components.form-elements.input.input', [
                       'title' => 'Local',
@@ -382,7 +383,6 @@
               <h3 class="p-0 m-0">Parcerias Internas</h3>
             </div>
             <div class="card-body">
-              {{-- <h4>DESCRIÇÃO DAS PARCERIAS INTERNAS FIRMADAS DURANTE O PERÍODO DE REALIZAÇÃO DA AÇÃO</h4> --}}
 
               <form action="{{ route('internalPartners.store') }}" method="post">
                 @csrf
@@ -497,7 +497,6 @@
               <h3 class="p-0 m-0">Parcerias externas</h3>
             </div>
             <div class="card-body">
-              {{-- <h4>DESCRIÇÃO DAS PARCERIAS EXTERNAS FIRMADAS DURANTE O PERÍODO DE REALIZAÇÃO DA AÇÃO</h4> --}}
 
               <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
                 data-bs-target="#modal-add-externalPartner">
@@ -673,33 +672,33 @@
                 Adicionar ação
               </a>
               <x-modal.modal route="{{ route('extencionActions.store') }}" id="modal-add-extensionActions"
-                class="modal-dialog-centered" title="Adicionar parceiro externo" typeBtnClose="button"
-                classBtnClose="me-auto" textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary"
-                textBtnSave="Salvar">
+                class="modal-dialog-centered" title="Adicionar ação" typeBtnClose="button" classBtnClose="me-auto"
+                textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
                 <x-slot:content>
                   @include('components.form-elements.input.input', [
-                      'title' => 'Liste os títulos das Ações que se articulam ao Programa de Extensão',
+                      'title' => 'Ação que se articula ao programa de extensão',
                       'type' => 'text',
                       'class' => 'mb-3',
                       'name' => 'title_action',
                       'required' => 'true',
-                      'placeholder' => 'Digite o seu nome',
+                      'placeholder' => 'Digite a ação',
                   ])
 
-                  <x-form-elements.select.select title="A Ação é voltada para escolas públicas? " id="role"
+                  <x-form-elements.select.select title="A ação é voltada para escolas públicas? " id="role"
                     name="its_for_public_schools">
                     <x-slot:options>
-                      <option value="" selected>Selecione</option>
+                      <option value="" selected disabled>Selecione</option>
                       <option value="1">Sim</option>
                       <option value="0">Não</option>
                     </x-slot:options>
                   </x-form-elements.select.select>
                   @include('components.form-elements.textarea.textarea', [
-                      'title' => 'A Ação estabeleceu parceria internacional? Se sim, descreva',
+                      'title' => 'A ação estabeleceu parceria internacional? Se sim, descreva',
                       'type' => 'text',
                       'class' => 'mb-3',
                       'name' => 'international_description',
                       'required' => 'false',
+                      'placeholder' => 'Descrição',
                   ])
                 </x-slot:content>
               </x-modal.modal>
@@ -713,9 +712,9 @@
                   <div class="card p-0 mt-3">
                     <x-table.table tableClass="table-vcenter card-table table-striped">
                       <x-slot:ths>
-                        <th>Nome do parceiro</th>
-                        <th>Tipo de instituição</th>
-                        <th>Tipo de parceria</th>
+                        <th>Ação</th>
+                        <th>Escolas públicas?</th>
+                        <th>Descrição internacional</th>
                         <th width="5%"></th>
                         <th width="5%"></th>
                       </x-slot:ths>
@@ -723,7 +722,7 @@
                         @foreach ($response->extension_actions as $extensionActions)
                           <tr>
                             <td>{{ $extensionActions->title_action }}</td>
-                            <td>{{ $extensionActions->its_for_public_schools }}</td>
+                            <td>{{ $extensionActions->its_for_public_schools == 1 ? 'Sim' : 'Não' }}</td>
                             <td>{{ $extensionActions->international_description }}</td>
                             <td>
                               <button class="btn btn-secondary" data-bs-toggle="modal"
@@ -814,13 +813,13 @@
             class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step {{ session()->has('step') && session('step') == 9 ? '' : 'd-none' }}"
             id="card-9">
             <div class="card-header">
-              <h3 class="p-0 m-0">A ação atuou com o desenvolvimento de alguma tecnologia social</h3>
+              <h3 class="p-0 m-0">Desenvolvimento de tecnologia social</h3>
             </div>
             <div class="card-body">
               <form action="{{ route('forms.persist') }}" method="post">
                 @csrf
                 @include('components.form-elements.textarea.textarea', [
-                    'title' => 'A Ação atuou com o Desenvolvimento de alguma Tecnologia Social? Se sim, descreva',
+                    'title' => 'A ação atuou com o desenvolvimento de alguma tecnologia social? Se sim, descreva',
                     'type' => 'text',
                     'class' => 'mb-3',
                     'name' => 'social_technology_development',
@@ -972,7 +971,7 @@
             class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step {{ session()->has('step') && session('step') == 11 ? '' : 'd-none' }}"
             id="card-11">
             <div class="card-header">
-              <h3 class="p-0 m-0">Imagens das atividades realizadas</h3>
+              <h3 class="p-0 m-0">Imagens das atividades realizadas (minímo 3)</h3>
             </div>
             <div class="card-body">
               <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
@@ -1038,7 +1037,7 @@
                       <x-slot:trs>
                         @foreach ($response->images as $image)
                           <tr>
-                            <td><a href="{{ asset($image->image) }}" target="_blank">Link</a></td>
+                            <td><a href="{{ asset($image->image) }}" target="_blank">Visualizar</a></td>
                             <td>{{ $image->address }}</td>
                             <td>{{ $image->date }}</td>
                             <td>{{ $image->description }}</td>
@@ -1059,6 +1058,7 @@
                                       'name' => 'image',
                                       'required' => 'false',
                                       'placeholder' => 'Digite uma imagem',
+                                      'accept' => 'jpeg, .jpg, .png',
                                   ])
                                   @include('components.form-elements.input.input', [
                                       'title' => 'Local',
