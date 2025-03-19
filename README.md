@@ -1,61 +1,77 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema Proex-UFCA
 
-## Instruções de inicialização:
+Este repositório contém o código-fonte do Sistema da Proex UFCA. O projeto foi desenvolvido pelo Núcleo de Gestão de Dados da Proex.
 
-### Após ter feito o clone do repositório, acesse a pasta do projeto:
-```sh
-cd app-laravel
+## Pré-requisitos
+
+Antes de começar, verifique se você possui o Docker instalado em sua máquina.
+
+
+## Configuração do Ambiente Docker
+
+1. Clone este repositório em sua máquina usando o seguinte comando:
+```bash
+git clone git@github.com:Otavio-Ferreira/Proex-Project.git
 ```
-
-### Instale as dependências do Composer dentro do projeto:
-```sh
-composer install
+2. Entre no repositorio clonado
+```bash
+cd Proex-Project/
 ```
-### Crie um arquivo .env a partir do arquivo .env.example
-```sh
+3. Crie o arquivo .env
+```bash
 cp .env.example .env
 ```
 
-### No arquivo .env substitua as configurações de conexão do banco de dados para:
-```sh
-DB_CONNECTION=sqlite
+4. Crie o arquivo docker-compose.yml
+```bash
+cp docker-compose.yml.dev docker-compose.yml
 ```
 
-### Crie uma conta no mailtrap.io para gerar as credenciais para receber os emails e cole no arquivo .env:
-```sh
-MAIL_MAILER=smtp
-MAIL_HOST=
-MAIL_PORT=
-MAIL_USERNAME=
-MAIL_PASSWORD=
+5. No diretório raiz do projeto, execute o seguinte comando para instalar as dependências:
+```bash
+docker run --rm \
+  -u "$(id -u):$(id -g)" \
+  -v "$(pwd):/var/www/html" \
+  -w /var/www/html \
+  laravelsail/php82-composer:latest \
+  composer install --ignore-platform-reqs
+``` 
+6. Adicione o comando sail ao seu path
+```bash
+echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" >> ~/.bashrc & source ~/.bashrc
+
+```
+7. Inicialize os containers
+```bash
+sail up -d
+```
+8. Gere a chave de criptografia do Laravel:
+```bash
+sail php artisan key:generate
+```
+9.   Crie um link simbólico para o armazenamento público:
+```bash
+sail php artisan storage:link
+```
+10.   Instale as dependências do NPM:
+```bash
+sail npm install
+```
+11.   Compile os assets:
+```bash
+sail npm run build
 ```
 
-### Atualize seu .env para fazer upload na pasta public:
-```sh
-FILESYSTEM_DISK=public
+12.   Rode as migrations e seeds:
+```bash
+sail php artisan migrate
+sail php artisan db:seed
 ```
 
-### Gere a key do projeto laravel:
-```sh
-php artisan key:generate
+13.   Execute a aplicação Laravel Sail:
+```bash
+sail npm run dev
 ```
+1.  Acesse o dashboard padrão do sbadmin2 através do link: http://localhost:8081
 
-### Ainda dentro do terminal rode o comando para criar as migrations do banco de dados:
-```sh
-php artisan migrate --seed
-```
 
-### Para usar o storage do laravel e permitir anexos das imagens, rode esse comando:
-```sh
-php artisan storage:link
-```
-
-### Para inicializar os listeners abra um terminal em rode:
-```sh
-php artisan queue:listen
-```
-
-### Para inicializar o servidor e rodar o projeto rode:
-```sh
-php artisan serve
-```
