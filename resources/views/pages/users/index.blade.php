@@ -99,8 +99,8 @@
 
                       <x-form-elements.select.select title="Status" id="status" name="status">
                         <x-slot:options>
-                          <option value="1" {{ $user->STATUS == 1 ? 'selected' : '' }}>Ativo</option>
-                          <option value="0" {{ $user->STATUS == 0 ? 'selected' : '' }}>Inativo</option>
+                          <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Ativo</option>
+                          <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Inativo</option>
                         </x-slot:options>
                       </x-form-elements.select.select>
 

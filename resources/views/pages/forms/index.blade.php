@@ -44,7 +44,7 @@
     @if ($form)
       @if (isset($response) && $response->was_finished == 2 && isset($response->comment->comment))
         <div class="alert alert-danger mb-1">
-            <h4>Observações:</h4>
+          <h4>Observações:</h4>
           {{ $response->comment->comment }}
         </div>
       @endif
@@ -303,16 +303,16 @@
                 @endif
               </div>
 
-              @if (isset($response))
-                @if ($response->activitys->count() > 0)
-                  <div class="d-flex w-100 justify-content-between mt-3">
-                    <a href="{{ route('forms.return', 3) }}" type="submit" class="btn btn-outline-info">
-                      <i class="icon ti ti-chevron-left"></i>
-                      Voltar</a>
+              <div class="d-flex w-100 justify-content-between mt-3">
+                <a href="{{ route('forms.return', 3) }}" type="submit" class="btn btn-outline-info">
+                  <i class="icon ti ti-chevron-left"></i>
+                  Voltar</a>
+                @if (isset($response))
+                  @if ($response->activitys->count() > 0)
                     <a href="{{ route('forms.advance', 3) }}" class="btn btn-info ms-auto">Avançar</a>
-                  </div>
+                  @endif
                 @endif
-              @endif
+              </div>
             </div>
           </div>
 
@@ -484,16 +484,16 @@
                   </div>
                 @endif
 
-                @if (isset($response))
-                  @if ($response->internal_partners->count() > 0)
-                    <div class="d-flex w-100 justify-content-between mt-3">
-                      <a href="{{ route('forms.return', 6) }}" type="submit" class="btn btn-outline-info">
-                        <i class="icon ti ti-chevron-left"></i>
-                        Voltar</a>
+                <div class="d-flex w-100 justify-content-between mt-3">
+                  <a href="{{ route('forms.return', 6) }}" type="submit" class="btn btn-outline-info">
+                    <i class="icon ti ti-chevron-left"></i>
+                    Voltar</a>
+                  @if (isset($response))
+                    @if ($response->internal_partners->count() > 0)
                       <a href="{{ route('forms.advance', 6) }}" class="btn btn-info ms-auto">Avançar</a>
-                    </div>
+                    @endif
                   @endif
-                @endif
+                </div>
               </div>
             </div>
           </div>
@@ -654,16 +654,16 @@
                 @endif
               </div>
 
-              @if (isset($response))
-                @if ($response->external_partners->count() > 0)
-                  <div class="d-flex w-100 justify-content-between mt-3">
-                    <a href="{{ route('forms.return', 7) }}" type="submit" class="btn btn-outline-info">
-                      <i class="icon ti ti-chevron-left"></i>
-                      Voltar</a>
+              <div class="d-flex w-100 justify-content-between mt-3">
+                <a href="{{ route('forms.return', 7) }}" type="submit" class="btn btn-outline-info">
+                  <i class="icon ti ti-chevron-left"></i>
+                  Voltar</a>
+                @if (isset($response))
+                  @if ($response->external_partners->count() > 0)
                     <a href="{{ route('forms.advance', 7) }}" class="btn btn-info ms-auto">Avançar</a>
-                  </div>
+                  @endif
                 @endif
-              @endif
+              </div>
             </div>
           </div>
 
@@ -804,16 +804,16 @@
                 @endif
               </div>
 
-              @if (isset($response))
-                @if ($response->extension_actions->count() > 0)
-                  <div class="d-flex w-100 justify-content-between mt-3">
-                    <a href="{{ route('forms.return', 8) }}" type="submit" class="btn btn-outline-info">
-                      <i class="icon ti ti-chevron-left"></i>
-                      Voltar</a>
+              <div class="d-flex w-100 justify-content-between mt-3">
+                <a href="{{ route('forms.return', 8) }}" type="submit" class="btn btn-outline-info">
+                  <i class="icon ti ti-chevron-left"></i>
+                  Voltar</a>
+                @if (isset($response))
+                  @if ($response->extension_actions->count() > 0)
                     <a href="{{ route('forms.advance', 8) }}" class="btn btn-info ms-auto">Avançar</a>
-                  </div>
+                  @endif
                 @endif
-              @endif
+              </div>
             </div>
           </div>
 
@@ -961,16 +961,16 @@
                 @endif
               </div>
 
-              @if (isset($response))
-                @if ($response->social_medias->count() > 0)
-                  <div class="d-flex w-100 justify-content-between mt-3">
-                    <a href="{{ route('forms.return', 10) }}" type="submit" class="btn btn-outline-info">
-                      <i class="icon ti ti-chevron-left"></i>
-                      Voltar</a>
+              <div class="d-flex w-100 justify-content-between mt-3">
+                <a href="{{ route('forms.return', 10) }}" type="submit" class="btn btn-outline-info">
+                  <i class="icon ti ti-chevron-left"></i>
+                  Voltar</a>
+                @if (isset($response))
+                  @if ($response->social_medias->count() > 0)
                     <a href="{{ route('forms.advance', 10) }}" class="btn btn-info ms-auto">Avançar</a>
-                  </div>
+                  @endif
                 @endif
-              @endif
+              </div>
 
             </div>
           </div>
@@ -1125,16 +1125,16 @@
                 @endif
               </div>
 
-              @if (isset($response))
-                @if ($response->images->count() >= 3)
-                  <div class="d-flex w-100 justify-content-between mt-3">
-                    <a href="{{ route('forms.return', 11) }}" type="submit" class="btn btn-outline-info">
-                      <i class="icon ti ti-chevron-left"></i>
-                      Voltar</a>
+              <div class="d-flex w-100 justify-content-between mt-3">
+                <a href="{{ route('forms.return', 11) }}" type="submit" class="btn btn-outline-info">
+                  <i class="icon ti ti-chevron-left"></i>
+                  Voltar</a>
+                @if (isset($response))
+                  @if ($response->images->count() >= 3)
                     <a href="{{ route('forms.advance', 11) }}" class="btn btn-info">Avançar</a>
-                  </div>
+                  @endif
                 @endif
-              @endif
+              </div>
             </div>
           </div>
 

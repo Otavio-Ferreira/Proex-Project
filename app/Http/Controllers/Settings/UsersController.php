@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Settings;
 use App\Events\Autenticator\UserCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\StoreRequest;
+use App\Http\Requests\Users\UpdateRequest;
 use App\Models\User;
 use App\Repositories\Authentication\LoginRepository;
 use App\Repositories\Settings\Roles\RolesRepository;
@@ -59,25 +60,25 @@ class UsersController extends Controller
         }
     }
 
-    // public function update(UpdateRequest $request, $id)
-    // {
-    //     try {
-    //         $user = User::findOrFail($id);
+    public function update(UpdateRequest $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
 
-    //         $user->name = $request->name;
-    //         $user->status = $request->status;
+            $user->name = $request->name;
+            $user->status = $request->status;
 
-    //         $user->save();
+            $user->save();
 
-    //         if ($request->role) {
-    //             $user->syncRoles([$request->role]);
-    //         }
+            if ($request->role) {
+                $user->syncRoles([$request->role]);
+            }
 
-    //         return redirect()->back()->with('toast_success', 'Usuário atualizado com sucesso.');
-    //     } catch (\Throwable $th) {
-    //         return redirect()->back()->with('toast_error', 'Erro ao atualizar usuário, tente novamente em alguns instantes');
-    //     }
-    // }
+            return redirect()->back()->with('toast_success', 'Usuário atualizado com sucesso.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('toast_error', 'Erro ao atualizar usuário, tente novamente em alguns instantes');
+        }
+    }
 
     public function destroy($id)
     {
