@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="utf-8" />
@@ -100,7 +100,7 @@
                 </x-navbar.navbar-item>
               @endcanany
 
-              @canany(['adicionar_cursos', 'adicionar_projetos'])
+              {{-- @canany(['adicionar_cursos', 'adicionar_projetos'])
                 <x-navbar.navbar-item route="" title="Dados"
                   isActive="{{ request()->routeIs(['courses.*', 'projects.*']) ? true : false }}"
                   icon="ti-file-database">
@@ -113,7 +113,7 @@
                     @endcan
                   </x-slot:links>
                 </x-navbar.navbar-item>
-              @endcanany
+              @endcanany --}}
 
               @canany(['adicionar_usuário', 'adicionar_grupo', 'adicionar_permissões'])
                 <x-navbar.navbar-item route="" title="Configurações"

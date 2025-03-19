@@ -26,9 +26,9 @@ class StoreRequest extends FormRequest
         return [
             'title_action' => 'nullable|uuid|exists:projects,id',
             'type_action' => 'nullable|string|in:Programa,Projeto',
-            'action_modality' => 'nullable|string|in:UFCA Itinerante, Ampla Concorrência, PROPE',
+            'action_modality' => 'nullable|string|in:UFCA Itinerante,Ampla Concorrência,PROPE',
             'coordinator_name' => 'nullable|string',
-            'coordinator_profile' => 'nullable|string|in:Docente, Técnico Administrativo, Discente',
+            'coordinator_profile' => 'nullable|string|in:Docente,Técnico Administrativo,Discente',
             'coordinator_siape' => 'nullable|integer',
             'coordinator_course' => 'nullable|uuid|exists:courses,id',
             'qtd_internal_audience' => 'nullable|integer',
