@@ -17,7 +17,7 @@
         <div class="col-auto ms-auto">
           @if ($finished)
             @if ($response)
-              @if (!$response->was_finished)
+              @if (!$response->was_finished || $response->was_finished == 2)
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                     class="icon ti ti-check"></i>Finalizar Formulário</button>
 
@@ -42,7 +42,15 @@
   </div>
   <div class="page-body row">
     @if ($form)
-      @if (isset($response) && $response->was_finished)
+      @if (isset($response) && $response->was_finished == 2 && isset($response->comment->comment))
+        <div class="alert alert-danger mb-1">
+            <h4>Observações:</h4>
+          {{ $response->comment->comment }}
+        </div>
+      @endif
+    @endif
+    @if ($form)
+      @if (isset($response) && ($response->was_finished == 1 || $response->was_finished == 3 || $response->was_finished == 4))
         <div class="alert alert-success">Sua resposta ja foi enviada!</div>
       @else
         <div class="card col-12 col-md-12 col-lg-2 d-none d-lg-block">

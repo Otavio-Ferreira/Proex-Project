@@ -70,5 +70,7 @@ class FormsResponse extends Model
         return $this->belongsTo(Courses::class, 'coordinator_course', 'id');
     }
 
-
+    public function comment() : HasOne{
+        return $this->hasOne(Comments::class, 'form_response_id', 'id');
+    }
 }

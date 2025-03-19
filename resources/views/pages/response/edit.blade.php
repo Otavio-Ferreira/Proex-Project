@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="page-body row">
-    <div class="col-9 overflow-auto" style="height: calc(100vh - 300px);">
+    <div class="col-12 col-md-9 mb-3 mb-md-0 overflow-auto" style="height: calc(100vh - 300px);">
       <div class="card border-top-0 border-end-0 border-bottom-0 border-4 border-primary mb-3">
         <div class="card-header">
           <h3 class="p-0 m-0">Título da ação de extensão</h3>
@@ -122,19 +122,21 @@
           <h3 class="p-0 m-0">Parcerias Internas</h3>
         </div>
         <div class="card-body">
-          <x-table.table tableClass="table-vcenter card-table table-striped">
-            <x-slot:ths>
-              <th>Título da ação parceira</th>
-              <th width="5%"></th>
-            </x-slot:ths>
-            <x-slot:trs>
-              @foreach ($response->internal_partners as $internal_partner)
-                <tr>
-                  <td>{{ $internal_partner->title_action_partner->title }}</td>
-                </tr>
-              @endforeach
-            </x-slot:trs>
-          </x-table.table>
+          <div class="table-responsive">
+            <x-table.table tableClass="table-vcenter card-table table-striped">
+              <x-slot:ths>
+                <th>Título da ação parceira</th>
+                <th width="5%"></th>
+              </x-slot:ths>
+              <x-slot:trs>
+                @foreach ($response->internal_partners as $internal_partner)
+                  <tr>
+                    <td>{{ $internal_partner->title_action_partner->title }}</td>
+                  </tr>
+                @endforeach
+              </x-slot:trs>
+            </x-table.table>
+          </div>
         </div>
       </div>
 
@@ -143,22 +145,25 @@
           <h3 class="p-0 m-0">Parcerias Externa</h3>
         </div>
         <div class="card-body">
-          <x-table.table tableClass="table-vcenter card-table table-striped">
-            <x-slot:ths>
-              <th>Nome do parceiro</th>
-              <th>Tipo de instituição</th>
-              <th>Tipo de parceria</th>
-            </x-slot:ths>
-            <x-slot:trs>
-              @foreach ($response->external_partners as $externalPartner)
-                <tr>
-                  <td>{{ $externalPartner->name_partner }}</td>
-                  <td>{{ $externalPartner->institution_type }}</td>
-                  <td>{{ $externalPartner->partnership_type }}</td>
-                </tr>
-              @endforeach
-            </x-slot:trs>
-          </x-table.table>
+          <div class="table-responsive">
+
+            <x-table.table tableClass="table-vcenter card-table table-striped">
+              <x-slot:ths>
+                <th>Nome do parceiro</th>
+                <th>Tipo de instituição</th>
+                <th>Tipo de parceria</th>
+              </x-slot:ths>
+              <x-slot:trs>
+                @foreach ($response->external_partners as $externalPartner)
+                  <tr>
+                    <td>{{ $externalPartner->name_partner }}</td>
+                    <td>{{ $externalPartner->institution_type }}</td>
+                    <td>{{ $externalPartner->partnership_type }}</td>
+                  </tr>
+                @endforeach
+              </x-slot:trs>
+            </x-table.table>
+          </div>
         </div>
       </div>
 
@@ -167,22 +172,24 @@
           <h3 class="p-0 m-0">Ações vinculadas ao programa de extensão</h3>
         </div>
         <div class="card-body">
-          <x-table.table tableClass="table-vcenter card-table table-striped">
-            <x-slot:ths>
-              <th>Ação</th>
-              <th>Escolas públicas?</th>
-              <th>Descrição internacional</th>
-            </x-slot:ths>
-            <x-slot:trs>
-              @foreach ($response->extension_actions as $extensionActions)
-                <tr>
-                  <td>{{ $extensionActions->title_action }}</td>
-                  <td>{{ $extensionActions->its_for_public_schools == 1 ? 'Sim' : 'Não' }}</td>
-                  <td>{{ $extensionActions->international_description }}</td>
-                </tr>
-              @endforeach
-            </x-slot:trs>
-          </x-table.table>
+          <div class="table-responsive">
+            <x-table.table tableClass="table-vcenter card-table table-striped">
+              <x-slot:ths>
+                <th>Ação</th>
+                <th>Escolas públicas?</th>
+                <th>Descrição internacional</th>
+              </x-slot:ths>
+              <x-slot:trs>
+                @foreach ($response->extension_actions as $extensionActions)
+                  <tr>
+                    <td>{{ $extensionActions->title_action }}</td>
+                    <td>{{ $extensionActions->its_for_public_schools == 1 ? 'Sim' : 'Não' }}</td>
+                    <td>{{ $extensionActions->international_description }}</td>
+                  </tr>
+                @endforeach
+              </x-slot:trs>
+            </x-table.table>
+          </div>
         </div>
       </div>
 
@@ -225,24 +232,27 @@
           <h3 class="p-0 m-0">Imagens das atividades realizadas</h3>
         </div>
         <div class="card-body">
-          <x-table.table tableClass="table-vcenter card-table table-striped">
-            <x-slot:ths>
-              <th>Imagem</th>
-              <th>Local</th>
-              <th>Data</th>
-              <th>Descrição</th>
-            </x-slot:ths>
-            <x-slot:trs>
-              @foreach ($response->images as $image)
-                <tr>
-                  <td><a href="{{ asset($image->image) }}" target="_blank">Visualizar</a></td>
-                  <td>{{ $image->address }}</td>
-                  <td>{{ $image->date }}</td>
-                  <td>{{ $image->description }}</td>
-                </tr>
-              @endforeach
-            </x-slot:trs>
-          </x-table.table>
+          <div class="table-responsive">
+
+            <x-table.table tableClass="table-vcenter card-table table-striped">
+              <x-slot:ths>
+                <th>Imagem</th>
+                <th>Local</th>
+                <th>Data</th>
+                <th>Descrição</th>
+              </x-slot:ths>
+              <x-slot:trs>
+                @foreach ($response->images as $image)
+                  <tr>
+                    <td><a href="{{ asset($image->image) }}" target="_blank">Visualizar</a></td>
+                    <td>{{ $image->address }}</td>
+                    <td>{{ $image->date }}</td>
+                    <td>{{ $image->description }}</td>
+                  </tr>
+                @endforeach
+              </x-slot:trs>
+            </x-table.table>
+          </div>
         </div>
       </div>
 
@@ -258,41 +268,47 @@
         </div>
       </div>
     </div>
-    <div class="col-3">
+    <div class="col-12 col-md-3">
       <div class="card">
         <div class="card-body">
           <h4 class="mb-1">Status atual</h4>
           <div class="badge fs-4 bg-{{ $info['color'] }} mb-3">
             {{ $info['name'] }}
           </div>
-          <form action="{{ route('response.update', $response->id) }}" method="post">
-            @csrf
-            <x-form-elements.select.select title="Proximo status" id="role" name="status">
-              <x-slot:options>
-                <option value="" selected disabled>Selecione</option>
-                <option value="2" {{ $info['status'] == 2 ? 'selected' : '' }}>
-                  Revisão</option>
-                <option value="4" {{ $info['status'] == 4 ? 'selected' : '' }}>
-                  Aprovados
-                </option>
-              </x-slot:options>
-            </x-form-elements.select.select>
-            <div id="comment" style="display: none;">
-              @include('components.form-elements.textarea.textarea', [
-                  'title' => 'Comentário',
-                  'type' => 'text',
-                  'id' => 'input_comment',
-                  'class' => 'mb-3',
-                  'name' => 'comment',
-                  'placeholder' => 'Digite um comentário',
-                  'value' => $comment->comment ?? ' ',
-              ])
+          @if ($response->was_finished == 0)
+            <div class="alert">
+              Espere essa resposta ser finalizada para comentar e avançar para as proximas etapas!
             </div>
-            <hr class="mb-2 mt-2">
-            <div class="d-flex">
+          @else
+            <form action="{{ route('response.update', $response->id) }}" method="post">
+              @csrf
+              <x-form-elements.select.select title="Proximo status" id="role" name="status">
+                <x-slot:options>
+                  <option value="" selected disabled>Selecione</option>
+                  <option value="2" {{ $info['status'] == 2 ? 'selected' : '' }}>
+                    Revisão</option>
+                  <option value="4" {{ $info['status'] == 4 ? 'selected' : '' }}>
+                    Aprovados
+                  </option>
+                </x-slot:options>
+              </x-form-elements.select.select>
+              <div id="comment" style="display: none;">
+                @include('components.form-elements.textarea.textarea', [
+                    'title' => 'Comentário',
+                    'type' => 'text',
+                    'id' => 'input_comment',
+                    'class' => 'mb-3',
+                    'name' => 'comment',
+                    'placeholder' => 'Digite um comentário',
+                    'value' => $comment->comment ?? ' ',
+                ])
+              </div>
+              <hr class="mb-2 mt-2">
+              <div class="d-flex">
                 <button type="submit" class="btn btn-success ms-auto">Enviar</button>
-            </div>
-          </form>
+              </div>
+            </form>
+          @endif
         </div>
       </div>
     </div>

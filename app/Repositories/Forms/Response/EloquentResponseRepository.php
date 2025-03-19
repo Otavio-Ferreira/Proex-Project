@@ -90,7 +90,12 @@ class EloquentResponseRepository implements ResponseRepository
     }
 
     public function finish($form_response){
-        $form_response->was_finished = 1;
+        if($form_response->was_finished == 0){
+            $form_response->was_finished = 1;
+        }
+        else{
+            $form_response->was_finished = 3;
+        }
         $form_response->save();
     }
 

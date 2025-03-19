@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title_partner' => 'required|uuid|exists:projects,id|unique:internal_partners,title_partner'
+            'title_partner' => 'required|uuid|exists:projects,id'
         ];
     }
 
@@ -34,7 +34,6 @@ class StoreRequest extends FormRequest
             "title_partner.required" => "É necessário inserir uma ação parceira.",
             "title_partner.uuid" => "O campo título da ação parceira precisa ser válido.",
             "title_partner.exists" => "O campo título da ação parceira precisa existir em nossa base.",
-            "title_partner.unique" => "Esse título da ação parceira ja foi inserido.",
         ];
     }
 }
