@@ -141,7 +141,7 @@ class LoginController extends Controller
             );
             // $password = Str::random(7);
             // $user = $this->usersRepository->setUser($request, $password);
-            // $user->assignRole("Professor");
+            $user->assignRole("Professor");
             
             // NewUser::dispatch(
             //     $user->name,

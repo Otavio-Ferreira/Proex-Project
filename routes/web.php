@@ -4,8 +4,17 @@ use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
+use App\Http\Controllers\System\Forms\ActivityController;
+use App\Http\Controllers\System\Forms\ExtencionActionsController;
+use App\Http\Controllers\System\Forms\ExternalPartnersController;
+use App\Http\Controllers\System\Forms\FormsResponseController;
+use App\Http\Controllers\System\Forms\ImagesController;
+use App\Http\Controllers\System\Forms\InternalPartnersController;
+use App\Http\Controllers\System\Forms\SocialMediaController;
+use App\Http\Controllers\System\Forms\FormsController;
 use App\Http\Controllers\System\HomeController;
 use App\Http\Middleware\Authenticate;
+use App\Models\Forms\Images;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +69,59 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::post('usuarios/atualizar/{id}', [UsersController::class, 'update'])->name('users.update');
         Route::delete('usuarios/deletar/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
     });
+
+    Route::group(['middleware' => ['auth', 'permission:adicionar_cursos']], function () {
+        Route::get('cursos', [RolesController::class, 'index'])->name('courses.index');
+        // Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
+        // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
+    });
+    Route::group(['middleware' => ['auth', 'permission:adicionar_projetos']], function () {
+        Route::get('projetos', [RolesController::class, 'index'])->name('projects.index');
+        // Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
+        // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
+    });
+    
+    Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {
+        Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
+        Route::get('formulario/detalhes/{id}', [FormsController::class, 'show'])->name('forms.show');
+        Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
+        Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
+        Route::get('resposta/editar/{id}', [FormsResponseController::class, 'edit'])->name('response.edit');
+        Route::post('resposta/editar/{id}', [FormsResponseController::class, 'update'])->name('response.update');
+    });
+    
+    Route::group(['middleware' => ['auth', 'permission:responder_formulário']], function () {
+        Route::get('formulario', [FormsResponseController::class, 'index'])->name('forms.index');
+        Route::get('formulario/avançar/{actual_step}', [FormsResponseController::class, 'advance'])->name('forms.advance');
+        Route::get('formulario/retornar/{actual_step}', [FormsResponseController::class, 'return'])->name('forms.return');
+        Route::post('formulario/persistir', [FormsResponseController::class, 'persist'])->name('forms.persist');
+        Route::delete('formulario/finalizar', [FormsResponseController::class, 'finish'])->name('forms.finish');
+    
+        Route::post('atividade/adicionar', [ActivityController::class, 'store'])->name('activitys.store');
+        Route::post('atividade/editar/{id}', [ActivityController::class, 'update'])->name('activitys.update');
+        Route::delete('atividade/deletar/{id}', [ActivityController::class, 'destroy'])->name('activitys.destroy');
+    
+        Route::post('parceiro/interno/adicionar', [InternalPartnersController::class, 'store'])->name('internalPartners.store');
+        Route::post('parceiro/interno/editar/{id}', [InternalPartnersController::class, 'update'])->name('internalPartners.update');
+        Route::delete('parceiro/interno/deletar/{id}', [InternalPartnersController::class, 'destroy'])->name('internalPartners.destroy');
+    
+        Route::post('parceiro/externo/adicionar', [ExternalPartnersController::class, 'store'])->name('externalPartners.store');
+        Route::post('parceiro/externo/editar/{id}', [ExternalPartnersController::class, 'update'])->name('externalPartners.update');
+        Route::delete('parceiro/externo/deletar/{id}', [ExternalPartnersController::class, 'destroy'])->name('externalPartners.destroy');
+    
+        Route::post('acao/extencao/adicionar', [ExtencionActionsController::class, 'store'])->name('extencionActions.store');
+        Route::post('acao/extencao/editar/{id}', [ExtencionActionsController::class, 'update'])->name('extencionActions.update');
+        Route::delete('acao/extencao/deletar/{id}', [ExtencionActionsController::class, 'destroy'])->name('extencionActions.destroy');
+    
+        Route::post('redes/sociais/adicionar', [SocialMediaController::class, 'store'])->name('socialMedia.store');
+        Route::post('redes/sociais/editar/{id}', [SocialMediaController::class, 'update'])->name('socialMedia.update');
+        Route::delete('redes/sociais/deletar/{id}', [SocialMediaController::class, 'destroy'])->name('socialMedia.destroy');
+    
+        Route::post('images/adicionar', [ImagesController::class, 'store'])->name('images.store');
+        Route::post('images/editar/{id}', [ImagesController::class, 'update'])->name('images.update');
+        Route::delete('images/deletar/{id}', [ImagesController::class, 'destroy'])->name('images.destroy');
+    });
+
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
 });
