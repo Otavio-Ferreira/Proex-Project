@@ -113,7 +113,8 @@
           @foreach ($column['DATA'] as $key => $item)
             <tr>
               <td class="p-0">
-                <a href="{{route('response.edit', $item['RESPONSE']->id)}}" class="text-decoration-none card alert border-0 alert-{{ $column['COR'] }} p-2">
+                <a href="{{ route('response.edit', $item['RESPONSE']->id) }}"
+                  class="text-decoration-none card alert border-0 alert-{{ $column['COR'] }} p-2">
                   <div class="row">
                     <div class="col-8">
                       {{-- <p class="m-0 fs-3 text-dark">{{ $item['RESPONSE']->user->name }}</p> --}}

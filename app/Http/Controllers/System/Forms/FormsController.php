@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Forms\StoreRequest;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
+use App\Models\User;
 use App\Repositories\Forms\Form\FormRepository;
 use App\Services\Forms\FormService;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class FormsController extends Controller
 {
@@ -27,8 +29,14 @@ class FormsController extends Controller
     public function create(Request $request)
     {
         $this->data['forms'] = $this->formRepository->getAllForm($request);
+
+        $this->data['qtd_users'] = User::where('status', 1)->get()->filter(function ($user) {
+            return $user->hasPermissionTo('responder_formulário');
+        })->count();
+
         return view('pages.forms.create', $this->data);
     }
+
     public function show($id)
     {
         $type_status = [
@@ -111,6 +119,12 @@ class FormsController extends Controller
         $this->data['form'] = Forms::find($id);
 
         return view('pages.forms.show', $this->data);
+    }
+
+    public function reports($id){
+        $this->data['form'] = $this->formRepository->getFormById($id);
+        return view('pages.forms.reports', $this->data);
+
     }
 
     public function store(StoreRequest $request)

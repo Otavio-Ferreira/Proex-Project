@@ -11,6 +11,10 @@ class EloquentFormRepository implements FormRepository
         return Forms::orderBy('date', 'desc')->get();
     }
 
+    public function getFormById($id) {
+        return Forms::find($id);
+    }
+
     public function getActualForm() {
         return Forms::where('status', '1')->first();
     }
