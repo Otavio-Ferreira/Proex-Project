@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\Reports\FormReportController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
@@ -121,6 +122,8 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::post('images/adicionar', [ImagesController::class, 'store'])->name('images.store');
         Route::post('images/editar/{id}', [ImagesController::class, 'update'])->name('images.update');
         Route::delete('images/deletar/{id}', [ImagesController::class, 'destroy'])->name('images.destroy');
+        
+        Route::post('relatorio/{id}', [FormReportController::class, 'generate'])->name('form.report');
     });
 
 

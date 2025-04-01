@@ -1,6 +1,27 @@
 @extends('templates.template')
 
 @section('styles')
+  <link rel="stylesheet" href="{{ asset('assets/css/kanban/dataTables.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/kanban/styleDataTable.css') }}">
+  <style>
+    #table thead th {
+      white-space: nowrap;
+      /* Evita que o cabeçalho seja quebrado */
+      width: auto;
+      /* Permite que a largura seja determinada pelo conteúdo */
+    }
+
+    #table tbody td {
+      white-space: nowrap;
+      /* Evita quebra de texto nas células */
+    }
+
+    #table {
+      table-layout: fixed;
+      /* Garante que as colunas do thead e tbody tenham a mesma largura */
+      width: 100%;
+    }
+  </style>
 @endsection
 @section('content')
   <div class="page-header">
@@ -21,65 +42,136 @@
     </div>
   </div>
   <div class="page-body container-xl">
-    <div class="card">
-      <div class="card-body">
-        <form action="" method="post">
-          @csrf
-          <x-form-elements.select.select title="Deseja trazer os dados de todas as respostas?" id="role"
-            name="status">
-            <x-slot:options>
-              <option value="" selected disabled>Selecione</option>
-              <option value="1">Não</option>
-              <option value="2">Sim</option>
-            </x-slot:options>
-          </x-form-elements.select.select>
+    <form action="{{ route('form.report', $form->id) }}" method="post" class="row">
+      @csrf
+      <div class="col-12 p-2">
+        <div class="card mb-2 border-top-0 border-end-0 border-bottom-0 border-4 border-muted">
+          <div class="card-body">
+            <label class="form-label">Selecione os campos adicionais das respostas que devem ser exibidos no
+              relatório</label>
+            <div class="d-flex flex-wrap mt-3">
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="additional_fields[]" value="activitys" type="checkbox">
+                <span class="form-check-label">Atividades</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="additional_fields[]" value="internal_partners" type="checkbox">
+                <span class="form-check-label">Parceiros internos</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="additional_fields[]" value="external_partners" type="checkbox">
+                <span class="form-check-label">Parceiros externos</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="additional_fields[]" value="extension_actions" type="checkbox">
+                <span class="form-check-label">Ações</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="additional_fields[]" value="social_medias" type="checkbox">
+                <span class="form-check-label">Redes sociais</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="additional_fields[]" value="images" type="checkbox">
+                <span class="form-check-label">Imagens</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 p-2">
+        <div class="card mb-2 border-top-0 border-end-0 border-bottom-0 border-4 border-muted">
+          <div class="card-body">
+            <label class="form-label required">Selecione os status das respostas que devem ser exibidos no
+              relatório</label>
+            <div class="d-flex flex-wrap mt-3">
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="status[]" value="0" type="checkbox">
+                <span class="form-check-label">Em andamento</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="status[]" value="1" type="checkbox">
+                <span class="form-check-label">Enviados</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="status[]" value="2" type="checkbox">
+                <span class="form-check-label">Em revisão</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="status[]" value="3" type="checkbox">
+                <span class="form-check-label">Corrigidos</span>
+              </label>
+              <label class="form-check form-switch form-switch-2 me-3">
+                <input class="form-check-input" name="status[]" value="4" type="checkbox">
+                <span class="form-check-label">Aprovados</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 p-2">
+        <div class="card border-top-0 border-end-0 border-bottom-0 border-4 border-muted">
+          <div class="card-body">
+            <x-form-elements.select.select title="Deseja trazer os dados de todas as respostas?" id="role"
+              name="all">
+              <x-slot:options>
+                <option value="" selected disabled>Selecione</option>
+                <option value="false">Não</option>
+                <option value="true">Sim</option>
+              </x-slot:options>
+            </x-form-elements.select.select>
 
-          <div id="comment" style="display: none;">
-            <hr class="mb-2 mt-2">
-            <div class="mb-3">
-              <label class="form-label">Título da ação parceira</label>
-              <div class="d-flex gap-2">
-                <select class="form-select" id="select_project" name="title_partner">
-                  <option value="" selected>Selecione</option>
-                  @foreach ($form->responses as $response)
-                    <option value="{{ $response->id }}" data-title="{{ $response->action->title }}"
-                      data-coordinator="{{ $response->coordinator_name }}">
-                      {{ $response->action->title }}
-                    </option>
-                  @endforeach
-                </select>
-                <button type="button" class="btn btn-success" id="add_project">Adicionar</button>
+            <div id="comment" style="display: none;">
+              <hr class="mb-2 mt-2">
+              <label class="form-label">Selecione os projetos para o relatório</label>
+              <div class="d-flex align-items-center mb-2 w-100">
+                <div class="input-icon w-100">
+                  <input type="text" value="" id="customFilter" class="form-control"
+                    placeholder="Título do projeto">
+                  <span class="input-icon-addon">
+                    <i class="ti icon text-primary ti-search"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="card overflow-auto" style="">
+                  <table class="table table-vcenter mt-0 exclude" id="myTable">
+                    <thead class="">
+                      <tr>
+                        <th>Nome</th>
+                        <th>Professor</th>
+                        <th width="10%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($form->responses as $response)
+                        <tr>
+                          <td>{{ $response->action->title }}</td>
+                          <td>{{ $response->coordinator_name }}</td>
+                          <td>
+                            <span class="col-auto">
+                              <label class="form-check form-check-single form-switch">
+                                <input class="form-check-input" name="projects[]" value="{{ $response->id }}"
+                                  type="checkbox">
+                              </label>
+                            </span>
+                          </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-
-            <!-- Input oculto para armazenar os IDs das respostas selecionadas -->
-            <input type="hidden" id="responses_input" name="responses" value="">
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Título do projeto</th>
-                  <th>Coordenador do projeto</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="responses_table_body">
-              </tbody>
-            </table>
           </div>
-
-          <div class="d-flex">
-            <button type="submit" class="btn btn-success ms-auto">Enviar</button>
-          </div>
-        </form>
-
-
-        Se quer todos ou escolher entre as Respostas/
-        Escolher quais campos devem vim/
-        Escolher sobre quais status devem vim as respostas/
-
+        </div>
       </div>
-    </div>
+      <div class="d-flex mt-2">
+        <button type="submit" class="btn btn-muted ms-auto">
+          <i class="ti ti-file-type-pdf icon"></i>
+          Gerar relatório
+        </button>
+      </div>
+    </form>
   </div>
 @endsection
 @section('scripts')
@@ -107,7 +199,7 @@
       var commentDiv = document.getElementById('comment');
       var roleValue = this.value;
 
-      if (roleValue == '1') {
+      if (roleValue == 'false') {
         commentDiv.style.display = 'block';
       } else {
         commentDiv.style.display = 'none';
@@ -117,73 +209,40 @@
     if (document.getElementById('role').value == '2') {
       document.getElementById('comment').style.display = 'block';
     }
+  </script>
 
-    document.addEventListener("DOMContentLoaded", function() {
-      let selectProject = document.getElementById("select_project");
-      let addProjectBtn = document.getElementById("add_project");
-      let tableBody = document.getElementById("table_body");
-      let responsesInput = document.getElementById("responses_input");
-      let commentDiv = document.getElementById("comment");
-      let roleSelect = document.getElementById("role");
-      let selectedResponses = [];
-
-      if (!selectProject || !addProjectBtn || !tableBody || !responsesInput || !commentDiv || !roleSelect) {
-        console.error("Um ou mais elementos não foram encontrados no DOM.");
-        return;
-      }
-
-      // Adiciona item à tabela
-      addProjectBtn.addEventListener("click", function() {
-        let selectedOption = selectProject.options[selectProject.selectedIndex];
-        if (!selectedOption) return;
-
-        let responseId = selectedOption.value;
-        let title = selectedOption.getAttribute("data-title");
-        let coordinator = selectedOption.getAttribute("data-coordinator");
-
-        if (!responseId || selectedResponses.includes(responseId)) {
-          return; // Evita valores duplicados ou inválidos
-        }
-
-        selectedResponses.push(responseId);
-        responsesInput.value = selectedResponses.join(",");
-
-        let newRow = `<tr data-id="${responseId}">
-                        <td>${title}</td>
-                        <td>${coordinator}</td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-response">Remover</button></td>
-                      </tr>`;
-
-        if (tableBody) {
-          tableBody.insertAdjacentHTML("beforeend", newRow);
+  <script src="{{ asset('assets/js/kanban/dataTables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/kanban/startDataTable.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      var table = $('#myTable').DataTable({
+        info: false,
+        ordering: false,
+        paging: true,
+        searching: true,
+        autoWidth: false,
+        scrollCollapse: false,
+        border: false,
+        lengthChange: false, // Remove o seletor de quantidade de registros
+        pagingType: 'simple_numbers', // Exemplo de tipo de paginação, pode ser customizado
+        language: {
+          zeroRecords: " ",
+          emptyTable: " ",
+          paginate: {
+            first: "Primeiro",
+            last: "Último",
+            next: "Próximo",
+            previous: "Anterior"
+          }
         }
       });
 
-      // Remove item da tabela
-      if (tableBody) {
-        tableBody.addEventListener("click", function(event) {
-          if (event.target.classList.contains("remove-response")) {
-            let row = event.target.closest("tr");
-            let responseId = row.getAttribute("data-id");
+      $('#customFilter').on('keyup', function() {
+        table.search(this.value).draw();
+      });
 
-            selectedResponses = selectedResponses.filter(id => id !== responseId);
-            responsesInput.value = selectedResponses.join(",");
-
-            row.remove();
-          }
-        });
-      }
-
-      // Controla a exibição do bloco de respostas
-      roleSelect.addEventListener("change", function() {
-        if (this.value == "1") {
-          commentDiv.style.display = "block";
-        } else {
-          commentDiv.style.display = "none";
-          selectedResponses = [];
-          responsesInput.value = "";
-          tableBody.innerHTML = ""; // Limpa a tabela
-        }
+      $('.customFilter').on('keyup', function() {
+        table.search(this.value).draw();
       });
     });
   </script>

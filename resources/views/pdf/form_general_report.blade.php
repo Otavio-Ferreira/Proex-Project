@@ -71,7 +71,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($municipios as $municipio)
+            {{-- @foreach ($municipios as $municipio)
                 <tr>
                     <td>{{ $municipio->nome }}</td>
                     <td>{{ $municipio->regiao }}</td>
@@ -81,30 +81,30 @@
                     <td>{{ $municipio->numero_negocios }}</td>
                     <td>{{ $municipio->numero_empregos }}</td>
                 </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
     </table>
     <table class="content-table" style="margin-bottom: 20px;">
         <thead>
             <tr>
                 <th>Formulário</th>
-                @foreach ($resultadosPorMunicipio as $municipio => $formularios)
+                {{-- @foreach ($resultadosPorMunicipio as $municipio => $formularios)
                     @foreach ($formularios as $formulario)
                         <th style="text-align: center;">{{ $formulario['formulario'] }}</th>
                     @endforeach
-                @endforeach
+                @endforeach --}}
             </tr>
             <tr>
                 <th>Dimensão</th>
-                @foreach ($resultadosPorMunicipio as $municipio => $formularios)
+                {{-- @foreach ($resultadosPorMunicipio as $municipio => $formularios)
                     @foreach ($formularios as $formulario)
                         <th style="text-align: center;" width="10%">{{ $municipio }}</th>
                     @endforeach
-                @endforeach
+                @endforeach --}}
             </tr>
         </thead>
         <tbody>
-            @foreach ($resultadosPorMunicipio->first()->first()['dimensoes'] as $dimensao => $dados)
+            {{-- @foreach ($resultadosPorMunicipio->first()->first()['dimensoes'] as $dimensao => $dados)
                 @if ($dimensao !== 'mediaDasMedias')
                     <tr>
                         <td>{{ $dimensao }}</td>
@@ -117,19 +117,19 @@
                         @endforeach
                     </tr>
                 @endif
-            @endforeach
+            @endforeach --}}
             <tr class="table-primary text-white fw-bold">
                 <td>Grau de maturidade em relação a transformação digital</td>
-                @foreach ($resultadosPorMunicipio as $municipio => $formularios)
+                {{-- @foreach ($resultadosPorMunicipio as $municipio => $formularios)
                     @foreach ($formularios as $formulario)
                         <td style="text-align: center; font-weight: bolder;">
                             {{ number_format($formulario['somaMedias'], 2) }}</td>
                     @endforeach
-                @endforeach
+                @endforeach --}}
             </tr>
         </tbody>
     </table>
-    @foreach ($respostas_detalhadas as $index => $resposta_detalhada)
+    {{-- @foreach ($respostas_detalhadas as $index => $resposta_detalhada)
         <table class="header-table">
             <thead>
                 <tr>
@@ -163,9 +163,9 @@
                 @endforeach
             </tbody>
         </table>
-    @endforeach
+    @endforeach --}}
     <div style="margin-top: 20px; font-weight: bolder;">
-        Emitido por: {{ $usuario->name }}
+        {{-- Emitido por: {{ $usuario->name }} --}}
     </div>
 </body>
 
