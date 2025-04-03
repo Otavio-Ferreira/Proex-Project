@@ -29,9 +29,10 @@ class FormReportController extends Controller
             }
 
             // Carregar campos adicionais dinamicamente
-            if(isset($request->additional_fields))
-            foreach ($request->additional_fields as $field) {
-                $form_responses->with($field);
+            if(isset($request->additional_fields)){
+                foreach ($request->additional_fields as $field) {
+                    $form_responses->with($field);
+                }
             }
 
             // Obter os dados
@@ -43,6 +44,8 @@ class FormReportController extends Controller
                 'responses' => $responses,
             ];
 
+            // return view('pdf.form_general_report', $data);
+            // dd($data);
             $pdf = Pdf::loadView('pdf.form_general_report', $data)
                 ->setPaper('a4', 'landscape');
 
