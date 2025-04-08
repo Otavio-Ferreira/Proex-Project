@@ -8,13 +8,14 @@ use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FormReportController extends Controller
 {
     public function generate(FormReport $request, $id)
     {
         // dd($request->all());
-        // try {
+        try {
 
             // Buscar o formulário
             $form = Forms::findOrFail($id);
@@ -37,11 +38,29 @@ class FormReportController extends Controller
 
             // Obter os dados
             $responses = $form_responses->get();
+            $arry = $request->additional_fields ?? [];
+            if(in_array("images", $arry)){
+                foreach ($responses as $response) {
+                    if ($response->images) {
+                        foreach ($response->images as $image) {
+                            $imagePath = public_path($image->image);
+                
+                            if (file_exists($imagePath)) {
+                                $imageData = base64_encode(file_get_contents($imagePath));
+                                $mimeType = mime_content_type($imagePath);
+                                $image->base64 = "data:{$mimeType};base64,{$imageData}";
+                            }
+                        }
+                    }
+                }
+            }
 
             // Preparar os dados para a view
             $data = [
                 'form' => $form,
+                'fields' => $request->additional_fields ?? [],
                 'responses' => $responses,
+                'user' => Auth::user()
             ];
 
             // return view('pdf.form_general_report', $data);
@@ -50,8 +69,8 @@ class FormReportController extends Controller
                 ->setPaper('a4', 'landscape');
 
             return $pdf->download('form_general_report.pdf');
-        // } catch (\Throwable $th) {
-        //     return redirect()->back()->with("toast_error", "Erro ao gerar o relatório em PDF. Por favor, tente novamente mais tarde.");
-        // }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("toast_error", "Erro ao gerar o relatório em PDF. Por favor, tente novamente mais tarde.");
+        }
     }
 }

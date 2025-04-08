@@ -64,6 +64,7 @@
         <th>Título</th>
         <th>Data de criação</th>
         <th>Prazo</th>
+        <th>Qtd. Respostas</th>
         <th>Status Atual</th>
       </tr>
     </thead>
@@ -72,6 +73,7 @@
         <td>{{ $form->title }}</td>
         <td>{{ date('d/m/Y', strtotime($form->date)) }}</td>
         <td>{{ date('d/m/Y', strtotime($form->created_at)) }}</td>
+        <td>{{ count($responses) }}</td>
         <td>
           {{ App\Helpers\Status\Status::get_status_form($form->status) }}
         </td>
@@ -123,7 +125,7 @@
       </tr>
     </tbody>
   </table> --}}
-  <table>
+  <table style="margin-bottom: 5px;">
     <thead>
       <tr>
         <th colspan="2">Respostas do formulário</th>
@@ -131,85 +133,196 @@
     </thead>
   </table>
   @foreach ($responses as $index => $response)
-    <table style="text-align: left;">
+    <table style="text-align: left !important;margin-bottom: 20px;">
       <thead>
         <tr>
-          <th width="20%" scope="row">Título da ação:</th>
+          <th width="20%" scope="row" style="text-align: left;">Título da ação:</th>
           <td width="80%">{{ $response->action->title ?? 'Não informado' }}</td>
-          <th width="20%">Status atual</th>
-          <td width="80%" colspan="4">
+          <th width="20%" style="text-align: left;">Status atual</th>
+          <td width="80%" colspan="3">
             {{ App\Helpers\Status\Status::get_status_response_form($response->was_finished) ?? 'Não informado' }}
           </td>
-        </tr>
-        <tr widht="100%">
-          <th width="15%" style="white-space: nowrap;" scope="row">Data de início</th>
-          <td width="15%" style="white-space: nowrap;">
-            {{ date('d/m/Y', strtotime($response->created_at)) ?? 'Não informado' }}</td>
-          <th width="15%" style="white-space: nowrap;">Tipo de ação</th>
-          <td width="15%" style="white-space: nowrap;">{{ $response->type_action ?? 'Não informado' }}</td>
-          <th width="20%" style="white-space: nowrap;">Modalidade da ação</th>
-          <td width="20%" style="white-space: nowrap;" >{{ $response->action_modality ?? 'Não informado' }}</td>
+          {{-- <th></th>
+          <td></td> --}}
         </tr>
         <tr>
-          <th style="white-space: nowrap;">Nome do coordenador</th>
+          <th style="white-space: nowrap; text-align: left;">Data de início</th>
+          <td style="white-space: nowrap;">
+            {{ date('d/m/Y', strtotime($response->created_at)) ?? 'Não informado' }}</td>
+          <th style="white-space: nowrap; text-align: left; text-align: left;">Tipo de ação</th>
+          <td style="white-space: nowrap;">{{ $response->type_action ?? 'Não informado' }}</td>
+          <th style="white-space: nowrap; text-align: left; text-align: left;">Modalidade da ação</th>
+          <td style="white-space: nowrap;">{{ $response->action_modality ?? 'Não informado' }}</td>
+        </tr>
+        <tr>
+          <th style="white-space: nowrap; text-align: left;">Nome do coordenador</th>
           <td style="white-space: nowrap;">{{ $response->coordinator_name ?? 'Não informado' }}</td>
-          <th style="white-space: nowrap;">Perfil do coordenador</th>
+          <th style="white-space: nowrap; text-align: left;">Perfil do coordenador</th>
           <td style="white-space: nowrap;">{{ $response->coordinator_profile ?? 'Não informado' }}</td>
-          <th style="white-space: nowrap;">Siape do coordenador</th>
+          <th style="white-space: nowrap; text-align: left;">Siape do coordenador</th>
           <td style="white-space: nowrap;">{{ $response->coordinator_siape ?? 'Não informado' }}</td>
         </tr>
         <tr>
-          <th style="white-space: nowrap;">Curso do projeto</th>
-          <td style="white-space: nowrap;">{{ $response->coordinator_course ?? 'Não informado' }}</td>
-          <th style="white-space: nowrap;">Alcançe interno</th>
+          <th style="white-space: nowrap; text-align: left;">Curso do projeto</th>
+          <td style="white-space: nowrap;">{{ $response->course->name ?? 'Não informado' }}</td>
+          <th style="white-space: nowrap; text-align: left;">Alcançe interno</th>
           <td style="white-space: nowrap;">{{ $response->qtd_internal_audience ?? 'Não informado' }}</td>
-          <th style="white-space: nowrap;">Alacançe externo</th>
+          <th style="white-space: nowrap; text-align: left;">Alacançe externo</th>
           <td style="white-space: nowrap;">{{ $response->qtd_external_audience ?? 'Não informado' }}</td>
         </tr>
         <tr>
-          <th width="20%">Avanços e impactos alcançados</th>
+          <th width="20%" scope="row" style="text-align: left;">Avanços e impactos alcançados</th>
           <td width="80%" colspan="5">{{ $response->advances_extensionist_action ?? 'Não informado' }}</td>
         </tr>
         <tr>
-          <th width="20%">Desenvolvimento de tecnologia social</th>
+          <th width="20%" scope="row" style="text-align: left;">Desenvolvimento de tecnologia social</th>
           <td width="80%" colspan="5">{{ $response->social_technology_development ?? 'Não informado' }}</td>
         </tr>
         <tr>
-          <th width="20%">Avaliação final</th>
+          <th width="20%" scope="row" style="text-align: left;">Avaliação final</th>
           <td width="80%" colspan="5">{{ $response->instrument_avaliation ?? 'Não informado' }}</td>
+        </tr>
+        <tr>
+          @if (in_array('activitys', $fields))
+            <th width="20%" scope="row" style="text-align: left;">Atividades</th>
+            <td width="80%" colspan="5" style="padding: 5px">
+              <ul style="margin: 0%;">
+                @if (isset($response->activitys))
+                  @foreach ($response->activitys as $activity)
+                    <li style="margin: 5px 0px 5px 0px;"><strong>Atividade: </strong>{{ $activity->activity }}<strong>
+                        Local: </strong> {{ $activity->address }}</li>
+                  @endforeach
+                @else
+                  Não informado
+                @endif
+              </ul>
+            </td>
+          @endif
+        </tr>
+        <tr>
+          @if (in_array('internal_partners', $fields))
+            <th width="20%" style="text-align: left;">Parceiros internos</th>
+            <td width="80%" colspan="5" style="padding: 5px">
+              <ul style="margin: 0%;">
+                @if (isset($response->internal_partners))
+                  @foreach ($response->internal_partners as $internal_partner)
+                    <li style="margin: 5px 0px 5px 0px;">
+                      <strong>Título do parceiro: </strong>{{ $internal_partner->title_action_partner->title }}
+                  @endforeach
+                @else
+                  Não informado
+                @endif
+              </ul>
+            </td>
+          @endif
+        </tr>
+        <tr>
+          @if (in_array('external_partners', $fields))
+            <th width="20%" style="text-align: left;">Parceiros internos</th>
+            <td width="80%" colspan="5" style="padding: 5px">
+              <ul style="margin: 0%;">
+                @if (isset($response->external_partners))
+                  @foreach ($response->external_partners as $external_partner)
+                    <li style="margin: 5px 0px 5px 0px;">
+                      <strong>Nome do parceiro: </strong>{{ $external_partner->name_partner }}
+                      <strong> Tipo de instituição: </strong> {{ $external_partner->institution_type }}
+                    </li>
+                    <strong> Tipo de parceria: </strong> {{ $external_partner->partnership_type }}</li>
+                  @endforeach
+                @else
+                  Não informado
+                @endif
+              </ul>
+            </td>
+          @endif
+        </tr>
+        <tr>
+          @if (in_array('extension_actions', $fields))
+            <th width="20%" style="text-align: left;">Ações</th>
+            <td width="80%" colspan="5" style="padding: 5px">
+              <ul style="margin: 0%;">
+                @if (isset($response->extension_actions))
+                  @foreach ($response->extension_actions as $extension_action)
+                    <li style="margin: 5px 0px 5px 0px;">
+                      <strong>Ação: </strong>{{ $extension_action->title_action }}
+                      <strong> Escolas Públicas? </strong>
+                      {{ $extension_action->its_for_public_schools ? 'Sim' : 'Não' }}
+                    </li>
+                    <strong> Descrição: </strong> {{ $extension_action->international_description }}</li>
+                  @endforeach
+                @else
+                  Não informado
+                @endif
+              </ul>
+            </td>
+          @endif
+        </tr>
+        <tr>
+          @if (in_array('social_medias', $fields))
+            <th width="20%" style="text-align: left;">Redes sociais</th>
+            <td width="80%" colspan="5" style="padding: 5px">
+              <ul style="margin: 0%;">
+                @if (isset($response->social_medias))
+                  @foreach ($response->social_medias as $social_media)
+                    <li style="margin: 5px 0px 5px 0px;">
+                      <strong>Nome: </strong>{{ $social_media->name }}
+                      <strong> Link </strong> <a href="{{ $social_media->link }}">Acessar</a>
+                    </li>
+                  @endforeach
+                @else
+                  Não informado
+                @endif
+              </ul>
+            </td>
+          @endif
         </tr>
       </thead>
     </table>
-    {{-- <table class="content-table" style="margin-bottom: 20px;">
-            <thead>
-                <tr>
-                    <th>Dimensão</th>
-                    <th>Dispositivo</th>
-                    <th>Requisito</th>
-                    <th>Descrição</th>
-                    <th>Nota</th>
-                    <th>Peso</th>
-                    <th>Evidência</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($resposta_detalhada as $resposta)
-                    <tr>
-                        <td>{{ $resposta->titulo_dimensao }}</td>
-                        <td>{{ $resposta->dispositivo }}</td>
-                        <td>{{ $resposta->requisito }}</td>
-                        <td>{{ $resposta->descricao }}</td>
-                        <td>{{ $resposta->nota }}</td>
-                        <td>{{ $resposta->peso }}</td>
-                        <td>{{ $resposta->evidencia }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table> --}}
+    @if (in_array('images', $fields))
+      @if (isset($response->images) && count($response->images) > 0)
+        <table>
+          <thead>
+            <tr>
+              <th colspan="2">Imagens</th>
+            </tr>
+          </thead>
+        </table>
+        <table width="100%" border="1" cellspacing="0" cellpadding="5"
+          style="border-collapse: collapse; margin-bottom: 20px;">
+          <thead>
+            <tr>
+              <th style="text-align: center;">Imagem</th>
+              <th style="text-align: left;">Endereço</th>
+              <th style="text-align: left;">Data</th>
+              <th style="text-align: left;">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($response->images as $image)
+              <tr>
+                <td style="text-align: center;">
+                  <img src="{{ $image->base64 }}" style="max-width: 120px; height: auto;" alt="Imagem">
+                </td>
+                <td>{{ $image->address }}</td>
+                <td>{{ date('d/m/Y', strtotime($image->date)) }}</td>
+                <td>{{ $image->description }}</td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      @else
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">Imagens não informadas</th>
+          </tr>
+        </thead>
+      </table>
+      @endif
+    @endif
   @endforeach
   <div style="margin-top: 20px; font-weight: bolder;">
-    {{-- Emitido por: {{ $usuario->name }} --}}
-  </div>
+    Emitido por: {{ $user->name }}
 </body>
 
 </html>

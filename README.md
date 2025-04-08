@@ -38,7 +38,7 @@ docker run --rm \
 ``` 
 6. Adicione o comando sail ao seu path
 ```bash
-echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" >> ~/.bashrc & source ~/.bashrc
+echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" >> ~/.bashrc && source ~/.bashrc
 
 ```
 7. Inicialize os containers
