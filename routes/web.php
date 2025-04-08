@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\Reports\FormReportController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
@@ -86,6 +87,7 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::get('formulario/detalhes/{id}', [FormsController::class, 'show'])->name('forms.show');
         Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
         Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
+        Route::get('resposta/relatórios/{id}', [FormsController::class, 'reports'])->name('forms.reports');
         Route::get('resposta/editar/{id}', [FormsResponseController::class, 'edit'])->name('response.edit');
         Route::post('resposta/editar/{id}', [FormsResponseController::class, 'update'])->name('response.update');
     });
@@ -120,6 +122,8 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::post('images/adicionar', [ImagesController::class, 'store'])->name('images.store');
         Route::post('images/editar/{id}', [ImagesController::class, 'update'])->name('images.update');
         Route::delete('images/deletar/{id}', [ImagesController::class, 'destroy'])->name('images.destroy');
+        
+        Route::post('relatorio/{id}', [FormReportController::class, 'generate'])->name('form.report');
     });
 
 

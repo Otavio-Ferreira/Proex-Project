@@ -31,10 +31,12 @@
             <table class="table table-vcenter table card-table table-vcenter text-nowrap datatable">
               <thead>
                 <th>Título</th>
-                <th>Data</th>
+                <th>Prazo</th>
+                <th>Respostas</th>
                 <th>Status</th>
-                <th width="10%"></th>
-                <th width="10%"></th>
+                <th width="5%"></th>
+                <th width="5%"></th>
+                <th width="5%"></th>
               </thead>
               <tbody>
                 @foreach ($forms as $form)
@@ -42,16 +44,28 @@
                     <td>{{ $form->title }}</td>
                     <td>{{ date('d/m/Y', strtotime($form->date)) }}</td>
                     <td>
+                      <x-badge.badge class="{{ $form->responses->count() == 0 ? 'bg-danger-lt' : ' bg-primary-lt' }}">
+                        <x-slot:content>
+                          {{ $form->responses->count() . '/' . $qtd_users }}
+                        </x-slot:content>
+                      </x-badge.badge>
+                    </td>
+                    <td>
                       <x-badge.badge class="{{ $form->status == 1 ? 'bg-success' : 'bg-danger' }}">
                         <x-slot:content>
                           {{ $form->status == 1 ? 'Ativo' : 'Inativo' }}
                         </x-slot:content>
                       </x-badge.badge>
                     </td>
-                    <td><a class="btn btn-info" href="{{route('forms.show', $form->id)}}">Detalhes</a>
+                    <td><a class="btn p-1 px-2 rounded-2 btn-info btn-sm"
+                        href="{{ route('forms.show', $form->id) }}">Detalhes</a>
                     </td>
-                    <td><button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#forms-edit{{ $form->id }}" aria-controls="offcanvasExample">Editar</button>
+                    <td><button class="btn p-1 px-2 rounded-2 btn-secondary btn-sm" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#forms-edit{{ $form->id }}"
+                        aria-controls="offcanvasExample">Editar</button>
+                    </td>
+                    <td><a class="btn p-1 px-2 rounded-2 btn-yellow btn-sm"
+                        href="{{ route('forms.reports', $form->id) }}">Relatórios</a>
                     </td>
                   </tr>
                   <div class="offcanvas offcanvas-end" tabindex="-1" id="forms-edit{{ $form->id }}"
