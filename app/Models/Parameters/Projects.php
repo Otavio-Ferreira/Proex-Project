@@ -12,3 +12,7 @@ class Projects extends Model
 
     protected $fillable = ['title'];
 }
+
+
+// echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" >> ~/.bashrc & source ~/.bashrc
+// echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" >> ~/.bashrc && source ~/.bashrc

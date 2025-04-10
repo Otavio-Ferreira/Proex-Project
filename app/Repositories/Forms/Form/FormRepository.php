@@ -7,6 +7,8 @@ use App\Models\User;
 interface FormRepository{
 
     public function getAllForm($request);
+    
+    public function getFormById($id);
 
     public function getActualForm();
 

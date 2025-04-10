@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -73,4 +74,8 @@ class FormsResponse extends Model
     public function comment() : HasOne{
         return $this->hasOne(Comments::class, 'form_response_id', 'id');
     }
+
+    // public function form():BelongsToMany{
+    //     return $this->belongsToMany(Forms::class, 'id', 'forms_id');
+    // }
 }
