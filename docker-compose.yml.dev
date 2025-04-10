@@ -73,7 +73,7 @@ services:
         ports:
             - "8083:80"
         environment:
-            PMA_HOST: db
+            PMA_HOST: mysql_repoex
             PMA_PORT: 3306
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
         networks:
