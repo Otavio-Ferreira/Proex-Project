@@ -11,7 +11,7 @@ Antes de começar, verifique se você possui o Docker instalado em sua máquina.
 
 1. Clone este repositório em sua máquina usando o seguinte comando:
 ```bash
-git clone git@github.com:Otavio-Ferreira/Proex-Project.git
+git clone https://github.com/Otavio-Ferreira/Proex-Project.git
 ```
 2. Entre no repositorio clonado
 ```bash
@@ -41,26 +41,30 @@ docker run --rm \
 echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" >> ~/.bashrc && source ~/.bashrc
 
 ```
-7. Inicialize os containers
+7. Construa a imagem local a partir do Dockerfile
+```
+sail build
+```
+8. Inicialize os containers
 ```bash
 sail up -d
 ```
-8. Gere a chave de criptografia do Laravel:
+9. Gere a chave de criptografia do Laravel:
 ```bash
 sail php artisan key:generate
 ```
-9.   Crie um link simbólico para o armazenamento público:
+10.   Crie um link simbólico para o armazenamento público:
 ```bash
 sail php artisan storage:link
 ```
-10.   Instale as dependências do NPM:
+<!-- 11.   Instale as dependências do NPM:
 ```bash
 sail npm install
 ```
 11.   Compile os assets:
 ```bash
 sail npm run build
-```
+``` -->
 
 12.   Rode as migrations e seeds:
 ```bash
@@ -68,10 +72,10 @@ sail php artisan migrate
 sail php artisan db:seed
 ```
 
-13.   Execute a aplicação Laravel Sail:
+<!-- 13.   Execute a aplicação Laravel Sail:
 ```bash
 sail npm run dev
-```
-1.  Acesse o dashboard padrão do sbadmin2 através do link: http://localhost:8081
+``` -->
+1.  Acesse o sistema através do link: http://localhost:8081
 
 
