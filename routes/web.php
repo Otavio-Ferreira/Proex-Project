@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\Data\CourseController;
+use App\Http\Controllers\Data\ProjectsController;
 use App\Http\Controllers\Reports\FormReportController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
@@ -14,6 +16,7 @@ use App\Http\Controllers\System\Forms\InternalPartnersController;
 use App\Http\Controllers\System\Forms\SocialMediaController;
 use App\Http\Controllers\System\Forms\FormsController;
 use App\Http\Controllers\System\HomeController;
+use App\Http\Controllers\System\Profile\ProfileController;
 use App\Http\Middleware\Authenticate;
 use App\Models\Forms\Images;
 use Illuminate\Support\Facades\Auth;
@@ -72,12 +75,13 @@ Route::middleware(Authenticate::class)->group(function () {
     });
 
     Route::group(['middleware' => ['auth', 'permission:adicionar_cursos']], function () {
-        Route::get('cursos', [RolesController::class, 'index'])->name('courses.index');
-        // Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
-        // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
+        Route::get('cursos', [CourseController::class, 'index'])->name('courses.index');
+        Route::post('cursos/adicionar', [CourseController::class, 'store'])->name('courses.store');
+        Route::post('cursos/atualizar/{id}', [CourseController::class, 'update'])->name('courses.update');
+        Route::delete('cursos/deletar/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
     });
     Route::group(['middleware' => ['auth', 'permission:adicionar_projetos']], function () {
-        Route::get('projetos', [RolesController::class, 'index'])->name('projects.index');
+        Route::get('projetos', [ProjectsController::class, 'index'])->name('projects.index');
         // Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
         // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
     });
@@ -128,4 +132,6 @@ Route::middleware(Authenticate::class)->group(function () {
 
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
+    Route::get('perfil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('perfil', [ProfileController::class, 'store'])->name('profile.store');
 });

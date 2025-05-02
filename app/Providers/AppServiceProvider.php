@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Course\CourseRepository;
+use App\Repositories\Course\EloquentCourseRepository;
 use App\Repositories\Forms\InternalPartner\InternalPartnerRepository;
 use App\Repositories\Forms\Activity\ActivityRepository;
 use App\Repositories\Forms\Activity\EloquentActivityRepository;
@@ -18,6 +20,8 @@ use App\Repositories\Forms\Response\EloquentResponseRepository;
 use App\Repositories\Forms\Response\ResponseRepository;
 use App\Repositories\Forms\SocialMedia\EloquentSocialMediaRepository;
 use App\Repositories\Forms\SocialMedia\SocialMediaRepository;
+use App\Repositories\Persons\EloquentPersonsRepository;
+use App\Repositories\Persons\PersonsRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -35,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ExtensionActionRepository::class, EloquentExtensionActionRepository::class);
         $this->app->bind(SocialMediaRepository::class, EloquentSocialMediaRepository::class);
         $this->app->bind(ImageRepository::class, EloquentImageRepository::class);
+        $this->app->bind(PersonsRepository::class, EloquentPersonsRepository::class);
+        $this->app->bind(CourseRepository::class, EloquentCourseRepository::class);
     }
 
     /**

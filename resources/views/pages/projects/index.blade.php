@@ -86,7 +86,7 @@
   <div class="page-body">
     <div class="">
       <div class="table-responsive">
-        <table class="border unded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped" id="userTable">
+        <table class="border rounded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped" id="userTable">
           <thead>
             <tr>
               <th>Nome</th>

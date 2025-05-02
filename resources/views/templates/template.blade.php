@@ -70,6 +70,8 @@
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <a href="{{ route('profile.index') }}" class="dropdown-item m-0">Perfil</a>
+              <div class="dropdown-divider m-0"></div>
               <a href="{{ route('logout') }}" class="dropdown-item">Sair</a>
             </div>
           </div>
@@ -100,7 +102,7 @@
                 </x-navbar.navbar-item>
               @endcanany
 
-              {{-- @canany(['adicionar_cursos', 'adicionar_projetos'])
+              @canany(['adicionar_cursos', 'adicionar_projetos'])
                 <x-navbar.navbar-item route="" title="Dados"
                   isActive="{{ request()->routeIs(['courses.*', 'projects.*']) ? true : false }}"
                   icon="ti-file-database">
@@ -113,7 +115,7 @@
                     @endcan
                   </x-slot:links>
                 </x-navbar.navbar-item>
-              @endcanany --}}
+              @endcanany
 
               @canany(['adicionar_usuário', 'adicionar_grupo', 'adicionar_permissões'])
                 <x-navbar.navbar-item route="" title="Configurações"

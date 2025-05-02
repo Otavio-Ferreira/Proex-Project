@@ -20,6 +20,18 @@
     </div>
   </div>
   <div class="page-body">
+    @if (!$person)
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <img src="{{ asset('assets/img/illustrations/funny.svg') }}" alt="">
+        </div>
+        <div class="col-12 col-md-6">
+            <h1>Olá, <span class="text-primary">{{$user->name}}</span> Seja bem vindo ao sistema de PROEX!</h1>
+            <h3>Para continuar precisamos que você clique no botão abaixo para completar o seu cadastro.</h3>
+            <a href="{{route('profile.index')}}" class="btn btn-primary">Completar Cadastro</a>
+        </div>
+      </div>
+    @endif
     @can('ver_dashboard')
     @endcan
   </div>

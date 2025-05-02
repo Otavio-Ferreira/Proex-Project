@@ -26,19 +26,18 @@
         <div class="col">
           <div class="col">
             <div class="page-pretitle">
-              <a href="{{ route('users.index') }}">Usuários</a>
+              <a href="{{ route('courses.index') }}">Cursos</a>
             </div>
             <h2 class="page-title">
-              Usuários
+              Cursos
             </h2>
           </div>
         </div>
         <div class="col-auto ms-auto">
           <div class="btn-list">
             <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
-              data-bs-target="#modal-add-user">
-              <i class="icon ti ti-user-plus"></i>
-              Adicionar usuário
+              data-bs-target="#modal-add-course">
+              Adicionar curso
             </a>
             <div class="d-flex align-items-center">
               <div class="input-icon me-2">
@@ -48,34 +47,18 @@
                 </span>
               </div>
             </div>
-            <x-modal.modal route="{{ route('users.store') }}" id="modal-add-user" class="modal-dialog-centered"
-              title="Adicionar usuário" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
+            <x-modal.modal route="{{ route('courses.store') }}" id="modal-add-course" class="modal-dialog-centered"
+              title="Adicionar curso" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
               typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
               <x-slot:content>
                 @include('components.form-elements.input.input', [
-                    'title' => 'Nome',
+                    'title' => 'Nome do curso',
                     'type' => 'text',
                     'class' => 'mb-3',
                     'name' => 'name',
                     'required' => 'true',
-                    'placeholder' => 'Digite o nome do usuário',
+                    'placeholder' => 'Digite o nome do curso',
                 ])
-                @include('components.form-elements.input.input', [
-                    'title' => 'Email',
-                    'type' => 'text',
-                    'class' => 'mb-3',
-                    'name' => 'email',
-                    'required' => 'true',
-                    'placeholder' => 'Digite o email do usuário',
-                ])
-                <x-form-elements.select.select title="Grupo de permissões" id="role" name="role">
-                  <x-slot:options>
-                    <option value="" selected>Selecione</option>
-                    @foreach ($roles as $role)
-                      <option value="{{ $role->name }}">{{ $role->name }}</option>
-                    @endforeach
-                  </x-slot:options>
-                </x-form-elements.select.select>
               </x-slot:content>
             </x-modal.modal>
           </div>
@@ -86,72 +69,45 @@
   <div class="page-body">
     <div class="">
       <div class="table-responsive">
-        <table class="border unded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped" id="userTable">
+        <table class="rounded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped"
+          id="userTable">
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Email</th>
-              <th>Grupo</th>
-              <th>Status</th>
               <th width="5%"></th>
               <th width="5%"></th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($users as $user)
+            @foreach ($courses as $course)
               <tr>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->roles->first()->name }}</td>
-                <td>
-                  <x-badge.badge class="{{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
-                    <x-slot:content>
-                      {{ $user->status == 1 ? 'Ativo' : 'Inativo' }}
-                    </x-slot:content>
-                  </x-badge.badge>
-                </td>
+                <td>{{ $course->name }}</td>
                 <td>
                   <button class="btn btn-secondary" data-bs-toggle="modal"
-                    data-bs-target="#modal-edit-user{{ $user->id }}"><i class="ti ti-edit"></i></button>
-                  <x-modal.modal route="{{ route('users.update', $user->id) }}" id="modal-edit-user{{ $user->id }}"
-                    class="modal-dialog-centered" title="Editar usuário" typeBtnClose="button" classBtnClose="me-auto"
-                    textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
+                    data-bs-target="#modal-edit-course{{ $course->id }}"><i class="ti ti-edit"></i></button>
+                  <x-modal.modal route="{{ route('courses.update', $course->id) }}"
+                    id="modal-edit-course{{ $course->id }}" class="modal-dialog-centered" title="Editar curso"
+                    typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar" typeBtnSave="submit"
+                    classBtnSave="btn-primary" textBtnSave="Salvar">
                     <x-slot:content>
                       @include('components.form-elements.input.input', [
-                          'title' => 'Nome',
+                          'title' => 'Nome do curso',
                           'type' => 'text',
                           'class' => 'mb-3',
                           'name' => 'name',
                           'required' => 'true',
-                          'value' => $user->name,
+                          'value' => $course->name,
                       ])
-
-                      <x-form-elements.select.select title="Status" id="status" name="status">
-                        <x-slot:options>
-                          <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Ativo</option>
-                          <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Inativo</option>
-                        </x-slot:options>
-                      </x-form-elements.select.select>
-
-                      <x-form-elements.select.select title="Grupo de permissões" id="role" name="role">
-                        <x-slot:options>
-                          @foreach ($roles as $role)
-                            <option value="{{ $role->name }}"
-                              {{ $role->name == $user->roles->first()->name ? 'selected' : '' }}>{{ $role->name }}
-                            </option>
-                          @endforeach
-                        </x-slot:options>
-                      </x-form-elements.select.select>
                     </x-slot:content>
                   </x-modal.modal>
                 </td>
                 <td>
                   <button class="btn btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#modal-delete-user{{ $user->id }}"><i class="ti ti-trash"></i></button>
+                    data-bs-target="#modal-delete-course{{ $course->id }}"><i class="ti ti-trash"></i></button>
 
-                  <x-modal.modal-alert route="{{ route('users.destroy', $user->id) }}"
-                    id="modal-delete-user{{ $user->id }}" class="modal-dialog-centered modal-sm"
-                    background="bg-danger" classBody="text-center py-4" title="Excluír usuário" typeBtnClose="button"
+                  <x-modal.modal-alert route="{{ route('courses.destroy', $course->id) }}"
+                    id="modal-delete-course{{ $course->id }}" class="modal-dialog-centered modal-sm"
+                    background="bg-danger" classBody="text-center py-4" title="Excluír curso" typeBtnClose="button"
                     classBtnClose="me-auto w-100" textBtnClose="Cancelar" typeBtnSave="submit"
                     classBtnSave="btn-danger w-100" textBtnSave="Deletar">
                     <x-slot:content>

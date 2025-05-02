@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Parameters\Courses;
 use App\Models\Parameters\Projects;
+use App\Models\Persons\Persons;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -33,7 +34,7 @@ class DatabaseSeeder extends Seeder
             "5" => "adicionar_projetos",
             "6" => "responder_formulário",
             "7" => "adicionar_formulário",
-            "8" => "ver_respostas",
+            "8" => "ver_respostas"
         ];
 
         foreach ($permissions as $permission) {
@@ -60,6 +61,11 @@ class DatabaseSeeder extends Seeder
             "adicionar_formulário",
         ]);
 
+        $role3 = Role::create([
+            'name' => 'Visitante',
+            'guard_name' => 'web'
+        ]);
+
         $role2 = Role::create([
             'name' => 'Professor',
             'guard_name' => 'web'
@@ -69,7 +75,7 @@ class DatabaseSeeder extends Seeder
             "responder_formulário",
         ]);
 
-        $user->assignRole($role);
+        $user->assignRole($role3);
 
         $courses = [
             "Administração",

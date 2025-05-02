@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models\Parameters;
+namespace App\Models\Persons;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Courses extends Model
+class Persons extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['name'];
+    protected $fillable = ["user_id", "coordinator_name", "coordinator_profile", "coordinator_siape", "coordinator_course"];
+    
 }
