@@ -4,11 +4,17 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Forms\Activitys;
+use App\Models\Forms\Forms;
+use App\Models\Forms\FormsResponse;
 use App\Models\Parameters\Courses;
 use App\Models\Parameters\Projects;
 use App\Models\Persons\Persons;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -20,11 +26,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        $user = User::factory()->create([
-            'name' => 'Super Admin',
-            'email' => 'admin@gmail.com',
-            'status' => 1,
-        ]);
+        
 
         $permissions = [
             "1" => "adicionar_grupo",
@@ -49,7 +51,7 @@ class DatabaseSeeder extends Seeder
             'guard_name' => 'web'
         ]);
 
-        
+
         $role->givePermissionTo([
             "adicionar_grupo",
             "adicionar_usuário",
@@ -74,8 +76,6 @@ class DatabaseSeeder extends Seeder
         $role2->givePermissionTo([
             "responder_formulário",
         ]);
-
-        $user->assignRole($role3);
 
         $courses = [
             "Administração",
@@ -321,17 +321,104 @@ class DatabaseSeeder extends Seeder
             "Outro",
         ];
 
-        foreach($projects as $project){
-            if(!Projects::where('title', ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8')))->first()){
+        foreach ($projects as $project) {
+            if (!Projects::where('title', ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8')))->first()) {
                 Projects::create([
                     "title" => ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8'))
                 ]);
             }
         }
-        foreach($courses as $course){
+        foreach ($courses as $course) {
             Courses::create([
                 "name" => ucwords(mb_strtolower(str_replace(["'", "`"], '', $course), 'UTF-8'))
             ]);
         }
+
+        $cidades_ceara = [
+            'Fortaleza',
+            'Caucaia',
+            'Juazeiro do Norte',
+            'Maracanaú',
+            'Sobral',
+            'Crato',
+            'Itapipoca',
+            'Quixadá',
+            'Iguatu',
+            'Russas',
+            'Aquiraz',
+            'Canindé',
+            'Pacatuba',
+            'Icó',
+            'Tianguá',
+            'Aracati'
+        ];
+
+// Criar usuários
+        for ($i = 0; $i < 20; $i++) {
+            $new_user = User::create([
+                'name' => fake()->name(),
+                'email' => fake()->unique()->safeEmail(),
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+                'status' => true
+            ]);
+            $new_user->assignRole($role2);
+            $person = Persons::create([
+                "user_id" => $new_user->id,
+                "coordinator_name" => $new_user->name,
+                "coordinator_profile" => "Docente",
+                "coordinator_siape" => fake()->numerify('######'),
+                "coordinator_course" => Courses::where('name', $courses[array_rand($courses)])->first()->id
+            ]);
+        }
+
+        for ($i = 0; $i < 10; $i++) {
+            $form = Forms::create([
+                "title" => 'Formulário ' . (2016 + $i),
+                "date" => Carbon::create((2010 + $i), 1, 1)->toDateString(),
+                "status" => $i == 9 ? 1 : 0
+            ]);
+
+            
+            $typeActions = ['Programa', 'Projeto'];
+            $modalities = ['UFCA Itinerante', 'Ampla Concorrência', 'PROPE'];
+            
+            $max = 10 + random_int(1, 10);
+            $users = User::limit($max)->with('persons')->get();
+
+            foreach ($users as $key => $one_user) {
+                $form_response = FormsResponse::create([
+                    "forms_id" => $form->id,
+                    "user_id" => $one_user->id,
+                    "title_action" => Projects::where('title', $projects[array_rand($projects)])->first()?->id,
+                    "type_action" => $typeActions[array_rand($typeActions)],
+                    "action_modality" => $modalities[array_rand($modalities)],
+                    "coordinator_name" => $one_user->name,
+                    "coordinator_profile" => "Docente",
+                    "coordinator_siape" => $one_user->persons->coordinator_siape,
+                    "coordinator_course" => $one_user->persons->coordinator_course,
+                    "qtd_internal_audience" => fake()->numberBetween(50, 500),
+                    "qtd_external_audience" => fake()->numberBetween(100, 1000),
+                    "advances_extensionist_action" => fake()->paragraph(),
+                    "social_technology_development" => fake()->paragraph(),
+                    "instrument_avaliation" => fake()->paragraph(),
+                    "was_finished" => fake()->numberBetween(0, 4),
+                ]);
+    
+                $form_activity = Activitys::create([
+                    "response_forms_id" => $form_response->id,
+                    "activity" => fake()->paragraph(),
+                    "address" => $cidades_ceara[array_rand($cidades_ceara)]
+                ]);
+            }
+        }
+
+        $user = User::factory()->create([
+            'name' => 'Super Admin',
+            'email' => 'admin@gmail.com',
+            'status' => 1,
+        ]);
+        $user->assignRole($role);
     }
 }

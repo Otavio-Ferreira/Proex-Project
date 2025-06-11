@@ -38,7 +38,7 @@
             <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
               data-bs-target="#modal-add-user">
               <i class="icon ti ti-user-plus"></i>
-              Adicionar usuário
+              Adicionar projeto
             </a>
             <div class="d-flex align-items-center">
               <div class="input-icon me-2">
@@ -48,7 +48,7 @@
                 </span>
               </div>
             </div>
-            <x-modal.modal route="{{ route('users.store') }}" id="modal-add-user" class="modal-dialog-centered"
+            {{-- <x-modal.modal route="{{ route('users.store') }}" id="modal-add-user" class="modal-dialog-centered"
               title="Adicionar usuário" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
               typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
               <x-slot:content>
@@ -77,7 +77,7 @@
                   </x-slot:options>
                 </x-form-elements.select.select>
               </x-slot:content>
-            </x-modal.modal>
+            </x-modal.modal> --}}
           </div>
         </div>
       </div>
@@ -86,31 +86,26 @@
   <div class="page-body">
     <div class="">
       <div class="table-responsive">
-        <table class="border rounded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped" id="userTable">
+        <table class="border unded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped" id="userTable">
           <thead>
             <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Grupo</th>
-              <th>Status</th>
-              <th width="5%"></th>
-              <th width="5%"></th>
+              <th>Título</th>
+              {{-- <th width="5%"></th>
+              <th width="5%"></th> --}}
             </tr>
           </thead>
           <tbody>
-            @foreach ($users as $user)
+            @foreach ($projects as $project)
               <tr>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->roles->first()->name }}</td>
-                <td>
+                <td>{{ $project->title }}</td>
+                {{-- <td>
                   <x-badge.badge class="{{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
                     <x-slot:content>
                       {{ $user->status == 1 ? 'Ativo' : 'Inativo' }}
                     </x-slot:content>
                   </x-badge.badge>
-                </td>
-                <td>
+                </td> --}}
+                {{-- <td>
                   <button class="btn btn-secondary" data-bs-toggle="modal"
                     data-bs-target="#modal-edit-user{{ $user->id }}"><i class="ti ti-edit"></i></button>
                   <x-modal.modal route="{{ route('users.update', $user->id) }}" id="modal-edit-user{{ $user->id }}"
@@ -162,7 +157,7 @@
                       </div>
                     </x-slot:content>
                   </x-modal.modal-alert>
-                </td>
+                </td> --}}
               </tr>
             @endforeach
           </tbody>

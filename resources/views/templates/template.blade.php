@@ -83,8 +83,12 @@
         <div class="navbar">
           <div class="container-xl">
             <ul class="navbar-nav">
-              <x-navbar.navbar-item route="{{ route('home.index') }}" title="Dashboard"
-                isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-chart-bar">
+              <x-navbar.navbar-item route="{{ route('home.index') }}" title="Home"
+                isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-home">
+              </x-navbar.navbar-item>
+
+              <x-navbar.navbar-item route="{{ route('dashboard.index') }}" title="Dashboard"
+                isActive="{{ request()->routeIs(['dashboard.*']) ? true : false }}" icon="ti-chart-bar">
               </x-navbar.navbar-item>
 
               @canany(['responder_formulário', 'adicionar_formulário'])
@@ -103,7 +107,7 @@
               @endcanany
 
               @canany(['adicionar_cursos', 'adicionar_projetos'])
-                <x-navbar.navbar-item route="" title="Dados"
+                <x-navbar.navbar-item route="" title="Cadastros"
                   isActive="{{ request()->routeIs(['courses.*', 'projects.*']) ? true : false }}"
                   icon="ti-file-database">
                   <x-slot:links>

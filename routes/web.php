@@ -7,6 +7,7 @@ use App\Http\Controllers\Reports\FormReportController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
+use App\Http\Controllers\System\DashboardController;
 use App\Http\Controllers\System\Forms\ActivityController;
 use App\Http\Controllers\System\Forms\ExtencionActionsController;
 use App\Http\Controllers\System\Forms\ExternalPartnersController;
@@ -52,8 +53,8 @@ Route::get('login/cadastro', [LoginController::class, 'first'])->name('login.fir
 Route::post('login/cadastrar', [LoginController::class, 'fill'])->name('login.fill');
 
 Route::middleware(Authenticate::class)->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('home.index');
-    Route::post('/dashboard', [HomeController::class, 'index']);
+    Route::get('/home', [HomeController::class, 'index'])->name('home.index');
+    Route::post('/home', [HomeController::class, 'index']);
 
     Route::group(['middleware' => ['auth', 'permission:adicionar_grupo']], function () {
         Route::get('gupos', [RolesController::class, 'index'])->name('roles.index');
@@ -134,4 +135,5 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
     Route::get('perfil', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('perfil', [ProfileController::class, 'store'])->name('profile.store');
+    Route::get('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
 });

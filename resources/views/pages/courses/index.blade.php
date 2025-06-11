@@ -69,8 +69,8 @@
   <div class="page-body">
     <div class="">
       <div class="table-responsive">
-        <table class="rounded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped"
-          id="userTable">
+        <table class="border unded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped"
+          id="courseTable">
           <thead>
             <tr>
               <th>Nome</th>
@@ -133,7 +133,7 @@
   <script src="{{ asset('assets/js/kanban/kanbanColumn.js') }}"></script>
   <script>
     $(document).ready(function() {
-      var table = $('#userTable').DataTable({
+      var table = $('#courseTable').DataTable({
         info: false,
         ordering: false,
         paging: true,

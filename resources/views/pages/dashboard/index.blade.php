@@ -8,10 +8,10 @@
       <div class="row g-2 align-items-center">
         <div class="col">
           <div class="page-pretitle">
-            <a href="{{ route('home.index') }}">Home</a>
+            <a href="{{ route('dashboard.index') }}">Dashboard</a>
           </div>
           <h2 class="page-title">
-            Home
+            Dashboard
           </h2>
         </div>
         <div class="col-auto ms-auto">
