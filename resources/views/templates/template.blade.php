@@ -43,7 +43,7 @@
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
           <a href="/dashboard">
-            <img src="{{ asset('assets/img/illustrations/logo.svg') }}" width="110" height="32" alt="tabler"
+            <img src="{{ asset('assets/img/ufca.png') }}" width="110" height="32" alt="tabler"
               class="navbar-brand-image">
           </a>
         </h1>

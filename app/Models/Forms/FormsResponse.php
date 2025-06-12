@@ -35,44 +35,59 @@ class FormsResponse extends Model
         'was_finished'
     ];
 
-    public function activitys() : HasMany{
+    public function activitys(): HasMany
+    {
         return $this->hasMany(Activitys::class, 'response_forms_id', 'id');
     }
 
-    public function internal_partners() : HasMany{
+    public function internal_partners(): HasMany
+    {
         return $this->hasMany(InternalPartners::class, 'response_forms_id', 'id');
     }
 
-    public function external_partners() : HasMany{
+    public function external_partners(): HasMany
+    {
         return $this->hasMany(ExternalPartners::class, 'response_forms_id', 'id');
     }
 
-    public function extension_actions() : HasMany{
+    public function extension_actions(): HasMany
+    {
         return $this->hasMany(ExtensionActions::class, 'response_forms_id', 'id');
     }
 
-    public function social_medias() : HasMany{
+    public function social_medias(): HasMany
+    {
         return $this->hasMany(SocialMedia::class, 'response_forms_id', 'id');
     }
 
-    public function images() : HasMany{
+    public function images(): HasMany
+    {
         return $this->hasMany(Images::class, 'response_forms_id', 'id');
     }
 
-    public function user() : BelongsTo{
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function action() : BelongsTo{
+    public function action(): BelongsTo
+    {
         return $this->belongsTo(Projects::class, 'title_action', 'id');
     }
 
-    public function course() : BelongsTo{
+    public function course(): BelongsTo
+    {
         return $this->belongsTo(Courses::class, 'coordinator_course', 'id');
     }
 
-    public function comment() : HasOne{
+    public function comment(): HasOne
+    {
         return $this->hasOne(Comments::class, 'form_response_id', 'id');
+    }
+
+    public function form()
+    {
+        return $this->belongsTo(Forms::class, 'forms_id');
     }
 
     // public function form():BelongsToMany{
