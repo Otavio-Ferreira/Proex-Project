@@ -113,13 +113,25 @@ class DashboardController extends Controller
         })->sortBy('ano')->values();
 
 
-        $this->data["forms"] = Forms::all();
+        $this->data["forms"] = Forms::orderBy('date','desc')->get();
         $this->data["cards_projeto"] = $cards_projeto;
         $this->data["cards_acao"] = $cards_acao;
         $this->data["cards_alcance"] = $cards_alcance;
         $this->data["ranking_course"] = $ranking_course;
         $this->data["ranking_projects"] = $ranking_projects;
 
+        $data = Activitys::select('address', DB::raw('count(*) as total'))
+        ->groupBy('address')
+        ->get();
+
+        $citiesData = $data->map(function ($item) {
+            return [
+                'name' => $item->address,
+                'value' => $item->total,
+            ];
+        });
+        $this->data['chartDataCity'] = $citiesData->toJson();        
+        // dd($chartData);
         return view('pages.dashboard.index', $this->data);
     }
 
@@ -157,4 +169,5 @@ class DashboardController extends Controller
                 ->first();
         }
     }
+
 }

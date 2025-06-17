@@ -20,7 +20,7 @@
     }
 
     #chart-container3 {
-      height: 400px;
+      height: 500px;
       position: relative;
     }
 
@@ -49,7 +49,8 @@
               <select class="form-select me-1" id="" name="form" required>
                 <option value="" selected disabled>Selecione um ano</option>
                 @foreach ($forms as $year)
-                <option value="{{$year->id}}" {{old('year') == $year->id ?'selected':''}} >{{date('Y', strtotime($year->date))}}</option>
+                  <option value="{{ $year->id }}" {{ old('year') == $year->id ? 'selected' : '' }}>
+                    {{ date('Y', strtotime($year->date)) }}</option>
                 @endforeach
                 <option value="">Tudo</option>
               </select>
@@ -129,6 +130,11 @@
         {{-- <div class="col-6">
           <div id="chart-container4" class="w-100 card" data-value='{{ $ranking_projects }}'></div>
         </div> --}}
+      </div>
+
+      <div class="col-12 mt-2">
+        <h3 class="text-muted mb-2">Mapa de projetos do Ceará</h3>
+        <div id="mapa-ceara" class="card" style="width: 100%; height: 800px;"></div>
       </div>
     @endcan
   </div>
@@ -227,7 +233,6 @@
 
     window.addEventListener('resize', myChart.resize);
   </script>
-
   <script>
     function renderCharts() {
       // Chart 1: Ranking por curso
@@ -271,7 +276,7 @@
           data: sortedNames,
           inverse: true,
           axisLabel: {
-            show: false // Esconde os nomes no eixo Y
+            show: true // Esconde os nomes no eixo Y
           }
         },
         series: [{
@@ -312,7 +317,7 @@
         yAxis: {
           type: 'value',
           interval: 5,
-          max: 25
+          max: 40
         },
         series: [{
           name: 'Total',
@@ -336,5 +341,47 @@
     }
 
     document.addEventListener('DOMContentLoaded', renderCharts);
+  </script>
+
+  <div id="mapa-ceara" style="width: 100%; height: 600px;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+
+  <script>
+    const chartDataCe = {!! $chartDataCity !!}; // Laravel -> envia dados [{name: "Fortaleza", value: 10}, ...]
+
+    const chart = echarts.init(document.getElementById('mapa-ceara'));
+
+    fetch('/assets/js/geojs-23-mun.json')
+      .then(response => response.json())
+      .then(geoJson => {
+        echarts.registerMap('ceara', geoJson);
+
+        chart.setOption({
+          tooltip: {
+            trigger: 'item',
+            formatter: function(params) {
+              return `${params.name}: ${params.value}`;
+            }
+          },
+          visualMap: {
+            min: 0,
+            max: Math.max(...chartDataCe.map(d => d.value)),
+            inRange: {
+              color: ['#e0f3f8', '#005824']
+            },
+            show: false
+          },
+          series: [{
+            name: 'Atividades',
+            type: 'map',
+            map: 'ceara',
+            label: {
+              show: false
+            },
+            data: chartDataCe
+          }]
+        });
+      });
   </script>
 @endsection

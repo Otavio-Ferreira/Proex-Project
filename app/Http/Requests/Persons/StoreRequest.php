@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
             'coordinator_name' => 'required|string',
             'coordinator_profile' => 'required|string|in:Docente,Técnico Administrativo,Discente',
             'coordinator_siape' => 'required|integer',
-            'coordinator_course' => 'required|exists:courses,name',
+            'coordinator_course' => 'required|exists:courses,id',
         ];
     }
 

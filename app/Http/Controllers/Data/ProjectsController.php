@@ -16,4 +16,8 @@ class ProjectsController extends Controller
         
         return view('pages.projects.index', $this->data);
     }
+
+    public function create(){   
+        return view('pages.projects.create', $this->data);
+    }
 }

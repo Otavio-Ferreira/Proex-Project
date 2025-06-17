@@ -14,6 +14,13 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->text('title')->nullable();
+            $table->text('type')->nullable();
+            $table->text('modality')->nullable();
+            $table->uuid('course')->nullable();
+            $table->uuid('coordinator')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->date('status')->nullable();
             $table->timestamps();
         });
     }

@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        
+
 
         $permissions = [
             "1" => "adicionar_grupo",
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $role = Role::create([
-            'name' => 'Gerente',
+            'name' => 'Desenvolvimento',
             'guard_name' => 'web'
         ]);
 
@@ -350,11 +350,42 @@ class DatabaseSeeder extends Seeder
             'Pacatuba',
             'Icó',
             'Tianguá',
-            'Aracati'
+            'Aracati',
+            'Morada Nova',
+            'Quixeramobim',
+            'Limoeiro do Norte',
+            'Horizonte',
+            'Acaraú',
+            'Camocim',
+            'Barbalha',
+            'São Gonçalo do Amarante',
+            'Trairi',
+            'Tauá',
+            'Viçosa do Ceará',
+            'Baturité',
+            'Granja',
+            'Crateús',
+            'Boa Viagem',
+            'Redenção',
+            'Maranguape',
+            'Ubajara',
+            'Guaraciaba do Norte',
+            'Pentecoste',
+            'Campos Sales',
+            'Itapajé',
+            'Brejo Santo',
+            'Beberibe',
+            'Amontada',
+            'Jaguaribe',
+            'Eusébio',
+            'Paracuru',
+            'Várzea Alegre',
+            'Missão Velha',
+            'Massapê'
         ];
 
-// Criar usuários
-        for ($i = 0; $i < 20; $i++) {
+
+        for ($i = 0; $i < 40; $i++) {
             $new_user = User::create([
                 'name' => fake()->name(),
                 'email' => fake()->unique()->safeEmail(),
@@ -373,52 +404,61 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 10; $i++) {
-            $form = Forms::create([
-                "title" => 'Formulário ' . (2016 + $i),
-                "date" => Carbon::create((2010 + $i), 1, 1)->toDateString(),
-                "status" => $i == 9 ? 1 : 0
-            ]);
+        // for ($i = 0; $i < 10; $i++) {
+        //     $form = Forms::create([
+        //         "title" => 'Formulário ' . (2016 + $i),
+        //         "date" => Carbon::create((2016 + $i), 1, 1)->toDateString(),
+        //         "status" => $i == 9 ? 1 : 0
+        //     ]);
 
-            
-            $typeActions = ['Programa', 'Projeto'];
-            $modalities = ['UFCA Itinerante', 'Ampla Concorrência', 'PROPE'];
-            
-            $max = 10 + random_int(1, 10);
-            $users = User::limit($max)->with('persons')->get();
 
-            foreach ($users as $key => $one_user) {
-                $form_response = FormsResponse::create([
-                    "forms_id" => $form->id,
-                    "user_id" => $one_user->id,
-                    "title_action" => Projects::where('title', $projects[array_rand($projects)])->first()?->id,
-                    "type_action" => $typeActions[array_rand($typeActions)],
-                    "action_modality" => $modalities[array_rand($modalities)],
-                    "coordinator_name" => $one_user->name,
-                    "coordinator_profile" => "Docente",
-                    "coordinator_siape" => $one_user->persons->coordinator_siape,
-                    "coordinator_course" => $one_user->persons->coordinator_course,
-                    "qtd_internal_audience" => fake()->numberBetween(50, 500),
-                    "qtd_external_audience" => fake()->numberBetween(100, 1000),
-                    "advances_extensionist_action" => fake()->paragraph(),
-                    "social_technology_development" => fake()->paragraph(),
-                    "instrument_avaliation" => fake()->paragraph(),
-                    "was_finished" => fake()->numberBetween(0, 4),
-                ]);
-    
-                $form_activity = Activitys::create([
-                    "response_forms_id" => $form_response->id,
-                    "activity" => fake()->paragraph(),
-                    "address" => $cidades_ceara[array_rand($cidades_ceara)]
-                ]);
-            }
-        }
+        //     $typeActions = ['Programa', 'Projeto'];
+        //     $modalities = ['UFCA Itinerante', 'Ampla Concorrência', 'PROPE'];
+
+        //     $max = 10 + random_int(1, 30);
+        //     $users = User::limit($max)->with('persons')->get();
+
+        //     foreach ($users as $key => $one_user) {
+        //         $form_response = FormsResponse::create([
+        //             "forms_id" => $form->id,
+        //             "user_id" => $one_user->id,
+        //             "title_action" => Projects::where('title', $projects[array_rand($projects)])->first()?->id,
+        //             "type_action" => $typeActions[array_rand($typeActions)],
+        //             "action_modality" => $modalities[array_rand($modalities)],
+        //             "coordinator_name" => $one_user->name,
+        //             "coordinator_profile" => "Docente",
+        //             "coordinator_siape" => $one_user->persons->coordinator_siape,
+        //             "coordinator_course" => $one_user->persons->coordinator_course,
+        //             "qtd_internal_audience" => fake()->numberBetween(50, 500),
+        //             "qtd_external_audience" => fake()->numberBetween(100, 1000),
+        //             "advances_extensionist_action" => fake()->paragraph(),
+        //             "social_technology_development" => fake()->paragraph(),
+        //             "instrument_avaliation" => fake()->paragraph(),
+        //             "was_finished" => fake()->numberBetween(0, 4),
+        //         ]);
+
+        //         $form_activity = Activitys::create([
+        //             "response_forms_id" => $form_response->id,
+        //             "activity" => fake()->paragraph(),
+        //             "address" => $cidades_ceara[array_rand($cidades_ceara)]
+        //         ]);
+        //     }
+        // }
 
         $user = User::factory()->create([
-            'name' => 'Super Admin',
+            'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'status' => 1,
         ]);
+
+        Persons::create([
+            "user_id" => $user->id,
+            "coordinator_name" => $user->name,
+            "coordinator_profile" => "Desenvolvedor",
+            "coordinator_siape" => null,
+            "coordinator_course" => null
+        ]);
+
         $user->assignRole($role);
     }
 }

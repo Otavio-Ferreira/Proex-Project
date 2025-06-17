@@ -26,18 +26,16 @@
         <div class="col">
           <div class="col">
             <div class="page-pretitle">
-              <a href="{{ route('users.index') }}">Usuários</a>
+              <a href="{{ route('projects.index') }}">Trabalhos</a>
             </div>
             <h2 class="page-title">
-              Usuários
+              Trabalhos
             </h2>
           </div>
         </div>
         <div class="col-auto ms-auto">
           <div class="btn-list">
-            <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
-              data-bs-target="#modal-add-user">
-              <i class="icon ti ti-user-plus"></i>
+            <a href="{{route('projects.create')}}" class="btn btn-primary d-sm-inline-block">
               Adicionar projeto
             </a>
             <div class="d-flex align-items-center">
@@ -48,36 +46,6 @@
                 </span>
               </div>
             </div>
-            {{-- <x-modal.modal route="{{ route('users.store') }}" id="modal-add-user" class="modal-dialog-centered"
-              title="Adicionar usuário" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
-              typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
-              <x-slot:content>
-                @include('components.form-elements.input.input', [
-                    'title' => 'Nome',
-                    'type' => 'text',
-                    'class' => 'mb-3',
-                    'name' => 'name',
-                    'required' => 'true',
-                    'placeholder' => 'Digite o nome do usuário',
-                ])
-                @include('components.form-elements.input.input', [
-                    'title' => 'Email',
-                    'type' => 'text',
-                    'class' => 'mb-3',
-                    'name' => 'email',
-                    'required' => 'true',
-                    'placeholder' => 'Digite o email do usuário',
-                ])
-                <x-form-elements.select.select title="Grupo de permissões" id="role" name="role">
-                  <x-slot:options>
-                    <option value="" selected>Selecione</option>
-                    @foreach ($roles as $role)
-                      <option value="{{ $role->name }}">{{ $role->name }}</option>
-                    @endforeach
-                  </x-slot:options>
-                </x-form-elements.select.select>
-              </x-slot:content>
-            </x-modal.modal> --}}
           </div>
         </div>
       </div>

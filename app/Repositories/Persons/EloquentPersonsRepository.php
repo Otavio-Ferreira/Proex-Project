@@ -3,6 +3,7 @@
 namespace App\Repositories\Persons;
 
 use App\Models\Persons\Persons;
+use App\Models\User;
 
 class EloquentPersonsRepository implements PersonsRepository
 {
@@ -15,6 +16,11 @@ class EloquentPersonsRepository implements PersonsRepository
             "coordinator_siape" => $request->coordinator_siape ?? null,
             "coordinator_course" => $request->coordinator_course ?? null,
         ]);
+
+        $user = User::find($id);
+        $user->name = $request->coordinator_name ?? $user->name;
+        $user->save();
+
         return $person;
     }
 
@@ -34,6 +40,10 @@ class EloquentPersonsRepository implements PersonsRepository
             $person->coordinator_course = $request->coordinator_course ?? $person->coordinator_course; 
             $person->save();
         }
+
+        $user = User::find($id);
+        $user->name = $request->coordinator_name ?? $user->name;
+        $user->save();
 
         return $person;
     }

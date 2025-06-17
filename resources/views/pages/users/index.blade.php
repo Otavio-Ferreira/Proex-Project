@@ -91,6 +91,9 @@
             <tr>
               <th>Nome</th>
               <th>Email</th>
+              <th>Perfil</th>
+              <th>Curso</th>
+              <th>Siape</th>
               <th>Grupo</th>
               <th>Status</th>
               <th width="5%"></th>
@@ -102,6 +105,9 @@
               <tr>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
+                <td>{{ $user->persons->coordinator_profile ?? "Não informado" }}</td>
+                <td>{{ $user->persons->course->name ?? "Não informado" }}</td>
+                <td>{{ $user->persons->coordinator_siape ?? "Não informado" }}</td>
                 <td>{{ $user->roles->first()->name }}</td>
                 <td>
                   <x-badge.badge class="{{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
