@@ -17,10 +17,12 @@ return new class extends Migration
             $table->text('type')->nullable();
             $table->text('modality')->nullable();
             $table->uuid('course')->nullable();
+            $table->foreign('course')->references('id')->on('courses')->onDelete('cascade');
             $table->uuid('coordinator')->nullable();
+            $table->foreign('coordinator')->references('id')->on('users')->onDelete('cascade');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->date('status')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

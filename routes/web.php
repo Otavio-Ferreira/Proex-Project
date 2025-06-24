@@ -84,8 +84,10 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::group(['middleware' => ['auth', 'permission:adicionar_projetos']], function () {
         Route::get('projetos', [ProjectsController::class, 'index'])->name('projects.index');
         Route::get('projetos/adicionar', [ProjectsController::class, 'create'])->name('projects.create');
-        // Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
-        // Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
+        Route::post('projetos/adicionar', [ProjectsController::class, 'store'])->name('projects.store');
+        Route::get('projetos/ver/{uuid}', [ProjectsController::class, 'edit'])->name('projects.edit');
+        Route::post('projetos/atualizar/{uuid}', [ProjectsController::class, 'update'])->name('projects.update');
+
     });
     
     Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {

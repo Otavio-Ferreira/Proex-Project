@@ -9,10 +9,10 @@
         <div class="col">
           <div class="page-pretitle">
             <a href="{{ route('projects.index') }}">Trabalhos</a>/
-            <a href="{{ route('projects.create') }}">Adicionar</a>
+            <a href="{{ route('projects.edit', $project->id) }}">Editar</a>
           </div>
           <h2 class="page-title">
-            Adicionar trabalho
+            Editar trabalho
           </h2>
         </div>
         <div class="col-auto ms-auto">
@@ -24,7 +24,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <form action="{{ route('projects.store') }}" method="post" class="row">
+          <form action="{{ route('projects.update', $project->id) }}" method="post" class="row">
             @csrf
 
             <div class="col-12 col-md-6">
@@ -35,16 +35,15 @@
                   'name' => 'title',
                   'required' => 'true',
                   'placeholder' => 'Digite o título',
-                  'value' => old('title') ?? '',
+                  'value' => $project->title ?? '',
               ])
 
               <div class="mb-3">
                 <label class="form-label required">Tipo</label>
                 <select class="form-select" id="type" name="type" required>
-                  <option value="" selected disabled>Selecione</option>
-                  <option value="Programa" {{ old('type') ? (old('type') == 'Programa' ? 'selected' : '') : '' }}>
+                  <option value="Programa" {{ $project->type ? ($project->type == 'Programa' ? 'selected' : '') : '' }}>
                     Programa</option>
-                  <option value="Projeto" {{ old('type') ? (old('type') == 'Projeto' ? 'selected' : '') : '' }}>
+                  <option value="Projeto" {{ $project->type ? ($project->type == 'Projeto' ? 'selected' : '') : '' }}>
                     Projeto
                   </option>
                 </select>
@@ -53,16 +52,15 @@
               <div class="mb-3">
                 <label class="form-label required">Modalidade</label>
                 <select class="form-select" id="modality" name="modality" required>
-                  <option value="" selected disabled>Selecione</option>
                   <option value="UFCA Itinerante"
-                    {{ old('modality') ? (old('modality') == 'UFCA Itinerante' ? 'selected' : '') : ' ' }}>
+                    {{ $project->modality ? ($project->modality == 'UFCA Itinerante' ? 'selected' : '') : ' ' }}>
                     UFCA Itinerante</option>
 
                   <option value="Ampla Concorrência"
-                    {{ old('modality') ? (old('modality') == 'Ampla Concorrência' ? 'selected' : '') : ' ' }}>
+                    {{ $project->modality ? ($project->modality == 'Ampla Concorrência' ? 'selected' : '') : ' ' }}>
                     Ampla Concorrência</option>
 
-                  <option value="PROPE" {{ old('modality') ? (old('modality') == 'PROPE' ? 'selected' : '') : ' ' }}>
+                  <option value="PROPE" {{ $project->modality ? ($project->modality == 'PROPE' ? 'selected' : '') : ' ' }}>
                     PROPE</option>
                 </select>
               </div>
@@ -70,10 +68,9 @@
               <div class="mb-3">
                 <label class="form-label required">Curso</label>
                 <select class="form-select" id="select-courses" name="course" required>
-                  <option value="" selected disabled>Selecione</option>
                   @foreach ($courses as $base_course)
                     <option value="{{ $base_course->id }}"
-                      {{ old('course') ? (old('course') == $base_course->id ? 'selected' : '') : ' ' }}>
+                      {{ $project->course ? ($project->course == $base_course->id ? 'selected' : '') : ' ' }}>
                       {{ $base_course->name }}</option>
                   @endforeach
                 </select>
@@ -83,10 +80,9 @@
               <div class="mb-3">
                 <label class="form-label">Professor/Orientador</label>
                 <select class="form-select" id="teachers" name="teacher">
-                  <option value="" selected disabled>Selecione</option>
                   @foreach ($teachers as $teacher)
                     <option value="{{ $teacher->id }}"
-                      {{ old('teacher') ? (old('teacher') == $teacher->id ? 'selected' : '') : ' ' }}>
+                      {{ $project->coordinator ? ($project->coordinator == $teacher->id ? 'selected' : '') : ' ' }}>
                       {{ $teacher->name }}</option>
                   @endforeach
                 </select>
@@ -98,7 +94,7 @@
                   'class' => 'mb-3',
                   'name' => 'start_date',
                   'required' => 'true',
-                  'value' => old('start_date') ?? '',
+                  'value' => $project->start_date ?? '',
               ])
 
               @include('components.form-elements.input.input', [
@@ -107,20 +103,19 @@
                   'class' => 'mb-3',
                   'name' => 'end_date',
                   'required' => 'true',
-                  'value' => old('end_date') ?? '',
+                  'value' => $project->end_date ?? '',
               ])
 
               <div class="mb-3">
                 <label class="form-label required">Status</label>
                 <select class="form-select" id="status" name="status" required>
-                  <option value="" selected disabled>Selecione</option>
-                  <option value="0" {{ old('status') ? (old('status') == '0' ? 'selected' : '') : ' ' }}>
+                  <option value="0" {{ $project->status ? ($project->status == '0' ? 'selected' : '') : ' ' }}>
                     Inativo</option>
 
-                  <option value="1" {{ old('status') ? (old('status') == '1' ? 'selected' : '') : ' ' }}>
+                  <option value="1" {{ $project->status ? ($project->status == '1' ? 'selected' : '') : ' ' }}>
                     Ativo</option>
 
-                  <option value="2" {{ old('status') ? (old('status') == '2' ? 'selected' : '') : ' ' }}>
+                  <option value="2" {{ $project->status ? ($project->status == '2' ? 'selected' : '') : ' ' }}>
                     Finalizado</option>
                 </select>
               </div>

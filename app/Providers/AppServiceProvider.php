@@ -22,6 +22,8 @@ use App\Repositories\Forms\SocialMedia\EloquentSocialMediaRepository;
 use App\Repositories\Forms\SocialMedia\SocialMediaRepository;
 use App\Repositories\Persons\EloquentPersonsRepository;
 use App\Repositories\Persons\PersonsRepository;
+use App\Repositories\Projects\EloquentProjectsRepository;
+use App\Repositories\Projects\ProjectsRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,7 +43,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ImageRepository::class, EloquentImageRepository::class);
         $this->app->bind(PersonsRepository::class, EloquentPersonsRepository::class);
         $this->app->bind(CourseRepository::class, EloquentCourseRepository::class);
-    }
+        $this->app->bind(ProjectsRepository::class, EloquentProjectsRepository::class);
+    } 
 
     /**
      * Bootstrap any application services.

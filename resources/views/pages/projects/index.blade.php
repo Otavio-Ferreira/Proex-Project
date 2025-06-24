@@ -35,8 +35,8 @@
         </div>
         <div class="col-auto ms-auto">
           <div class="btn-list">
-            <a href="{{route('projects.create')}}" class="btn btn-primary d-sm-inline-block">
-              Adicionar projeto
+            <a href="{{ route('projects.create') }}" class="btn btn-primary d-sm-inline-block">
+              Adicionar
             </a>
             <div class="d-flex align-items-center">
               <div class="input-icon me-2">
@@ -58,74 +58,37 @@
           <thead>
             <tr>
               <th>Título</th>
-              {{-- <th width="5%"></th>
-              <th width="5%"></th> --}}
+              <th>Orientador</th>
+              <th>Início</th>
+              <th>Fim</th>
+              <th>Status</th>
+              <th width="5%"></th>
+              <th width="5%"></th>
             </tr>
           </thead>
           <tbody>
             @foreach ($projects as $project)
               <tr>
                 <td>{{ $project->title }}</td>
-                {{-- <td>
-                  <x-badge.badge class="{{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
+                <td>{{ $project->user->name }}</td>
+                <td>{{ date('d/m/Y', strtotime($project->start_date)) }}</td>
+                <td>{{ date('d/m/Y', strtotime($project->end_date)) }}</td>
+                <td>
+                  <x-badge.badge
+                    class="{{ $project->status == 0 ? 'bg-danger' : ($project->status == 1 ? 'bg-success' : 'bg-primary') }}">
                     <x-slot:content>
-                      {{ $user->status == 1 ? 'Ativo' : 'Inativo' }}
+                      {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}
                     </x-slot:content>
                   </x-badge.badge>
-                </td> --}}
-                {{-- <td>
-                  <button class="btn btn-secondary" data-bs-toggle="modal"
-                    data-bs-target="#modal-edit-user{{ $user->id }}"><i class="ti ti-edit"></i></button>
-                  <x-modal.modal route="{{ route('users.update', $user->id) }}" id="modal-edit-user{{ $user->id }}"
-                    class="modal-dialog-centered" title="Editar usuário" typeBtnClose="button" classBtnClose="me-auto"
-                    textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
-                    <x-slot:content>
-                      @include('components.form-elements.input.input', [
-                          'title' => 'Nome',
-                          'type' => 'text',
-                          'class' => 'mb-3',
-                          'name' => 'name',
-                          'required' => 'true',
-                          'value' => $user->name,
-                      ])
-
-                      <x-form-elements.select.select title="Status" id="status" name="status">
-                        <x-slot:options>
-                          <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Ativo</option>
-                          <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Inativo</option>
-                        </x-slot:options>
-                      </x-form-elements.select.select>
-
-                      <x-form-elements.select.select title="Grupo de permissões" id="role" name="role">
-                        <x-slot:options>
-                          @foreach ($roles as $role)
-                            <option value="{{ $role->name }}"
-                              {{ $role->name == $user->roles->first()->name ? 'selected' : '' }}>{{ $role->name }}
-                            </option>
-                          @endforeach
-                        </x-slot:options>
-                      </x-form-elements.select.select>
-                    </x-slot:content>
-                  </x-modal.modal>
                 </td>
                 <td>
-                  <button class="btn btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#modal-delete-user{{ $user->id }}"><i class="ti ti-trash"></i></button>
-
-                  <x-modal.modal-alert route="{{ route('users.destroy', $user->id) }}"
-                    id="modal-delete-user{{ $user->id }}" class="modal-dialog-centered modal-sm"
-                    background="bg-danger" classBody="text-center py-4" title="Excluír usuário" typeBtnClose="button"
-                    classBtnClose="me-auto w-100" textBtnClose="Cancelar" typeBtnSave="submit"
-                    classBtnSave="btn-danger w-100" textBtnSave="Deletar">
-                    <x-slot:content>
-                      <i class="ti ti-alert-triangle icon icon-lg text-danger"></i>
-                      <h3>Tem certeza?</h3>
-                      <div class="text-secondary">
-                        Você realmente deseja remover esse registro? Não será possível restaurá-lo depois!
-                      </div>
-                    </x-slot:content>
-                  </x-modal.modal-alert>
-                </td> --}}
+                  <a href="{{route('projects.edit', $project->id)}}" class="btn btn-secondary"><i
+                      class="ti ti-edit"></i></a>
+                </td>
+                <td>
+                  <button class="btn btn-azure" data-bs-toggle="offcanvas"
+                    data-bs-target="#modal-details-{{ $project->id }}"><i class="ti ti-dots-vertical"></i></button>
+                </td>
               </tr>
             @endforeach
           </tbody>
@@ -133,6 +96,21 @@
       </div>
     </div>
   </div>
+  @foreach ($projects as $project)
+    <x-modal.offcanvas id="modal-details-{{ $project->id }}" class="offcanvas-end" title="{{ $project->title }}">
+      <x-slot:content>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Tipo: {{ $project->type }}</li>
+          <li class="list-group-item">Modalidade: {{ $project->modality }}</li>
+          <li class="list-group-item">Curso: {{ $project->course }}</li>
+          <li class="list-group-item">Orientador: {{ $project->user->name }}</li>
+          <li class="list-group-item">Início: {{ date('d/m/Y', strtotime($project->start_date)) }}</li>
+          <li class="list-group-item">Fim: {{ date('d/m/Y', strtotime($project->end_date)) }}</li>
+          <li class="list-group-item">Status: {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>
+        </ul>
+      </x-slot:content>
+    </x-modal.offcanvas>
+  @endforeach
 @endsection
 @section('scripts')
   <script src="{{ asset('assets/js/kanban/dataTables.min.js') }}"></script>

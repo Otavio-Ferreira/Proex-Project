@@ -321,13 +321,13 @@ class DatabaseSeeder extends Seeder
             "Outro",
         ];
 
-        foreach ($projects as $project) {
-            if (!Projects::where('title', ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8')))->first()) {
-                Projects::create([
-                    "title" => ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8'))
-                ]);
-            }
-        }
+        // foreach ($projects as $project) {
+        //     if (!Projects::where('title', ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8')))->first()) {
+        //         Projects::create([
+        //             "title" => ucfirst(mb_strtolower(str_replace(["'", "`"], '', $project), 'UTF-8'))
+        //         ]);
+        //     }
+        // }
         foreach ($courses as $course) {
             Courses::create([
                 "name" => ucwords(mb_strtolower(str_replace(["'", "`"], '', $course), 'UTF-8'))
