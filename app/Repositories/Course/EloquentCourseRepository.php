@@ -26,6 +26,7 @@ class EloquentCourseRepository implements CourseRepository
 
         if ($course) {
             $course->name = $request->name;
+            $course->status = $request->status;
             $course->save();
         }
 

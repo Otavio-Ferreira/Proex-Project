@@ -100,13 +100,13 @@
     <x-modal.offcanvas id="modal-details-{{ $project->id }}" class="offcanvas-end" title="{{ $project->title }}">
       <x-slot:content>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Tipo: {{ $project->type }}</li>
-          <li class="list-group-item">Modalidade: {{ $project->modality }}</li>
-          <li class="list-group-item">Curso: {{ $project->course }}</li>
-          <li class="list-group-item">Orientador: {{ $project->user->name }}</li>
-          <li class="list-group-item">Início: {{ date('d/m/Y', strtotime($project->start_date)) }}</li>
-          <li class="list-group-item">Fim: {{ date('d/m/Y', strtotime($project->end_date)) }}</li>
-          <li class="list-group-item">Status: {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>
+          <li class="list-group-item"><strong>Tipo:</strong> {{ $project->type }}</li>
+          <li class="list-group-item"><strong>Modalidade:</strong> {{ $project->modality }}</li>
+          <li class="list-group-item"><strong>Curso:</strong> {{ $project->course }}</li>
+          <li class="list-group-item"><strong>Orientador:</strong> {{ $project->user->name }}</li>
+          <li class="list-group-item"><strong>Início:</strong> {{ date('d/m/Y', strtotime($project->start_date)) }}</li>
+          <li class="list-group-item"><strong>Fim:</strong> {{ date('d/m/Y', strtotime($project->end_date)) }}</li>
+          <li class="list-group-item"><strong>Status:</strong> {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>
         </ul>
       </x-slot:content>
     </x-modal.offcanvas>

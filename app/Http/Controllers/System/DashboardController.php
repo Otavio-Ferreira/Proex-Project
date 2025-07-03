@@ -36,7 +36,7 @@ class DashboardController extends Controller
                 'icon' => 'ti-certificate'
             ],
             [
-                "title" => "Qtd. Professores",
+                "title" => "Qtd. Servidores",
                 "value" => Persons::where('coordinator_profile', 'Docente')->count(),
                 'color' => 'cyan',
                 'icon' => 'ti-user'

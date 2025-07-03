@@ -74,7 +74,7 @@
           <thead>
             <tr>
               <th>Nome</th>
-              <th width="5%"></th>
+              <th>Status</th>
               <th width="5%"></th>
             </tr>
           </thead>
@@ -82,6 +82,14 @@
             @foreach ($courses as $course)
               <tr>
                 <td>{{ $course->name }}</td>
+                <td>
+                  <x-badge.badge
+                    class="{{ $course->status == 0 ? 'bg-danger' : ($course->status == 1 ? 'bg-success' : 'bg-primary') }}">
+                    <x-slot:content>
+                      {{ $course->status == 0 ? 'Inativo' : ($course->status == 1 ? 'Ativo' : 'Finalizado') }}
+                    </x-slot:content>
+                  </x-badge.badge>
+                </td>
                 <td>
                   <button class="btn btn-secondary" data-bs-toggle="modal"
                     data-bs-target="#modal-edit-course{{ $course->id }}"><i class="ti ti-edit"></i></button>
@@ -98,26 +106,14 @@
                           'required' => 'true',
                           'value' => $course->name,
                       ])
+                      <x-form-elements.select.select title="Status" id="status" name="status">
+                        <x-slot:options>
+                          <option value="1" {{ $course->status == 1 ? 'selected' : '' }}>Ativo</option>
+                          <option value="0" {{ $course->status == 0 ? 'selected' : '' }}>Inativo</option>
+                        </x-slot:options>
+                      </x-form-elements.select.select>
                     </x-slot:content>
                   </x-modal.modal>
-                </td>
-                <td>
-                  <button class="btn btn-danger" data-bs-toggle="modal"
-                    data-bs-target="#modal-delete-course{{ $course->id }}"><i class="ti ti-trash"></i></button>
-
-                  <x-modal.modal-alert route="{{ route('courses.destroy', $course->id) }}"
-                    id="modal-delete-course{{ $course->id }}" class="modal-dialog-centered modal-sm"
-                    background="bg-danger" classBody="text-center py-4" title="Excluír curso" typeBtnClose="button"
-                    classBtnClose="me-auto w-100" textBtnClose="Cancelar" typeBtnSave="submit"
-                    classBtnSave="btn-danger w-100" textBtnSave="Deletar">
-                    <x-slot:content>
-                      <i class="ti ti-alert-triangle icon icon-lg text-danger"></i>
-                      <h3>Tem certeza?</h3>
-                      <div class="text-secondary">
-                        Você realmente deseja remover esse registro? Não será possível restaurá-lo depois!
-                      </div>
-                    </x-slot:content>
-                  </x-modal.modal-alert>
                 </td>
               </tr>
             @endforeach

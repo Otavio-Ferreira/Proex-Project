@@ -22,7 +22,8 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|unique:courses,name"
+            "name" => "required|string",
+            "status" => "required|boolean"
         ];
     }
 
@@ -31,7 +32,8 @@ class UpdateRequest extends FormRequest
         return [
             "name.required" => "O campo nome é obrigatório.",
             "name.string" => "O campo nome deve ser válido.",
-            "name.unique" => "Esse registro já foi adicionado."
+            "status.required" => "O campo status é obrigatório.",
+            "status.boolean" => "O campo status deve ser válido."
         ];
     }
 }

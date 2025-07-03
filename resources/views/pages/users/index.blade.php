@@ -90,12 +90,13 @@
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Email</th>
-              <th>Perfil</th>
+              {{-- <th>Email</th> --}}
+              {{-- <th>Perfil</th> --}}
               <th>Curso</th>
               <th>Siape</th>
               <th>Grupo</th>
               <th>Status</th>
+              <th width="5%"></th>
               <th width="5%"></th>
               <th width="5%"></th>
             </tr>
@@ -104,10 +105,10 @@
             @foreach ($users as $user)
               <tr>
                 <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->persons->coordinator_profile ?? "Não informado" }}</td>
-                <td>{{ $user->persons->course->name ?? "Não informado" }}</td>
-                <td>{{ $user->persons->coordinator_siape ?? "Não informado" }}</td>
+                {{-- <td>{{ $user->email }}</td> --}}
+                {{-- <td>{{ $user->persons->coordinator_profile ?? 'Não informado' }}</td> --}}
+                <td>{{ $user->persons->course->name ?? 'Não informado' }}</td>
+                <td>{{ $user->persons->coordinator_siape ?? 'Não informado' }}</td>
                 <td>{{ $user->roles->first()->name }}</td>
                 <td>
                   <x-badge.badge class="{{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
@@ -169,6 +170,10 @@
                     </x-slot:content>
                   </x-modal.modal-alert>
                 </td>
+                <td>
+                  <button class="btn btn-azure" data-bs-toggle="offcanvas"
+                    data-bs-target="#modal-details-{{ $user->id }}"><i class="ti ti-dots-vertical"></i></button>
+                </td>
               </tr>
             @endforeach
           </tbody>
@@ -176,6 +181,20 @@
       </div>
     </div>
   </div>
+  @foreach ($users as $user)
+    <x-modal.offcanvas id="modal-details-{{ $user->id }}" class="offcanvas-end" title="{{ $user->name }}">
+      <x-slot:content>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Email:</strong> {{ $user->email }}</li>
+          <li class="list-group-item"><strong>Perfil:</strong> {{ $user->persons->coordinator_profile ?? 'Não informado' }}</li>
+          <li class="list-group-item"><strong>Curso:</strong> {{ $user->persons->course->name ?? 'Não informado' }}</li>
+          <li class="list-group-item"><strong>Siape:</strong> {{ $user->persons->coordinator_siape ?? 'Não informado' }}</li>
+          <li class="list-group-item"><strong>Grupo:</strong> {{ $user->roles->first()->name }}</li>
+          <li class="list-group-item"><strong>Status:</strong> {{ $user->status == 1 ? 'Ativo' : 'Inativo' }}</li>
+        </ul>
+      </x-slot:content>
+    </x-modal.offcanvas>
+  @endforeach
 @endsection
 @section('scripts')
   <script src="{{ asset('assets/js/kanban/dataTables.min.js') }}"></script>

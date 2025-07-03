@@ -276,7 +276,7 @@
           data: sortedNames,
           inverse: true,
           axisLabel: {
-            show: true // Esconde os nomes no eixo Y
+            show: false // Esconde os nomes no eixo Y
           }
         },
         series: [{
