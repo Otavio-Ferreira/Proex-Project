@@ -8,23 +8,55 @@
       <div class="row g-2 align-items-center">
         <div class="col">
           <div class="page-pretitle">
-            <a href="{{ route('forms.create') }}">Criar Formulário</a>
+            <a href="{{ route('forms.index') }}">Formulários</a>/
+            <a href="{{ route('forms.create') }}">Cadastrar Formulário</a>
           </div>
           <h2 class="page-title">
-            Criar Formulário
+            Cadastro de Formulário
           </h2>
         </div>
         <div class="col-auto ms-auto">
-          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#add_form"
+          {{-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#add_form"
             aria-controls="offcanvasExample">
             Cadastrar formulário
-          </button>
+          </button> --}}
         </div>
       </div>
     </div>
   </div>
   <div class="page-body">
-    <div class="">
+    <div class="card">
+      <form action="{{ route('forms.store') }}" method="post">
+        <div class="card-body row">
+          @csrf
+          @include('components.form-elements.input.input', [
+              'title' => 'Título do formulário',
+              'type' => 'text',
+              'class' => 'col-12 col-md-12 col-lg-6',
+              'name' => 'title',
+              'required' => 'true',
+              'placeholder' => 'Adicone um título para o formulário',
+          ])
+          @include('components.form-elements.input.input', [
+              'title' => 'Data de finalização',
+              'type' => 'date',
+              'class' => 'col-12 col-md-6 col-lg-3',
+              'name' => 'date',
+              'required' => 'true',
+              'placeholder' => 'Adicone a data de finalização',
+          ])
+          <x-form-elements.select.select title="Ativar?" id="" name="status" class="col-12 col-md-6 col-lg-3">
+            <x-slot:options>
+              <option value="" selected>Selecione</option>
+              <option value="1">Sim</option>
+              <option value="0">Não</option>
+            </x-slot:options>
+          </x-form-elements.select.select>
+          {{-- <button type="submit" class="btn btn-success">Enviar</button> --}}
+        </div>
+      </form>
+    </div>
+    {{-- <div class="">
       <div class="">
         <div class="card">
           <div class="card-body p-0">
@@ -112,11 +144,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
 @endsection
 @section('scripts')
-  <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+  {{-- <script src="{{ asset('assets/js/dashboard.js') }}"></script> --}}
 @endsection
 
 

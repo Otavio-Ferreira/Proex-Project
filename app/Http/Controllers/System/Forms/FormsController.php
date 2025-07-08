@@ -26,6 +26,16 @@ class FormsController extends Controller
         $this->formRepository = $formRepository;
     }
 
+    public function index(Request $request){
+        $this->data['forms'] = $this->formRepository->getAllForm($request);
+
+        $this->data['qtd_users'] = User::where('status', 1)->get()->filter(function ($user) {
+            return $user->hasPermissionTo('responder_formulário');
+        })->count();
+
+        return view('pages.forms.index', $this->data);
+    }
+
     public function create(Request $request)
     {
         $this->data['forms'] = $this->formRepository->getAllForm($request);

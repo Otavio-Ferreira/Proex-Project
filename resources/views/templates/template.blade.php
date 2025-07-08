@@ -97,10 +97,10 @@
                   icon="ti-clipboard-text">
                   <x-slot:links>
                     @can('responder_formulário')
-                      <a class="dropdown-item" href="{{ route('forms.index') }}">Responder</a>
+                      {{-- <a class="dropdown-item" href="{{ route('forms.index') }}">Responder</a> --}}
                     @endcan
                     @can('adicionar_formulário')
-                      <a class="dropdown-item" href="{{ route('forms.create') }}">Formulários</a>
+                      <a class="dropdown-item" href="{{ route('forms.index') }}">Formulários</a>
                     @endcan
                   </x-slot:links>
                 </x-navbar.navbar-item>

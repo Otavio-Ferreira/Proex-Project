@@ -24,6 +24,7 @@ use App\Repositories\Persons\EloquentPersonsRepository;
 use App\Repositories\Persons\PersonsRepository;
 use App\Repositories\Projects\EloquentProjectsRepository;
 use App\Repositories\Projects\ProjectsRepository;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -51,6 +52,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Paginator::useBootstrapFive();
     }
 }

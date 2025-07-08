@@ -91,6 +91,8 @@ Route::middleware(Authenticate::class)->group(function () {
     });
     
     Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {
+        Route::get('formularios', [FormsController::class, 'index'])->name('forms.index');
+        
         Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
         Route::get('formulario/detalhes/{id}', [FormsController::class, 'show'])->name('forms.show');
         Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
@@ -101,7 +103,7 @@ Route::middleware(Authenticate::class)->group(function () {
     });
     
     Route::group(['middleware' => ['auth', 'permission:responder_formulário']], function () {
-        Route::get('formulario', [FormsResponseController::class, 'index'])->name('forms.index');
+        // Route::get('formulario', [FormsResponseController::class, 'index'])->name('forms.index');
         Route::get('formulario/avançar/{actual_step}', [FormsResponseController::class, 'advance'])->name('forms.advance');
         Route::get('formulario/retornar/{actual_step}', [FormsResponseController::class, 'return'])->name('forms.return');
         Route::post('formulario/persistir', [FormsResponseController::class, 'persist'])->name('forms.persist');
