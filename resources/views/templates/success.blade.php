@@ -1,12 +1,4 @@
 <!doctype html>
-<!--
-* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
-* @version 1.0.0-beta19
-* @link https://tabler.io
-* Copyright 2018-2023 The Tabler Authors
-* Copyright 2018-2023 codecalm.net Paweł Kuna
-* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
--->
 <html lang="pt-br">
 
 <head>
@@ -14,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Proex</title>
-  <!-- CSS files -->
   <link href="{{ asset('assets/css/tabler.min.css?1684106062') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/tabler-flags.min.css?1684106062') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/tabler-payments.min.css?1684106062') }}" rel="stylesheet" />
@@ -36,21 +27,19 @@
   </style>
 </head>
 
-<!-- Spinner fullscreen -->
-<div id="loading-overlay"
-  style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 9999; display: none; justify-content: center; align-items: center;">
-  <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status">
-    <span class="visually-hidden">Carregando...</span>
-  </div>
-</div>
-
-
 <body class="row m-0 p-0 vh-100">
-  <div class="d-none d-lg-flex col-6 flex-wrap justify-content-center align-content-center bg-primary bg-gradient">
-    <img src="{{ asset('assets/img/illustrations/login.svg') }}" class="w-75" alt="">
-  </div>
-  <div class="col-12 col-lg-6 bg-white">
-    @yield('content')
+  <div class="p-4 d-lg-flex flex-wrap justify-content-center align-content-center">
+    <div class="modal-body text-center py-4">
+      <i class="ti ti-square-rounded-check icon mb-2 text-green icon-lg"></i>
+      <h3>Sucesso!</h3>
+      <div class="text-secondary">
+        @if (session('message'))
+          <div class="text-success">
+            {{ session('message') }}
+          </div>
+        @endif
+      </div>
+    </div>
   </div>
 
   <script src="{{ asset('assets/js/demo-theme.min.js?1684106062') }}"></script>
@@ -60,21 +49,6 @@
   <script src="{{ asset('assets/js/demo.min.js?1684106062') }}" defer></script>
   <script src="{{ asset('assets/js/jquery-3.5.1.js') }}"></script>
   <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
-  <script>
-    function change(id) {
-      const input = document.getElementById(id);
-
-      if (input.type === 'password') {
-        input.type = 'text';
-      } else {
-        input.type = 'password';
-      }
-
-    }
-  </script>
-  @include('sweetalert::alert')
-  @yield('scripts')
-
 </body>
 
 </html>

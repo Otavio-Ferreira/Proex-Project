@@ -52,6 +52,10 @@ Route::post('login/atualizar/{token}', [LoginController::class, 'update'])->name
 Route::get('login/cadastro', [LoginController::class, 'first'])->name('login.first');
 Route::post('login/cadastrar', [LoginController::class, 'fill'])->name('login.fill');
 
+Route::get('sucesso', function(){
+    return view('templates.success');
+})->name('page.success');
+
 Route::middleware(Authenticate::class)->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home.index');
     Route::post('/home', [HomeController::class, 'index']);
@@ -135,7 +139,6 @@ Route::middleware(Authenticate::class)->group(function () {
         
         Route::post('relatorio/{id}', [FormReportController::class, 'generate'])->name('form.report');
     });
-
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
     Route::get('perfil', [ProfileController::class, 'index'])->name('profile.index');

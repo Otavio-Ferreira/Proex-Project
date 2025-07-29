@@ -349,116 +349,116 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        $cidades_ceara = [
-            'Fortaleza',
-            'Caucaia',
-            'Juazeiro do Norte',
-            'Maracanaú',
-            'Sobral',
-            'Crato',
-            'Itapipoca',
-            'Quixadá',
-            'Iguatu',
-            'Russas',
-            'Aquiraz',
-            'Canindé',
-            'Pacatuba',
-            'Icó',
-            'Tianguá',
-            'Aracati',
-            'Morada Nova',
-            'Quixeramobim',
-            'Limoeiro do Norte',
-            'Horizonte',
-            'Acaraú',
-            'Camocim',
-            'Barbalha',
-            'São Gonçalo do Amarante',
-            'Trairi',
-            'Tauá',
-            'Viçosa do Ceará',
-            'Baturité',
-            'Granja',
-            'Crateús',
-            'Boa Viagem',
-            'Redenção',
-            'Maranguape',
-            'Ubajara',
-            'Guaraciaba do Norte',
-            'Pentecoste',
-            'Campos Sales',
-            'Itapajé',
-            'Brejo Santo',
-            'Beberibe',
-            'Amontada',
-            'Jaguaribe',
-            'Eusébio',
-            'Paracuru',
-            'Várzea Alegre',
-            'Missão Velha',
-            'Massapê'
-        ];
+        // $cidades_ceara = [
+        //     'Fortaleza',
+        //     'Caucaia',
+        //     'Juazeiro do Norte',
+        //     'Maracanaú',
+        //     'Sobral',
+        //     'Crato',
+        //     'Itapipoca',
+        //     'Quixadá',
+        //     'Iguatu',
+        //     'Russas',
+        //     'Aquiraz',
+        //     'Canindé',
+        //     'Pacatuba',
+        //     'Icó',
+        //     'Tianguá',
+        //     'Aracati',
+        //     'Morada Nova',
+        //     'Quixeramobim',
+        //     'Limoeiro do Norte',
+        //     'Horizonte',
+        //     'Acaraú',
+        //     'Camocim',
+        //     'Barbalha',
+        //     'São Gonçalo do Amarante',
+        //     'Trairi',
+        //     'Tauá',
+        //     'Viçosa do Ceará',
+        //     'Baturité',
+        //     'Granja',
+        //     'Crateús',
+        //     'Boa Viagem',
+        //     'Redenção',
+        //     'Maranguape',
+        //     'Ubajara',
+        //     'Guaraciaba do Norte',
+        //     'Pentecoste',
+        //     'Campos Sales',
+        //     'Itapajé',
+        //     'Brejo Santo',
+        //     'Beberibe',
+        //     'Amontada',
+        //     'Jaguaribe',
+        //     'Eusébio',
+        //     'Paracuru',
+        //     'Várzea Alegre',
+        //     'Missão Velha',
+        //     'Massapê'
+        // ];
 
 
-        for ($i = 0; $i < 40; $i++) {
-            $new_user = User::create([
-                'name' => fake()->name(),
-                'email' => fake()->unique()->safeEmail(),
-                'email_verified_at' => now(),
-                'password' => Hash::make('password'),
-                'remember_token' => Str::random(10),
-                'status' => true
-            ]);
-            $new_user->assignRole($role2);
-            $person = Persons::create([
-                "user_id" => $new_user->id,
-                "coordinator_name" => $new_user->name,
-                "coordinator_profile" => "Docente",
-                "coordinator_siape" => fake()->numerify('######'),
-                "coordinator_course" => Courses::where('name', $courses[array_rand($courses)])->first()->id
-            ]);
-        }
+        // for ($i = 0; $i < 40; $i++) {
+        //     $new_user = User::create([
+        //         'name' => fake()->name(),
+        //         'email' => fake()->unique()->safeEmail(),
+        //         'email_verified_at' => now(),
+        //         'password' => Hash::make('password'),
+        //         'remember_token' => Str::random(10),
+        //         'status' => true
+        //     ]);
+        //     $new_user->assignRole($role2);
+        //     $person = Persons::create([
+        //         "user_id" => $new_user->id,
+        //         "coordinator_name" => $new_user->name,
+        //         "coordinator_profile" => "Docente",
+        //         "coordinator_siape" => fake()->numerify('######'),
+        //         "coordinator_course" => Courses::where('name', $courses[array_rand($courses)])->first()->id
+        //     ]);
+        // }
 
-        for ($i = 0; $i < 10; $i++) {
-            $form = Forms::create([
-                "title" => 'Formulário ' . (2016 + $i),
-                "date" => Carbon::create((2016 + $i), 1, 1)->toDateString(),
-                "status" => $i == 9 ? 1 : 0
-            ]);
+        // for ($i = 0; $i < 10; $i++) {
+        //     $form = Forms::create([
+        //         "title" => 'Formulário ' . (2016 + $i),
+        //         "date" => Carbon::create((2016 + $i), 1, 1)->toDateString(),
+        //         "status" => $i == 9 ? 1 : 0
+        //     ]);
 
 
-            $typeActions = ['Programa', 'Projeto'];
-            $modalities = ['UFCA Itinerante', 'Ampla Concorrência', 'PROPE'];
+        //     $typeActions = ['Programa', 'Projeto'];
+        //     $modalities = ['UFCA Itinerante', 'Ampla Concorrência', 'PROPE'];
 
-            $max = 10 + random_int(1, 30);
-            $users = User::limit($max)->orderBy('created_at', 'desc')->with('persons')->get();
+        //     $max = 10 + random_int(1, 30);
+        //     $users = User::limit($max)->orderBy('created_at', 'desc')->with('persons')->get();
 
-            foreach ($users as $key => $one_user) {
-                $form_response = FormsResponse::create([
-                    "forms_id" => $form->id,
-                    "user_id" => $one_user->id,
-                    "title_action" => Projects::where('title', $projects[array_rand($projects)])->first()?->id,
-                    "type_action" => $typeActions[array_rand($typeActions)],
-                    "action_modality" => $modalities[array_rand($modalities)],
-                    "coordinator_name" => $one_user->name,
-                    "coordinator_profile" => "Docente",
-                    "coordinator_siape" => $one_user->persons->coordinator_siape,
-                    "coordinator_course" => $one_user->persons->coordinator_course,
-                    "qtd_internal_audience" => fake()->numberBetween(50, 500),
-                    "qtd_external_audience" => fake()->numberBetween(100, 1000),
-                    "advances_extensionist_action" => fake()->paragraph(),
-                    "social_technology_development" => fake()->paragraph(),
-                    "instrument_avaliation" => fake()->paragraph(),
-                    "was_finished" => fake()->numberBetween(0, 4),
-                ]);
+        //     foreach ($users as $key => $one_user) {
+        //         $form_response = FormsResponse::create([
+        //             "forms_id" => $form->id,
+        //             "user_id" => $one_user->id,
+        //             "title_action" => Projects::where('title', $projects[array_rand($projects)])->first()?->id,
+        //             "type_action" => $typeActions[array_rand($typeActions)],
+        //             "action_modality" => $modalities[array_rand($modalities)],
+        //             "coordinator_name" => $one_user->name,
+        //             "coordinator_profile" => "Docente",
+        //             "coordinator_siape" => $one_user->persons->coordinator_siape,
+        //             "coordinator_course" => $one_user->persons->coordinator_course,
+        //             "qtd_internal_audience" => fake()->numberBetween(50, 500),
+        //             "qtd_external_audience" => fake()->numberBetween(100, 1000),
+        //             "advances_extensionist_action" => fake()->paragraph(),
+        //             "social_technology_development" => fake()->paragraph(),
+        //             "instrument_avaliation" => fake()->paragraph(),
+        //             "was_finished" => fake()->numberBetween(0, 4),
+        //         ]);
 
-                $form_activity = Activitys::create([
-                    "response_forms_id" => $form_response->id,
-                    "activity" => fake()->paragraph(),
-                    "address" => $cidades_ceara[array_rand($cidades_ceara)]
-                ]);
-            }
-        }
+        //         $form_activity = Activitys::create([
+        //             "response_forms_id" => $form_response->id,
+        //             "activity" => fake()->paragraph(),
+        //             "address" => $cidades_ceara[array_rand($cidades_ceara)]
+        //         ]);
+        //     }
+        // }
 
 
 
