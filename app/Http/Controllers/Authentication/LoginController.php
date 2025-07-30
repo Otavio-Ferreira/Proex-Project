@@ -91,7 +91,7 @@ class LoginController extends Controller
                     $data['title'],
                 );
 
-                return redirect()->back()->with("toast_success", "Verifique a caixa de entrada do seu email.");
+                return to_route('page.success')->with("message", "Verifique a caixa de entrada do seu email e siga os passos para redefinir sua senha.");
             } catch (\Throwable $th) {
                 return redirect()->back()->with("toast_error", "Erro ao enviar o email, tente novamente em alguns instantes.")->withInput();
             }
