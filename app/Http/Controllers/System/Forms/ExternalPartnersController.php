@@ -18,8 +18,8 @@ class ExternalPartnersController extends Controller
         $this->externalPartnerService = $externalPartnerService;
     }
 
-    public function store(StoreRequest $request){
-        return $this->externalPartnerService->storeResponse($request);
+    public function store(StoreRequest $request, $uuid){
+        return $this->externalPartnerService->storeResponse($request, $uuid);
     }
 
     public function update(UpdateRequest $request, $id){

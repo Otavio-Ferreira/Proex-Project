@@ -14,30 +14,44 @@
           </div>
           <h2 class="page-title">
             Sessão 5
-          </h2>
+          </h2><a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
+          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
+                class="icon ti ti-check"></i>Finalizar Formulário</button>
+
+            <x-modal.modal-alert route="{{ route('forms.finish', $response->id) }}" id="modal-finish-response"
+              class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
+              title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
+              typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
+              <x-slot:content>
+                <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
+                <h3>Tem certeza?</h3>
+                <div class="text-secondary">
+                  Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
+                </div>
+              </x-slot:content>
+            </x-modal.modal-alert>
+          @endif
         </div>
         <div class="col-auto ms-auto">
-          {{-- @if ($finished)
-            @if ($response)
-              @if (!$response->was_finished || $response->was_finished == 2)
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
-                    class="icon ti ti-check"></i>Finalizar Formulário</button>
+          <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
+          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
+                class="icon ti ti-check"></i>Finalizar Formulário</button>
 
-                <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
-                class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
-                title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
-                typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
-                <x-slot:content>
-                    <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
-                    <h3>Tem certeza?</h3>
-                    <div class="text-secondary">
-                        Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
-                    </div>
-                </x-slot:content>
-                </x-modal.modal-alert>
-                @endif
-                @endif
-                @endif --}}
+            <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
+              class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
+              title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
+              typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
+              <x-slot:content>
+                <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
+                <h3>Tem certeza?</h3>
+                <div class="text-secondary">
+                  Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
+                </div>
+              </x-slot:content>
+            </x-modal.modal-alert>
+          @endif
         </div>
       </div>
     </div>
@@ -65,8 +79,7 @@
       </div>
     </div>
     <div class="col-12 col-md-10">
-      <div
-        class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step"
+      <div class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step"
         id="card-7">
         <div class="card-header">
           <h3 class="p-0 m-0">Parcerias externas</h3>
@@ -78,7 +91,7 @@
             <i class="icon ti ti-externalPartner-plus"></i>
             Adicionar parceiro
           </a>
-          <x-modal.modal route="{{ route('externalPartners.store') }}" id="modal-add-externalPartner"
+          <x-modal.modal route="{{ route('externalPartners.store', $response->id) }}" id="modal-add-externalPartner"
             class="modal-dialog-centered" title="Adicionar parceiro externo" typeBtnClose="button" classBtnClose="me-auto"
             textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
             <x-slot:content>

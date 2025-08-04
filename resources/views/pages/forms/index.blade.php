@@ -18,9 +18,6 @@
           <a href="{{ route('forms.create') }}" class="btn btn-azure">
             Cadastrar
           </a>
-          <a href="" class="btn btn-secondary">
-            Relatórios
-          </a>
         </div>
       </div>
     </div>
@@ -51,7 +48,7 @@
                   <td>
                     <x-badge.badge class="{{ $form->responses->count() == 0 ? 'bg-danger-lt' : ' bg-primary-lt' }}">
                       <x-slot:content>
-                        {{ $form->responses->count() . '/' . $qtd_users }}
+                        {{ $form->responses->whereIn('was_finished', [1, 2, 3, 4])->count() . '/' . $form->responses->count() }}
                       </x-slot:content>
                     </x-badge.badge>
                   </td>
@@ -107,8 +104,26 @@
                           <option value="0" {{ $form->status == 0 ? 'selected' : '' }}>Inativo</option>
                         </x-slot:options>
                       </x-form-elements.select.select>
-                      <button type="submit" class="btn btn-primary">Salvar</button>
+                      <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                      </div>
                     </form>
+                    <div class="mt-3" style="text-align: justify;">
+                      Esse formulário foi disponibilizado para {{ $form->responses->count() }} projetos ativos
+                      @if ($total_inative_projects > 0)
+                        , e {{ $total_inative_projects }} projetos inativos ficaram de fora.
+                      @else
+                        .
+                      @endif
+                      @if ($total_active_projects - $form->responses->count() > 0)
+                        No entanto, detectamos que tem {{ $total_active_projects - $form->responses->count() > 0 }}
+                        projetos ativos novos, caso deseje que esses projetos também respondam esse formulário clique aqui
+                        abaixo.
+                        <div class="w-100 d-flex justify-content-end mt-3">
+                          <a href="{{route('forms.makeAvailable', $form->id)}}" type="submit" class="btn btn-green w-100">Disponibilizar para projetos novos</a>
+                        </div>
+                      @endif
+                    </div>
                   </div>
                 </div>
               @endforeach

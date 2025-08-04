@@ -26,10 +26,9 @@ class ResponseService
         try {
             $response = FormsResponse::find($uuid);
             $user = auth()->user();
-            $form_response = $this->responseRepository->getUserFormResponse($user->id, $response->forms_id);
 
-            if ($form_response) {
-                $this->responseRepository->update($form_response, $request);
+            if ($response) {
+                $this->responseRepository->update($response, $request);
             } else {
                 $this->responseRepository->set($request, $response->forms_id, $user->id);
             }
@@ -67,13 +66,11 @@ class ResponseService
         }
     }
 
-    public function finishResponse()
+    public function finishResponse($uuid)
     {
         try {
-            $actual_form = $this->formRepository->getActualForm();
-            $user = auth()->user();
-            $form_response = $this->responseRepository->getUserFormResponse($user->id, $actual_form->id);
-            $this->responseRepository->finish($form_response);
+            $response = FormsResponse::find($uuid);
+            $this->responseRepository->finish($response);
 
             return redirect()->back()->with("toast_success", "Formulário finalizado com sucesso.");
         } catch (\Throwable $th) {

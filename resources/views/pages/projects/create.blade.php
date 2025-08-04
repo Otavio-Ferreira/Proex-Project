@@ -16,6 +16,7 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
+            <a href="{{route('projects.index')}}" class="btn btn-cyan">Voltar</a>
         </div>
       </div>
     </div>
@@ -119,9 +120,6 @@
 
                   <option value="1" {{ old('status') ? (old('status') == '1' ? 'selected' : '') : ' ' }}>
                     Ativo</option>
-
-                  <option value="2" {{ old('status') ? (old('status') == '2' ? 'selected' : '') : ' ' }}>
-                    Finalizado</option>
                 </select>
               </div>
             </div>

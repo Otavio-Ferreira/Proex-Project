@@ -1,6 +1,14 @@
 @extends('templates.template')
 
 @section('styles')
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map {
+      height: 300px;
+      width: 100%;
+    }
+  </style>
 @endsection
 @section('content')
   <div class="page-header">
@@ -17,27 +25,24 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
-          {{-- @if ($finished)
-            @if ($response)
-              @if (!$response->was_finished || $response->was_finished == 2)
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
-                    class="icon ti ti-check"></i>Finalizar Formulário</button>
+          <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
+          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
+                class="icon ti ti-check"></i>Finalizar Formulário</button>
 
-                <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
-                  class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
-                  title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
-                  typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
-                  <x-slot:content>
-                    <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
-                    <h3>Tem certeza?</h3>
-                    <div class="text-secondary">
-                      Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
-                    </div>
-                  </x-slot:content>
-                </x-modal.modal-alert>
-              @endif
-            @endif
-          @endif --}}
+            <x-modal.modal-alert route="{{ route('forms.finish', $response->id) }}" id="modal-finish-response"
+              class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
+              title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
+              typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
+              <x-slot:content>
+                <i class="ti ti-alert-triangle icon icon-lg text-success"></i>
+                <h3>Tem certeza?</h3>
+                <div class="text-secondary">
+                  Você realmente deseja finalizar o formulário? Não será possível modificá-lo depois!
+                </div>
+              </x-slot:content>
+            </x-modal.modal-alert>
+          @endif
         </div>
       </div>
     </div>
@@ -64,41 +69,44 @@
       </div>
     </div>
     <div class="col-12 col-md-10">
-
-      <div
-        class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step "
-        id="card-3">
-        <div class="card-header">
-          <h3 class="p-0 m-0">Detalhamento de atividades</h3>
-        </div>
-        <div class="card-body">
-          <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
-            data-bs-target="#modal-add-activity">
-            <i class="icon ti ti-activity-plus"></i>
-            Adicionar atividade
-          </a>
-          <x-modal.modal route="{{ route('activitys.store', $response->id) }}" id="modal-add-activity" class="modal-dialog-centered"
-            title="Adicionar atividade" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
-            typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
-            <x-slot:content>
+      <div class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step mb-3">
+        <div class="card">
+          <div class="card-body">
+            <form action="{{ route('activitys.store', $response->id) }}" method="post">
+              @csrf
               @include('components.form-elements.textarea.textarea', [
-                  'title' => 'Atividade',
+                  'title' => 'Descreva a atividade',
                   'type' => 'text',
                   'class' => 'mb-3',
                   'name' => 'activity',
                   'required' => 'true',
                   'placeholder' => 'Digite uma atividade',
               ])
-              @include('components.form-elements.input.input', [
-                  'title' => 'Local',
-                  'type' => 'text',
-                  'class' => 'mb-3',
-                  'name' => 'address',
-                  'required' => 'true',
-                  'placeholder' => 'Digite o local',
-              ])
-            </x-slot:content>
-          </x-modal.modal>
+              <div class="mb-3">
+                <label class="form-label">Digite o local ou procure no mapa</label>
+                <div class="d-flex gap-2">
+                  <select class="form-select" id="select-local" id="address" name="address" required>
+                    <option value="" selected>Pesquisar</option>
+                  </select>
+                </div>
+              </div>
+              <div id="map"></div>
+              <input type="hidden" name="latitude" id="latitude">
+              <input type="hidden" name="longitude" id="longitude">
+              <input type="hidden" name="place_id" id="place_id">
+              <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-success">Adicionar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step "
+        id="card-3">
+        <div class="card-header">
+          <h3 class="p-0 m-0">Detalhamento de atividades</h3>
+        </div>
+        <div class="card-body">
           <div class="table-responsive">
             @if ($response->activitys->count() == 0)
               <div class="alert alert-yellow mt-3">
@@ -111,41 +119,12 @@
                     <th>Atividade</th>
                     <th>Local</th>
                     <th width="5%"></th>
-                    <th width="5%"></th>
                   </x-slot:ths>
                   <x-slot:trs>
                     @foreach ($response->activitys as $activity)
                       <tr>
                         <td>{{ $activity->activity }}</td>
                         <td>{{ $activity->address }}</td>
-                        <td>
-                          <button class="btn btn-secondary" data-bs-toggle="modal"
-                            data-bs-target="#modal-edit-activity{{ $activity->id }}"><i class="ti ti-edit"></i></button>
-                          <x-modal.modal route="{{ route('activitys.update', $activity->id) }}"
-                            id="modal-edit-activity{{ $activity->id }}" class="modal-dialog-centered"
-                            title="Editar atividade" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
-                            typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
-                            <x-slot:content>
-                              @include('components.form-elements.textarea.textarea', [
-                                  'title' => 'Atividade',
-                                  'type' => 'text',
-                                  'class' => 'mb-3',
-                                  'name' => 'activity',
-                                  'required' => 'true',
-                                  'value' => $activity->activity,
-                              ])
-                              @include('components.form-elements.input.input', [
-                                  'title' => 'Local',
-                                  'type' => 'text',
-                                  'class' => 'mb-3',
-                                  'name' => 'address',
-                                  'required' => 'true',
-                                  'placeholder' => 'Digite o local',
-                                  'value' => $activity->address,
-                              ])
-                            </x-slot:content>
-                          </x-modal.modal>
-                        </td>
                         <td>
                           <button class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#modal-delete-activity{{ $activity->id }}"><i
@@ -182,9 +161,107 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 @endsection
 @section('scripts')
+  <script src="{{ asset('assets/libs/tom-select/dist/js/tom-select.base.min.js') }}" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var map = L.map('map').setView([-7.2287, -39.3126], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      var marker;
+
+      function updateMap(lat, lon) {
+        const latlng = [lat, lon];
+        map.setView(latlng, 13);
+        if (marker) map.removeLayer(marker);
+        marker = L.marker(latlng).addTo(map);
+        document.getElementById("coordinates").innerText = `${lat}, ${lon}`;
+      }
+
+      // TomSelect
+      const select = document.getElementById("select-local");
+      const tom = new TomSelect(select, {
+        valueField: "display_name",
+        labelField: "display_name",
+        searchField: "display_name",
+        maxOptions: 10,
+        loadThrottle: 500,
+        preload: false,
+        load: function(query, callback) {
+          if (!query.length) return callback();
+          fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(json => {
+              json.forEach(item => item.display_name = resumirNome(item.display_name));
+              callback(json);
+            })
+            .catch(() => callback());
+        },
+        onChange: function(value) {
+          const selected = this.options[value];
+          if (selected) {
+            const lat = selected.lat;
+            const lon = selected.lon;
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lon;
+            document.getElementById("place_id").value = selected.place_id;
+            updateMap(lat, lon);
+          }
+        },
+        render: {
+          option: function(data, escape) {
+            return `<div>${escape(data.display_name)}</div>`;
+          },
+          item: function(data, escape) {
+            return `<div>${escape(data.display_name)}</div>`;
+          }
+        }
+      });
+
+      // Clique no mapa
+      map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lon = e.latlng.lng;
+
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lon;
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data && data.display_name) {
+              const displayName = resumirNome(data.display_name); // menos resumido se quiser
+              const placeId = data.place_id;
+
+              // Adiciona a opção ao select
+              tom.addOption({
+                value: displayName, // o valor enviado no form
+                display_name: displayName, // o que aparece no select
+                lat: lat,
+                lon: lon,
+                place_id: placeId
+              });
+
+              // Atualiza os inputs hidden
+              document.getElementById("place_id").value = placeId;
+              document.getElementById("latitude").value = lat;
+              document.getElementById("longitude").value = lon;
+
+              tom.addItem(displayName);
+            }
+          });
+      });
+
+      // Reduz nome do local (remove país, CEP, etc.)
+      function resumirNome(nomeCompleto) {
+        let partes = nomeCompleto.split(',');
+        if (partes.length > 3) {
+          return partes.slice(0, 3).join(',').trim(); // ex: "Campus UFCA, Juazeiro do Norte, CE"
+        }
+        return nomeCompleto.trim();
+      }
+    });
+  </script>
 @endsection

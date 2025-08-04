@@ -46,9 +46,9 @@
                 <option value="Técnico Administrativo"
                   {{ isset($person->coordinator_profile) ? ($person->coordinator_profile == 'Técnico Administrativo' ? 'selected' : '') : ' ' }}>
                   Técnico Administrativo</option>
-                <option value="Discente"
+                {{-- <option value="Discente"
                   {{ isset($person->coordinator_profile) ? ($person->coordinator_profile == 'Discente' ? 'selected' : '') : ' ' }}>
-                  Discente</option>
+                  Discente</option> --}}
               </x-slot:options>
             </x-form-elements.select.select>
 

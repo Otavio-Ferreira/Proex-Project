@@ -9,6 +9,5 @@ use Illuminate\Database\Eloquent\Model;
 class Activitys extends Model
 {
     use HasFactory, HasUuids;
-
-    protected $fillable = ["response_forms_id", "activity", "address"];
+    protected $fillable = ["response_forms_id", "activity", "address", "latitude", "longitude", "place_id"];
 }

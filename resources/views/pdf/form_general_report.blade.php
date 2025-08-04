@@ -80,51 +80,6 @@
       </tr>
     </tbody>
   </table>
-  {{-- <table class="content-table" style="margin-bottom: 20px;">
-    <thead>
-      <tr>
-        <th>Formulário</th>
-        {{-- @foreach ($resultadosPorMunicipio as $municipio => $formularios)
-                    @foreach ($formularios as $formulario)
-                        <th style="text-align: center;">{{ $formulario['formulario'] }}</th>
-                    @endforeach
-                @endforeach --}}
-  {{-- </tr> --}}
-  {{-- <tr> --}}
-  {{-- <th>Dimensão</th> --}}
-  {{-- @foreach ($resultadosPorMunicipio as $municipio => $formularios)
-                    @foreach ($formularios as $formulario)
-                        <th style="text-align: center;" width="10%">{{ $municipio }}</th>
-                    @endforeach
-                @endforeach --}}
-  {{-- </tr>
-  </thead> --}}
-  {{-- <tbody> --}}
-  {{-- @foreach ($resultadosPorMunicipio->first()->first()['dimensoes'] as $dimensao => $dados)
-                @if ($dimensao !== 'mediaDasMedias')
-                    <tr>
-                        <td>{{ $dimensao }}</td>
-                        @foreach ($resultadosPorMunicipio as $municipio => $formularios)
-                            @foreach ($formularios as $formulario)
-                                <td style="text-align: center;">
-                                    {{ isset($formulario['dimensoes'][$dimensao]) ? number_format($formulario['dimensoes'][$dimensao]['media_ponderada'], 2) : '-' }}
-                                </td>
-                            @endforeach
-                        @endforeach
-                    </tr>
-                @endif
-            @endforeach --}}
-  {{-- <tr class="table-primary text-white fw-bold"> --}}
-  {{-- <td>Grau de maturidade em relação a transformação digital</td> --}}
-  {{-- @foreach ($resultadosPorMunicipio as $municipio => $formularios)
-                    @foreach ($formularios as $formulario)
-                        <td style="text-align: center; font-weight: bolder;">
-                            {{ number_format($formulario['somaMedias'], 2) }}</td>
-                    @endforeach
-                @endforeach 
-      </tr>
-    </tbody>
-  </table> --}}
   <table style="margin-bottom: 5px;">
     <thead>
       <tr>
@@ -137,30 +92,28 @@
       <thead>
         <tr>
           <th width="20%" scope="row" style="text-align: left;">Título da ação:</th>
-          <td width="80%">{{ $response->action->title ?? 'Não informado' }}</td>
+          <td width="80%">{{ $response->project->title ?? 'Não informado' }}</td>
           <th width="20%" style="text-align: left;">Status atual</th>
           <td width="80%" colspan="3">
             {{ App\Helpers\Status\Status::get_status_response_form($response->was_finished) ?? 'Não informado' }}
           </td>
-          {{-- <th></th>
-          <td></td> --}}
         </tr>
         <tr>
           <th style="white-space: nowrap; text-align: left;">Data de início</th>
           <td style="white-space: nowrap;">
             {{ date('d/m/Y', strtotime($response->created_at)) ?? 'Não informado' }}</td>
           <th style="white-space: nowrap; text-align: left; text-align: left;">Tipo de ação</th>
-          <td style="white-space: nowrap;">{{ $response->type_action ?? 'Não informado' }}</td>
+          <td style="white-space: nowrap;">{{ $response->project->type ?? 'Não informado' }}</td>
           <th style="white-space: nowrap; text-align: left; text-align: left;">Modalidade da ação</th>
-          <td style="white-space: nowrap;">{{ $response->action_modality ?? 'Não informado' }}</td>
+          <td style="white-space: nowrap;">{{ $response->project->modality ?? 'Não informado' }}</td>
         </tr>
         <tr>
           <th style="white-space: nowrap; text-align: left;">Nome do coordenador</th>
-          <td style="white-space: nowrap;">{{ $response->coordinator_name ?? 'Não informado' }}</td>
+          <td style="white-space: nowrap;">{{ $response->user->persons->coordinator_name ?? 'Não informado' }}</td>
           <th style="white-space: nowrap; text-align: left;">Perfil do coordenador</th>
-          <td style="white-space: nowrap;">{{ $response->coordinator_profile ?? 'Não informado' }}</td>
+          <td style="white-space: nowrap;">{{ $response->user->persons->coordinator_profile ?? 'Não informado' }}</td>
           <th style="white-space: nowrap; text-align: left;">Siape do coordenador</th>
-          <td style="white-space: nowrap;">{{ $response->coordinator_siape ?? 'Não informado' }}</td>
+          <td style="white-space: nowrap;">{{ $response->user->persons->coordinator_siape ?? 'Não informado' }}</td>
         </tr>
         <tr>
           <th style="white-space: nowrap; text-align: left;">Curso do projeto</th>

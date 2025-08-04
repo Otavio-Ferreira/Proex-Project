@@ -51,7 +51,21 @@ class EloquentProjectsRepository implements ProjectsRepository
         return $projetc;
     }
 
-    public function getByUserId($uuid){
-        return Projects::where('coordinator', $uuid)->with('responses')->orderBy('created_at', 'desc')->paginate(5);
+    public function getByUserId($uuid, $request){
+        $query = Projects::where('coordinator', $uuid);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('type', 'like', '%' . $search . '%')
+                    ->orWhere('modality', 'like', '%' . $search . '%')
+                    ->orWhere('status', 'like', '%' . $search . '%');
+            });
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate(5);
+        // return Projects::where('coordinator', $uuid)->with('responses')->orderBy('created_at', 'desc')->paginate(5);
     }
 }

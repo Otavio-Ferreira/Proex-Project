@@ -46,7 +46,8 @@
         </div>
         <div class="d-flex align-items-center col-sm-12 col-md-auto">
           <div class="btn-list">
-            <a class="btn btn-primary">Baixar relatório</a>
+            <a href="{{route('projects.my')}}" class="btn btn-cyan">Voltar</a>
+            <a href="{{route('response.report', $response->id)}}" class="btn btn-primary">Baixar relatório</a>
           </div>
         </div>
       </div>
@@ -70,24 +71,40 @@
           </div>
         </div>
       </div>
-      @if (isset($response->comment->comment))
+      @if (isset($response->comment->comment) && $form->status == 1 && $response->was_finished == 2)
         <div class="alert alert-danger mb-3">
           <h4>Observações:</h4>
           {{ $response->comment->comment }}
         </div>
       @endif
-      @if ($form->status == 1)
-        <div class="card">
-          <div class="card-body">
-            Esse formulário está ativo no momento. O prazo para o seu preenchimento é até o dia
-            {{ date('d/m/Y', strtotime($form->date)) }}.
-            <div class="w-100 d-flex justify-content-end mt-2">
-              <a href="{{ route('response.start', $response->id) }}" class="btn btn-danger w-100">Preencher relatório</a>
-            </div>
-          </div>
+      <div class="card">
+        <div class="card-body">
+          @if ($form->status == 1)
+            @if ($response->was_finished == 0)
+              Esse formulário está ativo no momento. O prazo para o seu preenchimento é até o dia
+              {{ date('d/m/Y', strtotime($form->date)) }}.
+              <div class="w-100 d-flex justify-content-end mt-2">
+                <a href="{{ route('response.start', $response->id) }}" class="btn btn-danger w-100">Preencher
+                  relatório</a>
+              </div>
+            @elseif($response->was_finished == 1)
+              Você ja enviou esse relatório, aguarde ele ser aprovado.
+            @elseif($response->was_finished == 2)
+              Esse formulário foi aberto novamente pois há alterações para serem feitas. O prazo para o seu preenchimento
+              é até o dia
+              {{ date('d/m/Y', strtotime($form->date)) }}.
+              <div class="w-100 d-flex justify-content-end mt-2">
+                <a href="{{ route('response.start', $response->id) }}" class="btn btn-danger w-100">Corrigir
+                  relatório</a>
+              </div>
+            @else
+              Você ja enviou esse relatório, e ele foi aprovado.
+            @endif
+          @else
+            Esse formulario está indisponível para alterações.
+          @endif
         </div>
-      @else
-      @endif
+      </div>
     </div>
     <div class="col-12 col-md-8 mb-3 mb-md-0 overflow-auto" style="height: calc(100vh - 300px);">
       <div class="card border-top-0 border-end-0 border-bottom-0 border-4 border-primary mb-3">

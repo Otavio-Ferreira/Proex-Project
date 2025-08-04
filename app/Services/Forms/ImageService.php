@@ -3,6 +3,7 @@
 namespace App\Services\Forms;
 
 use App\Helpers\Storage\ImageStorage;
+use App\Models\Forms\FormsResponse;
 use App\Repositories\Forms\Form\FormRepository;
 use App\Repositories\Forms\Image\ImageRepository;
 use App\Repositories\Forms\Response\ResponseRepository;
@@ -23,14 +24,12 @@ class ImageService
         $this->responseRepository = $responseRepository;
     }
 
-    public function storeResponse($request)
+    public function storeResponse($request, $uuid)
     {
         try {
             $user = auth()->user();
-            $form = $this->formRepository->getActualForm();
-            $response = $this->responseRepository->getUserFormResponse($user->id, $form->id);
-            
-            $image_url = ImageStorage::storage($request, $form->id, $response->id);
+            $response = FormsResponse::find($uuid);
+            $image_url = ImageStorage::storage($request, $response->forms_id, $response->id);
             $this->imageRepository->set($request, $response->id, $image_url);
 
             return redirect()->back()->with("toast_success", "Imagem inserida com sucesso.");

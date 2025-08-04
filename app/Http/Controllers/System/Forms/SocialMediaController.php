@@ -17,9 +17,9 @@ class SocialMediaController extends Controller
     ) {
         $this->socialMediaService = $socialMediaService;
     }
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request, $uuid)
     {
-        return $this->socialMediaService->storeResponse($request);
+        return $this->socialMediaService->storeResponse($request, $uuid);
     }
     public function update(UpdateRequest $request, $id)
     {

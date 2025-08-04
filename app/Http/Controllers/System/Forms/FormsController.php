@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Forms\StoreRequest;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
+use App\Models\Parameters\Projects;
 use App\Models\User;
 use App\Repositories\Forms\Form\FormRepository;
 use App\Services\Forms\FormService;
 use Illuminate\Http\Request;
+use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 use Spatie\Permission\Models\Permission;
 
 class FormsController extends Controller
@@ -26,8 +28,11 @@ class FormsController extends Controller
         $this->formRepository = $formRepository;
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $this->data['forms'] = $this->formRepository->getAllForm($request);
+        $this->data['total_active_projects'] = Projects::where('status', 1)->count();
+        $this->data['total_inative_projects'] = Projects::where('status', 0)->count();
 
         $this->data['qtd_users'] = User::where('status', 1)->get()->filter(function ($user) {
             return $user->hasPermissionTo('responder_formulário');
@@ -87,7 +92,7 @@ class FormsController extends Controller
             $columns[$key]['COR'] = $status['COR'];
             $columns[$key]['DATA'] = [];
 
-            $responses = FormsResponse::where(['forms_id' => $id, 'was_finished' => $key])->with(['activitys', 'internal_partners', 'internal_partners.title_action_partner', 'external_partners', 'extension_actions', 'social_medias', 'images', 'user', 'action'])->get();
+            $responses = FormsResponse::where(['forms_id' => $id, 'was_finished' => $key])->with(['activitys', 'internal_partners', 'internal_partners.title_action_partner', 'external_partners', 'extension_actions', 'social_medias', 'images', 'user'])->get();
 
             foreach ($responses as $key2 => $response) {
                 $finished = 0;
@@ -115,7 +120,7 @@ class FormsController extends Controller
                 $columns[$key]['DATA'][$key2]['RESPONSE'] = $response;
             }
         }
-        
+
         ksort($columns);
         // dd($columns);
         $this->data['columns'] = $columns;
@@ -125,10 +130,10 @@ class FormsController extends Controller
         return view('pages.forms.show', $this->data);
     }
 
-    public function reports($id){
+    public function reports($id)
+    {
         $this->data['form'] = $this->formRepository->getFormById($id);
         return view('pages.forms.reports', $this->data);
-
     }
 
     public function store(StoreRequest $request)
@@ -139,5 +144,28 @@ class FormsController extends Controller
     public function update(StoreRequest $request, $id)
     {
         return $this->formService->updateResponse($request, $id);
+    }
+
+    public function makeAvailable($id)
+    {
+        try {
+            $form = $this->formRepository->getFormById($id);
+            $active_projects = Projects::where('status', 1)->get();
+            foreach ($active_projects as $project) {
+                $response = FormsResponse::where(['project_id' => $project->id,'forms_id' => $id])->first();
+    
+                if (!$response) {
+                    FormsResponse::create([
+                        'forms_id' => $form->id,
+                        'user_id' => $project->coordinator,
+                        'project_id' => $project->id,
+                    ]);
+                }
+            }
+            return redirect()->back()->with('toast_success', 'Formulário disponibilizado com sucesso!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('toast_error', 'Erro ao disponibilizar formulário, tente novamente mais tarde!');
+        }
+
     }
 }

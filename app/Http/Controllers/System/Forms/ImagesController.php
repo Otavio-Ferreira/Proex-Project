@@ -18,9 +18,9 @@ class ImagesController extends Controller
         $this->imageService = $imageService;
     }
     
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request, $uuid)
     {
-        return $this->imageService->storeResponse($request);
+        return $this->imageService->storeResponse($request, $uuid);
     }
 
     public function update(UpdateRequest $request, $id)

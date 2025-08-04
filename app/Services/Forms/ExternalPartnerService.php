@@ -2,6 +2,7 @@
 
 namespace App\Services\Forms;
 
+use App\Models\Forms\FormsResponse;
 use App\Repositories\Forms\ExternalPartner\ExternalPartnerRepository;
 use App\Repositories\Forms\Form\FormRepository;
 use App\Repositories\Forms\Response\ResponseRepository;
@@ -22,11 +23,10 @@ class ExternalPartnerService {
         $this->responseRepository = $responseRepository;
     }
 
-    public function storeResponse($request){
+    public function storeResponse($request, $uuid){
         try {            
             $user = auth()->user();
-            $form = $this->formRepository->getActualForm();
-            $response = $this->responseRepository->getUserFormResponse($user->id, $form->id);
+            $response = FormsResponse::find($uuid);
             $this->externalPartnerRepository->set($request, $response->id);
 
             return redirect()->back()->with("toast_success", "Parceiro externo inserida com sucesso.");

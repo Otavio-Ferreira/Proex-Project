@@ -66,9 +66,9 @@ class ProjectsController extends Controller
         }
     }
 
-    public function myProjects(){
+    public function myProjects(Request $request){
         $user = Auth::user();
-        $this->data['projects'] = $this->projetcsRepository->getByUserId($user->id);
+        $this->data['projects'] = $this->projetcsRepository->getByUserId($user->id, $request);
         return view('pages.projects.my', $this->data);
     }
 }

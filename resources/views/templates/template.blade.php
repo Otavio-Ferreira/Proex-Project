@@ -95,7 +95,7 @@
 
               @can('ver_seus_projetos')
                 <x-navbar.navbar-item route="{{ route('projects.my') }}" title="Meus Projetos"
-                  isActive="{{ request()->routeIs(['projects.my']) ? true : false }}" icon="ti-layout-dashboard">
+                  isActive="{{ request()->routeIs(['projects.my', 'response.session', 'response.index']) ? true : false }}" icon="ti-layout-dashboard">
                 </x-navbar.navbar-item>
               @endcan
 

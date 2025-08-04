@@ -26,7 +26,7 @@
   </div>
   <div class="page-body">
     <div class="d-flex justify-content-end mb-2">
-      <x-table.search route="{{ route('forms.index') }}" action="GET" value="{{ request('search') }}"
+      <x-table.search route="{{ route('projects.my') }}" action="GET" value="{{ request('search') }}"
         placeholder="Pesquisar por fomulário" button="true"></x-table.search>
     </div>
     <div class="">
@@ -58,9 +58,6 @@
                       </x-slot:content>
                     </x-badge.badge>
                   </td>
-                  {{-- <td><a class="btn p-1 px-2 rounded-2 btn-info btn-sm"
-                      href="{{ route('forms.show', $project->id) }}">Detalhes</a>
-                  </td> --}}
                   <td><a class="btn p-1 px-2 rounded-2 btn-yellow btn-sm" data-bs-toggle="offcanvas"
                       data-bs-target="#modal-reports-{{ $project->id }}">Relatórios</a>
                   </td>

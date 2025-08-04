@@ -29,9 +29,9 @@ class PersonService {
 
             if($person){
                 $this->personRepository->update($request, $user->id);
-                // if($request->coordinator_profile == "Técnico Administrativo"){
-                //     $this->rolesRepository->updateUserRole($user, 'Visitante');
-                // }
+                if($request->coordinator_profile == "Técnico Administrativo"){
+                    $this->rolesRepository->updateUserRole($user, 'Visitante');
+                }
             }
             else{
                 $this->personRepository->set($request, $user->id);

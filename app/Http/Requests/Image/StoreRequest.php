@@ -26,6 +26,9 @@ class StoreRequest extends FormRequest
         return [
             'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'address' => 'required|string',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'place_id' => 'required|string',
             'date' => 'required|date',
             'description' => 'required|string',
         ];
@@ -47,6 +50,13 @@ class StoreRequest extends FormRequest
 
             "description.required" => "É necessário inserir uma descrição.",
             "description.string" => "O campo descrição precisa ser um texto.",
+
+            "latitude.required" => "É necessário inserir um endereço",
+            "latitude.string" => "O campo endereço precisa ser um texto.",
+            "longitude.required" => "É necessário inserir um endereço",
+            "longitude.string" => "O campo endereço precisa ser um texto.",
+            "place_id.required" => "É necessário inserir um endereço",
+            "place_id.string" => "O campo endereço precisa ser um texto."
         ];
     }
 }

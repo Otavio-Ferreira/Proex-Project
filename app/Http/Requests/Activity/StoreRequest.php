@@ -22,10 +22,13 @@ class StoreRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
+    { 
         return [
             'activity' => 'required|string',
             'address' => 'required|string',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'place_id' => 'required|string'
         ];
     }
 
@@ -36,6 +39,12 @@ class StoreRequest extends FormRequest
             "activity.string" => "O campo atividade precisa ser um texto.",
             "address.required" => "É necessário inserir um endereço",
             "address.string" => "O campo endereço precisa ser um texto.",
+            "latitude.required" => "É necessário inserir um endereço",
+            "latitude.string" => "O campo endereço precisa ser um texto.",
+            "longitude.required" => "É necessário inserir um endereço",
+            "longitude.string" => "O campo endereço precisa ser um texto.",
+            "place_id.required" => "É necessário inserir um endereço",
+            "place_id.string" => "O campo endereço precisa ser um texto."
         ];
     }
 }

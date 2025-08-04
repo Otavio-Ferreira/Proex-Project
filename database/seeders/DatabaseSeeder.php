@@ -76,6 +76,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $role2->givePermissionTo([
+            "ver_seus_projetos",
             "responder_formulário",
         ]);
 
@@ -326,7 +327,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($courses as $course) {
             Courses::create([
-                "name" => strtoupper($course),
+                "name" => ucwords(strtolower($course)),
                 "status" => true
             ]);
         }
@@ -338,9 +339,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         foreach ($projects as $project) {
-            if (!Projects::where('title', strtoupper($project))->first()) {
+            if (!Projects::where('title', ucwords(strtolower($project)))->first()) {
                 Projects::create([
-                    "title" => strtoupper($project),
+                    "title" => ucwords(strtolower($project)),
                     "type" => "Projeto",
                     "modality" => "PROPE",
                     "course" => Courses::first()->id,

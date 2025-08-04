@@ -31,8 +31,6 @@ class ProfileController extends Controller
         $this->data['base_courses'] = Courses::all();
         $this->data['person'] = $this->personsRepository->get($user->id);
         $this->data['user'] = $user;
-
-        // dd($this->data['person']);
         return view('pages.profile.index', $this->data);
     }
 
