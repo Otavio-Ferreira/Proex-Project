@@ -37,15 +37,7 @@ class EloquentFormRepository implements FormRepository
 
     public function set($request)
     {
-        if ($request->status == 1) {
-            $forms = Forms::all();
-
-            foreach ($forms as $form) {
-                $form->status = 0;
-                $form->save();
-            }
-        }
-        Forms::create([
+        return Forms::create([
             "title" => $request->title,
             "date" => $request->date,
             "status" => $request->status,
@@ -54,15 +46,6 @@ class EloquentFormRepository implements FormRepository
 
     public function update($request, $id)
     {
-        if ($request->status == 1) {
-            $forms = Forms::all();
-
-            foreach ($forms as $form) {
-                $form->status = 0;
-                $form->save();
-            }
-        }
-
         $form = Forms::find($id);
         $form->title = $request->title;
         $form->date = $request->date;

@@ -105,15 +105,35 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::get('resposta/editar/{id}', [FormsResponseController::class, 'edit'])->name('response.edit');
         Route::post('resposta/editar/{id}', [FormsResponseController::class, 'update'])->name('response.update');
     });
+
+    Route::group(['middleware' => ['auth', 'permission:ver_seus_projetos']], function () {
+        Route::get('meus_projetos', [ProjectsController::class, 'myProjects'])->name('projects.my');
+        
+        // Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
+        // Route::get('formulario/detalhes/{id}', [FormsController::class, 'show'])->name('forms.show');
+        // Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
+        // Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
+        // Route::get('resposta/relatórios/{id}', [FormsController::class, 'reports'])->name('forms.reports');
+        // Route::get('resposta/editar/{id}', [FormsResponseController::class, 'edit'])->name('response.edit');
+        // Route::post('resposta/editar/{id}', [FormsResponseController::class, 'update'])->name('response.update');
+    });
     
     Route::group(['middleware' => ['auth', 'permission:responder_formulário']], function () {
-        // Route::get('formulario', [FormsResponseController::class, 'index'])->name('forms.index');
-        Route::get('formulario/avançar/{actual_step}', [FormsResponseController::class, 'advance'])->name('forms.advance');
-        Route::get('formulario/retornar/{actual_step}', [FormsResponseController::class, 'return'])->name('forms.return');
-        Route::post('formulario/persistir', [FormsResponseController::class, 'persist'])->name('forms.persist');
+        Route::get('meus_projetos/relatorio/{uuid}', [FormsResponseController::class, 'index'])->name('response.index');
+        Route::get('meus_projetos/preencher_relatorio/{uuid}', [FormsResponseController::class, 'start'])->name('response.start');
+
+        Route::get('meus_projetos/preencher_relatorio/{uuid}/{session}', [FormsResponseController::class, 'session'])->name('response.session');
+        
+
+
+
+        Route::get('formulario/avançar/{uuid}/{next}', [FormsResponseController::class, 'advance'])->name('forms.advance');
+
+        Route::get('formulario/retornar/{uuid}/{back}', [FormsResponseController::class, 'return'])->name('forms.return');
+        Route::post('formulario/persistir/{uuid}', [FormsResponseController::class, 'persist'])->name('forms.persist');
         Route::delete('formulario/finalizar', [FormsResponseController::class, 'finish'])->name('forms.finish');
     
-        Route::post('atividade/adicionar', [ActivityController::class, 'store'])->name('activitys.store');
+        Route::post('atividade/adicionar/{uuid}', [ActivityController::class, 'store'])->name('activitys.store');
         Route::post('atividade/editar/{id}', [ActivityController::class, 'update'])->name('activitys.update');
         Route::delete('atividade/deletar/{id}', [ActivityController::class, 'destroy'])->name('activitys.destroy');
     

@@ -50,4 +50,8 @@ class EloquentProjectsRepository implements ProjectsRepository
 
         return $projetc;
     }
+
+    public function getByUserId($uuid){
+        return Projects::where('coordinator', $uuid)->with('responses')->orderBy('created_at', 'desc')->paginate(5);
+    }
 }

@@ -20,13 +20,13 @@ class FormsResponse extends Model
     protected $fillable = [
         'forms_id',
         'user_id',
-        'title_action',
-        'type_action',
-        'action_modality',
-        'cordinator_name',
-        'cordinator_profile',
-        'cordinator_siape',
-        'coordinator_course',
+        'project_id',
+        // 'type_action',
+        // 'action_modality',
+        // 'cordinator_name',
+        // 'cordinator_profile',
+        // 'cordinator_siape',
+        // 'coordinator_course',
         'qtd_internal_audience',
         'qtd_external_audience',
         'advances_extensionist_action',
@@ -70,9 +70,9 @@ class FormsResponse extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function action(): BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Projects::class, 'title_action', 'id');
+        return $this->belongsTo(Projects::class, 'project_id', 'id');
     }
 
     public function course(): BelongsTo
@@ -89,8 +89,4 @@ class FormsResponse extends Model
     {
         return $this->belongsTo(Forms::class, 'forms_id');
     }
-
-    // public function form():BelongsToMany{
-    //     return $this->belongsToMany(Forms::class, 'id', 'forms_id');
-    // }
 }

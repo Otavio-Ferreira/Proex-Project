@@ -36,14 +36,8 @@ class FormsController extends Controller
         return view('pages.forms.index', $this->data);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $this->data['forms'] = $this->formRepository->getAllForm($request);
-
-        $this->data['qtd_users'] = User::where('status', 1)->get()->filter(function ($user) {
-            return $user->hasPermissionTo('responder_formulário');
-        })->count();
-
         return view('pages.forms.create', $this->data);
     }
 
@@ -142,7 +136,7 @@ class FormsController extends Controller
         return $this->formService->storeResponse($request);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreRequest $request, $id)
     {
         return $this->formService->updateResponse($request, $id);
     }

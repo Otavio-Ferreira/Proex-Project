@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end mb-2">
       <x-table.search route="{{ route('forms.index') }}" action="GET" value="{{ request('search') }}"
         placeholder="Pesquisar por fomulário" button="true"></x-table.search>
     </div>

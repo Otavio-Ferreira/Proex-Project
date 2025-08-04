@@ -9,6 +9,7 @@ use App\Models\Parameters\Projects;
 use App\Models\User;
 use App\Repositories\Projects\ProjectsRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectsController extends Controller
 {
@@ -63,5 +64,11 @@ class ProjectsController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with("toast_error", "Erro ao atualizar projeto. Por favor, tente novamente mais tarde.")->withInput();
         }
+    }
+
+    public function myProjects(){
+        $user = Auth::user();
+        $this->data['projects'] = $this->projetcsRepository->getByUserId($user->id);
+        return view('pages.projects.my', $this->data);
     }
 }

@@ -65,7 +65,7 @@
                 <i class="ti ti-user icon"></i>
               </span>
               <div class="d-none d-xl-block ps-2">
-                <div>{{ strtok(Auth::user()->name, " ") }}</div>
+                <div>{{ strtok(Auth::user()->name, ' ') }}</div>
                 <div class="mt-1 fs-6 text-muted">{{ ucfirst(Auth::user()->roles->first()->name) }}</div>
               </div>
             </a>
@@ -87,28 +87,27 @@
                 isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-home">
               </x-navbar.navbar-item>
 
-              <x-navbar.navbar-item route="{{ route('dashboard.index') }}" title="Dashboard"
-                isActive="{{ request()->routeIs(['dashboard.*']) ? true : false }}" icon="ti-chart-bar">
-              </x-navbar.navbar-item>
-
-              @canany(['responder_formulário', 'adicionar_formulário'])
-                <x-navbar.navbar-item route="" title="Formulário"
-                  isActive="{{ request()->routeIs(['forms.*', 'response.*']) ? true : false }}"
-                  icon="ti-clipboard-text">
-                  <x-slot:links>
-                    @can('responder_formulário')
-                      {{-- <a class="dropdown-item" href="{{ route('forms.index') }}">Responder</a> --}}
-                    @endcan
-                    @can('adicionar_formulário')
-                      <a class="dropdown-item" href="{{ route('forms.index') }}">Formulários</a>
-                    @endcan
-                  </x-slot:links>
+              @can('ver_dashboard')
+                <x-navbar.navbar-item route="{{ route('dashboard.index') }}" title="Dashboard"
+                  isActive="{{ request()->routeIs(['dashboard.*']) ? true : false }}" icon="ti-chart-bar">
                 </x-navbar.navbar-item>
-              @endcanany
+              @endcan
+
+              @can('ver_seus_projetos')
+                <x-navbar.navbar-item route="{{ route('projects.my') }}" title="Meus Projetos"
+                  isActive="{{ request()->routeIs(['projects.my']) ? true : false }}" icon="ti-layout-dashboard">
+                </x-navbar.navbar-item>
+              @endcan
+
+              @can('adicionar_formulário')
+                <x-navbar.navbar-item route="{{ route('forms.index') }}" title="Formulários"
+                  isActive="{{ request()->routeIs(['forms.*']) ? true : false }}" icon="ti-clipboard-text">
+                </x-navbar.navbar-item>
+              @endcan
 
               @canany(['adicionar_cursos', 'adicionar_projetos'])
                 <x-navbar.navbar-item route="" title="Cadastros"
-                  isActive="{{ request()->routeIs(['courses.*', 'projects.*']) ? true : false }}"
+                  isActive="{{ request()->routeIs(['courses.*', 'projects.index', 'projects.create']) ? true : false }}"
                   icon="ti-file-database">
                   <x-slot:links>
                     @can('adicionar_cursos')

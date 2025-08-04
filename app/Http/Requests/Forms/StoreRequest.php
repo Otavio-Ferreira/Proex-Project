@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
             'status' => 'required|integer|in:0,1'
         ];
     }
@@ -37,6 +37,7 @@ class StoreRequest extends FormRequest
             "title.text" => "O campo title precisa ser um texto.",
             "date.required" => "É necessário inserir uma data.",
             "date.data" => "O campo data precisa ser válido .",
+            "date.after_or_equal" => "O campo data precisa ser hoje ou posterior a data de hoje.",
             "status.required" => "É necessário escolher um status",
             "status.integer" => "O campo status precisa ser válido.",
             "status.in" => "O campo status deve ser 0 ou 1.",

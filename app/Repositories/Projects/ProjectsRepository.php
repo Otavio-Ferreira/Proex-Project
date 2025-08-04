@@ -8,6 +8,8 @@ interface ProjectsRepository{
 
     public function getById($uuid);
 
+    public function getByUserId($uuid);
+
     public function create($request);
     
     public function update($request, $uuid);
