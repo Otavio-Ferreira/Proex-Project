@@ -10,10 +10,10 @@
           <div class="page-pretitle">
             <a href="{{ route('projects.my') }}">Meus trabalhos</a> /
             <a href="{{ route('response.index', $response->id) }}">Relatório</a> /
-            <a href="{{ route('response.session', [$response->id, 3]) }}">Sessão 3</a>
+            <a href="{{ route('response.session', [$response->id, 7]) }}">Sessão 7</a>
           </div>
           <h2 class="page-title">
-            Sessão
+            Sessão 7
           </h2>
         </div>
         <div class="col-auto ms-auto">
@@ -57,7 +57,7 @@
         <ul class="steps steps-counter steps-vertical">
           @foreach ($steps as $key => $step)
             <li
-              class="step-item {{ $key <= 3 ? 'cursor-pointer ' : '' }} {{ $key == 3 ? ' active cursor-pointer' : '' }}">
+              class="step-item {{ $key <= 7 ? 'cursor-pointer ' : '' }} {{ $key == 7 ? ' active cursor-pointer' : '' }}">
               {{ $key }}ª Seção
             </li>
           @endforeach
@@ -66,30 +66,30 @@
     </div>
     <div class="col-12 col-md-10">
       <div class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step"
-        id="card-5">
+        id="card-9">
         <div class="card-header">
-          <h3 class="p-0 m-0">Avanços alcançados e impactos da ação extensionista</h3>
+          <h3 class="p-0 m-0">Desenvolvimento de tecnologia social</h3>
         </div>
         <div class="card-body">
           <form action="{{ route('forms.persist', $response->id) }}" method="post">
             @csrf
             @include('components.form-elements.textarea.textarea', [
-                'title' => 'Descreva os avanços alcançados e impactos da ação extensionista',
+                'title' => 'A ação atuou com o desenvolvimento de alguma tecnologia social? Se sim, descreva',
                 'type' => 'text',
                 'class' => 'mb-3',
-                'name' => 'advances_extensionist_action',
+                'name' => 'social_technology_development',
                 'required' => 'true',
-                'value' => isset($response->advances_extensionist_action)
-                    ? $response->advances_extensionist_action
+                'value' => isset($response->social_technology_development)
+                    ? $response->social_technology_development
                     : '',
             ])
 
             <div class="d-flex w-100 justify-content-between mt-3">
-              <a href="{{ route('forms.return', [$response->id, 2]) }}" type="submit" class="btn btn-outline-info">
+              <a href="{{ route('forms.return', [$response->id, 6]) }}" type="submit" class="btn btn-outline-info">
                 <i class="icon ti ti-chevron-left"></i>
                 Voltar</a>
-              @if (isset($response->advances_extensionist_action))
-                <a href="{{ route('forms.advance', [$response->id, 4]) }}" class="btn btn-info ms-auto">Avançar</a>
+              @if (isset($response->social_technology_development))
+                <a href="{{ route('forms.advance', [$response->id, 8]) }}" class="btn btn-info ms-auto">Avançar</a>
               @else
                 <button type="submit" class="btn btn-info ms-auto">Avançar</button>
               @endif
@@ -101,4 +101,74 @@
   </div>
 @endsection
 @section('scripts')
+  <script src="{{ asset('assets/libs/tom-select/dist/js/tom-select.base.min.js') }}" defer></script>
+  <script>
+    function show(id) {
+      let divs = document.getElementsByClassName('card-form-step');
+
+      for (let el of divs) {
+        el.classList.add('d-none');
+      }
+      let div = document.getElementById(`card-${id}`);
+      if (div) {
+        div.classList.remove('d-none');
+      }
+    }
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var el = document.getElementById('select-tags');
+      if (el) {
+        new TomSelect(el, {
+          copyClassesToDropdown: false,
+          dropdownParent: 'body',
+          controlInput: '<input>',
+          render: {
+            item: function(data, escape) {
+              return `<div>${escape(data.text)}</div>`;
+            },
+            option: function(data, escape) {
+              return `<div>${escape(data.text)}</div>`;
+            }
+          }
+        });
+      }
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      var el2 = document.getElementById('select-courses');
+      if (el2) {
+        new TomSelect(el2, {
+          copyClassesToDropdown: false,
+          dropdownParent: 'body',
+          controlInput: '<input>',
+          render: {
+            item: function(data, escape) {
+              return `<div>${escape(data.text)}</div>`;
+            },
+            option: function(data, escape) {
+              return `<div>${escape(data.text)}</div>`;
+            }
+          }
+        });
+      }
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      var el2 = document.getElementById('select-tags-partner');
+      if (el2) {
+        new TomSelect(el2, {
+          copyClassesToDropdown: false,
+          dropdownParent: 'body',
+          controlInput: '<input>',
+          render: {
+            item: function(data, escape) {
+              return `<div>${escape(data.text)}</div>`;
+            },
+            option: function(data, escape) {
+              return `<div>${escape(data.text)}</div>`;
+            }
+          }
+        });
+      }
+    });
+  </script>
 @endsection

@@ -91,52 +91,21 @@
           </form>
 
           <div class="table-responsive">
-            @if (!isset($response))
+            @if ($response->internal_partners->count() == 0)
               <div class="alert alert-yellow mt-3">
-                Nenhuma atividade adicionada
+                Nenhum parceiro adicionado
               </div>
             @else
               <div class="card p-0 mt-3">
                 <x-table.table tableClass="table-vcenter card-table table-striped">
                   <x-slot:ths>
                     <th>Título da ação parceira</th>
-                    {{-- <th width="5%"></th> --}}
                     <th width="5%"></th>
                   </x-slot:ths>
                   <x-slot:trs>
                     @foreach ($response->internal_partners as $internal_partner)
                       <tr>
                         <td>{{ $internal_partner->title_action_partner->title }}</td>
-                        {{-- <td>
-                          <button class="btn btn-secondary" data-bs-toggle="modal"
-                            data-bs-target="#modal-edit-internal_partner{{ $internal_partner->id }}"><i
-                                        class="ti ti-edit"></i></button>
-                                    <x-modal.modal route="{{ route('internalPartners.update', $internal_partner->id) }}"
-                                        id="modal-edit-internal_partner{{ $internal_partner->id }}" class="modal-dialog-centered"
-                                        title="Editar atividade" typeBtnClose="button" classBtnClose="me-auto"
-                                        textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary"
-                                        textBtnSave="Salvar">
-                                        <x-slot:content>
-                                            @include('components.form-elements.textarea.textarea', [
-                                            'title' => 'Atividade',
-                                            'type' => 'text',
-                                            'class' => 'mb-3',
-                                            'name' => 'internal_partner',
-                                            'required' => 'true',
-                                            'value' => $internal_partner->internal_partner,
-                                            ])
-                                            @include('components.form-elements.input.input', [
-                                            'title' => 'Local',
-                                            'type' => 'text',
-                                            'class' => 'mb-3',
-                                            'name' => 'address',
-                                            'required' => 'true',
-                                            'placeholder' => 'Digite o local',
-                                            'value' => $internal_partner->address,
-                                            ])
-                                        </x-slot:content>
-                                    </x-modal.modal>
-                                    </td> --}}
                         <td>
                           <button class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#modal-delete-internal_partner{{ $internal_partner->id }}"><i
@@ -177,63 +146,12 @@
           </div>
         </div>
       </div>
-
-
     </div>
   </div>
 @endsection
 @section('scripts')
   <script src="{{ asset('assets/libs/tom-select/dist/js/tom-select.base.min.js') }}" defer></script>
   <script>
-    function show(id) {
-      let divs = document.getElementsByClassName('card-form-step');
-
-      for (let el of divs) {
-        el.classList.add('d-none');
-      }
-      let div = document.getElementById(`card-${id}`);
-      if (div) {
-        div.classList.remove('d-none');
-      }
-    }
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var el = document.getElementById('select-tags');
-      if (el) {
-        new TomSelect(el, {
-          copyClassesToDropdown: false,
-          dropdownParent: 'body',
-          controlInput: '<input>',
-          render: {
-            item: function(data, escape) {
-              return `<div>${escape(data.text)}</div>`;
-            },
-            option: function(data, escape) {
-              return `<div>${escape(data.text)}</div>`;
-            }
-          }
-        });
-      }
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-      var el2 = document.getElementById('select-courses');
-      if (el2) {
-        new TomSelect(el2, {
-          copyClassesToDropdown: false,
-          dropdownParent: 'body',
-          controlInput: '<input>',
-          render: {
-            item: function(data, escape) {
-              return `<div>${escape(data.text)}</div>`;
-            },
-            option: function(data, escape) {
-              return `<div>${escape(data.text)}</div>`;
-            }
-          }
-        });
-      }
-    });
     document.addEventListener("DOMContentLoaded", function() {
       var el2 = document.getElementById('select-tags-partner');
       if (el2) {

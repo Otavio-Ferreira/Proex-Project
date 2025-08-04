@@ -52,7 +52,7 @@ class FormsResponseController extends Controller
         $this->data['form'] = $form;
         $this->data['response'] = $response;
         $this->data['steps'] = $steps;
-        $this->data['progress'] = 10 * collect($steps)->filter()->count();
+        $this->data['progress'] = collect($steps)->filter()->count();
         // dd($this->data['progress']);
         return view('pages.response.dash', $this->data);
 
@@ -255,11 +255,17 @@ class FormsResponseController extends Controller
         } else if ($session == 4) {
             return view('pages.response.steps.four', $this->data);
         } else if ($session == 5) {
+            return view('pages.response.steps.five', $this->data);
         } else if ($session == 6) {
+            return view('pages.response.steps.six', $this->data);
         } else if ($session == 7) {
+            return view('pages.response.steps.seven', $this->data);
         } else if ($session == 8) {
+            return view('pages.response.steps.eight', $this->data);
         } else if ($session == 9) {
+            return view('pages.response.steps.nine', $this->data);
         } else if ($session == 10) {
+            return view('pages.response.steps.ten', $this->data);
         } else {
             return redirect()->back()->with('toast_error', 'Sessão não encontrda!');
         }

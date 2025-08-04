@@ -308,7 +308,7 @@
 
       circles.forEach(function(circle) {
         let value = parseInt(circle.getAttribute('data-value')) || 0;
-        let maxValue = 12; // Defina o valor máximo
+        let maxValue = 10; // Defina o valor máximo
         let percentage = (value / maxValue) * 100; // Converte para percentual
 
         // Aplica o progresso ao estilo de background
