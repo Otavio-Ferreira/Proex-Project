@@ -21,8 +21,8 @@ class ExtencionActionsController extends Controller
         $this->extensionActionService = $extensionActionService;
     }
 
-    public function store(StoreRequest $request){
-        return $this->extensionActionService->storeResponse($request);
+    public function store(StoreRequest $request, $uuid){
+        return $this->extensionActionService->storeResponse($request, $uuid);
     }
 
     public function update(UpdateRequest $request, $id){

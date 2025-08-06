@@ -36,6 +36,15 @@
   </style>
 </head>
 
+<!-- Spinner fullscreen -->
+<div id="loading-overlay"
+  style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 9999; display: none; justify-content: center; align-items: center;">
+  <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status">
+    <span class="visually-hidden">Carregando...</span>
+  </div>
+</div>
+
+
 <body class="row m-0 p-0 vh-100">
   <div class="d-none d-lg-flex col-6 flex-wrap justify-content-center align-content-center bg-primary bg-gradient">
     <img src="{{ asset('assets/img/illustrations/login.svg') }}" class="w-75" alt="">

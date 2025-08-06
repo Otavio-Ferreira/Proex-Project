@@ -84,7 +84,7 @@
       <div class="row g-2 align-items-center">
         <div class="col-12 col-md">
           <div class="page-pretitle">
-            <a href="{{ route('forms.create') }}">Formulários</a> /
+            <a href="{{ route('forms.index') }}">Formulários</a> /
             <a href="{{ route('forms.show', $form->id) }}">Detalhes</a>
           </div>
           <h2 class="page-title">
@@ -92,11 +92,14 @@
           </h2>
         </div>
         <div class="d-flex align-items-center col-sm-12 col-md-auto">
-          <div class="input-icon me-2">
-            <input type="text" value="" id="customFilter" class="form-control" placeholder="Pesquisar ...">
-            <span class="input-icon-addon">
-              <i class="ti icon text-primary ti-search"></i>
-            </span>
+          <div class="btn-list">
+            <a href="{{ route('forms.index') }}" class="btn btn-cyan">Voltar</a>
+            <div class="input-icon me-2">
+              <input type="text" value="" id="customFilter" class="form-control" placeholder="Pesquisar ...">
+              <span class="input-icon-addon">
+                <i class="ti icon text-primary ti-search"></i>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -119,7 +122,7 @@
                     <div class="col-8">
                       {{-- <p class="m-0 fs-3 text-dark">{{ $item['RESPONSE']->user->name }}</p> --}}
                       <p class="m-0 text-muted">
-                        {{ \Illuminate\Support\Str::limit($item['RESPONSE']->action->title, 45, '...') }}</p>
+                        {{ \Illuminate\Support\Str::limit($item['RESPONSE']->project->title, 45, '...') }}</p>
                     </div>
                     <div class="col-4">
                       <div class="circleGraph" data-value="{{ $item['PROGRESS'] }}">
@@ -196,7 +199,7 @@
 
       circles.forEach(function(circle) {
         let value = parseInt(circle.getAttribute('data-value')) || 0;
-        let maxValue = 12; // Defina o valor máximo
+        let maxValue = 10; // Defina o valor máximo
         let percentage = (value / maxValue) * 100; // Converte para percentual
 
         // Aplica o progresso ao estilo de background

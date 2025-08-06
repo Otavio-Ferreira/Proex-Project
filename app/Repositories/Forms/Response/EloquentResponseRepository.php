@@ -89,14 +89,47 @@ class EloquentResponseRepository implements ResponseRepository
         ]);
     }
 
-    public function finish($form_response){
-        if($form_response->was_finished == 0){
+    public function finish($form_response)
+    {
+        if ($form_response->was_finished == 0) {
             $form_response->was_finished = 1;
-        }
-        else{
+        } else {
             $form_response->was_finished = 3;
         }
         $form_response->save();
     }
 
+    public function getByFilter($filter_year, $filter_form, $filter_course, $filter_status, $type, $modality)
+    {
+        $query = FormsResponse::query();
+
+        if (isset($filter_year)) {
+            $query->whereYear('forms_responses.created_at', $filter_year);
+        }
+        if (isset($filter_form)) {
+            $query->where('forms_id', $filter_form);
+        }
+        if (isset($filter_course)) {
+            $query->whereHas('project', function ($q) use ($filter_course) {
+                $q->where('course', $filter_course);
+            });
+        }
+        if (isset($filter_status)) {
+            $query->whereHas('project', function ($q) use ($filter_status) {
+                $q->where('status', $filter_status);
+            });
+        }
+        if (isset($type)) {
+            $query->whereHas('project', function ($q) use ($type) {
+                $q->where('type', $type);
+            });
+        }
+        if (isset($modality)) {
+            $query->whereHas('project', function ($q) use ($modality) {
+                $q->where('modality', $modality);
+            });
+        }
+
+        return $query;
+    }
 }

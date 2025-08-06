@@ -21,21 +21,19 @@ class ResponseService
         $this->formRepository = $formRepository;
     }
 
-    public function persistResponse($request)
+    public function persistResponse($request, $uuid)
     {
         try {
-            $actual_form = $this->formRepository->getActualForm();
+            $response = FormsResponse::find($uuid);
             $user = auth()->user();
-            $form_response = $this->responseRepository->getUserFormResponse($user->id, $actual_form->id);
 
-            if ($form_response) {
-                $this->responseRepository->update($form_response, $request);
+            if ($response) {
+                $this->responseRepository->update($response, $request);
             } else {
-                $this->responseRepository->set($request, $actual_form->id, $user->id);
-                session()->put('step', 2);
+                $this->responseRepository->set($request, $response->forms_id, $user->id);
             }
 
-            return redirect()->back()->with("toast_success", "Seção do formulário enviada.");
+            return to_route('response.start', $uuid)->with("toast_success", "Seção do formulário enviada.");
         } catch (\Throwable $th) {
             return redirect()->back()->with("toast_error", "Erro ao preencher seção do cadastro, tente novamente em alguns instantes.")->withInput();
         }
@@ -68,13 +66,11 @@ class ResponseService
         }
     }
 
-    public function finishResponse()
+    public function finishResponse($uuid)
     {
         try {
-            $actual_form = $this->formRepository->getActualForm();
-            $user = auth()->user();
-            $form_response = $this->responseRepository->getUserFormResponse($user->id, $actual_form->id);
-            $this->responseRepository->finish($form_response);
+            $response = FormsResponse::find($uuid);
+            $this->responseRepository->finish($response);
 
             return redirect()->back()->with("toast_success", "Formulário finalizado com sucesso.");
         } catch (\Throwable $th) {

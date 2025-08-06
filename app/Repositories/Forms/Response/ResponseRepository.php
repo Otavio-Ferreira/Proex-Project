@@ -15,4 +15,6 @@ interface ResponseRepository{
 
     public function finish($form_response);
 
+    public function getByFilter($filter_year, $filter_form, $filter_course, $filter_status, $type, $modality);
+
 }

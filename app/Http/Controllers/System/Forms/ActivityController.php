@@ -17,8 +17,8 @@ class ActivityController extends Controller
     {
         $this->activityService = $activityService;
     }
-    public function store(StoreRequest $request){
-        return $this->activityService->storeResponse($request);
+    public function store(StoreRequest $request, $uuid){
+        return $this->activityService->storeResponse($request, $uuid);
     }
     
     public function update(UpdateRequest $request, $id){

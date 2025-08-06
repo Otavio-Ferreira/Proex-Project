@@ -16,6 +16,9 @@ return new class extends Migration
             $table->uuid('response_forms_id');
             $table->text('image')->nullable();
             $table->text('address')->nullable();
+            $table->text('latitude')->nullable();
+            $table->text('longitude')->nullable();
+            $table->text('place_id')->nullable();
             $table->date('date')->nullable();
             $table->text('description')->nullable();
             $table->foreign('response_forms_id')->references('id')->on('forms_responses')->onDelete('cascade');

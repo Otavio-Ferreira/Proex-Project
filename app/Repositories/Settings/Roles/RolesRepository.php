@@ -13,4 +13,6 @@ interface RolesRepository{
     public function create(RoleRequest $request) : void;
 
     public function update(RoleRequest $request, $id) : void;
+    
+    public function updateUserRole($user, $role) : void;
 }

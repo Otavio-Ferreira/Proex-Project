@@ -17,9 +17,9 @@ class InternalPartnersController extends Controller
     ) {
         $this->internalPartnerService = $internalPartnerService;
     }
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request, $uuid)
     {
-        return $this->internalPartnerService->storeResponse($request);
+        return $this->internalPartnerService->storeResponse($request, $uuid);
     }
 
     public function destroy($id)

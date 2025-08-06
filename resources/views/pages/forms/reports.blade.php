@@ -29,14 +29,15 @@
       <div class="row g-2 align-items-center">
         <div class="col-12 col-md">
           <div class="page-pretitle">
-            <a href="{{ route('forms.create') }}">Formulários</a> /
-            <a href="{{ route('forms.show', $form->id) }}">Relatório personalizado</a>
+            <a href="{{ route('forms.index') }}">Formulários</a> /
+            <a href="{{ route('forms.reports', $form->id) }}">Relatório personalizado</a>
           </div>
           <h2 class="page-title">
             Relatório personalizado
           </h2>
         </div>
         <div class="d-flex align-items-center col-sm-12 col-md-auto">
+            <a href="{{route('forms.index')}}" class="btn btn-cyan">Voltar</a>
         </div>
       </div>
     </div>
@@ -145,8 +146,8 @@
                     <tbody>
                       @foreach ($form->responses as $response)
                         <tr>
-                          <td>{{ $response->action->title }}</td>
-                          <td>{{ $response->coordinator_name }}</td>
+                          <td>{{ $response->project->title }}</td>
+                          <td>{{ $response->user->persons->coordinator_name }}</td>
                           <td>
                             <span class="col-auto">
                               <label class="form-check form-check-single form-switch">
@@ -176,25 +177,6 @@
 @endsection
 @section('scripts')
   <script>
-    // document.addEventListener("DOMContentLoaded", function() {
-    //   var el = document.getElementById('select_project');
-    //   if (el) {
-    //     new TomSelect(el, {
-    //       copyClassesToDropdown: false,
-    //       dropdownParent: 'body',
-    //       controlInput: '<input>',
-    //       render: {
-    //         item: function(data, escape) {
-    //           return `<div>${escape(data.text)}</div>`;
-    //         },
-    //         option: function(data, escape) {
-    //           return `<div>${escape(data.text)}</div>`;
-    //         }
-    //       }
-    //     });
-    //   }
-    // });
-
     document.getElementById('role').addEventListener('change', function() {
       var commentDiv = document.getElementById('comment');
       var roleValue = this.value;

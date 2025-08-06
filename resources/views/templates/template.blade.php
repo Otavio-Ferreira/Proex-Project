@@ -43,7 +43,7 @@
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
           <a href="/dashboard">
-            <img src="{{ asset('assets/img/illustrations/logo.svg') }}" width="110" height="32" alt="tabler"
+            <img src="{{ asset('assets/img/ufca.png') }}" width="110" height="32" alt="tabler"
               class="navbar-brand-image">
           </a>
         </h1>
@@ -65,11 +65,13 @@
                 <i class="ti ti-user icon"></i>
               </span>
               <div class="d-none d-xl-block ps-2">
-                <div>{{ Auth::user()->name }}</div>
+                <div>{{ strtok(Auth::user()->name, ' ') }}</div>
                 <div class="mt-1 fs-6 text-muted">{{ ucfirst(Auth::user()->roles->first()->name) }}</div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+              <a href="{{ route('profile.index') }}" class="dropdown-item m-0">Perfil</a>
+              <div class="dropdown-divider m-0"></div>
               <a href="{{ route('logout') }}" class="dropdown-item">Sair</a>
             </div>
           </div>
@@ -81,28 +83,31 @@
         <div class="navbar">
           <div class="container-xl">
             <ul class="navbar-nav">
-              <x-navbar.navbar-item route="{{ route('home.index') }}" title="Dashboard"
-                isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-chart-bar">
+              <x-navbar.navbar-item route="{{ route('home.index') }}" title="Home"
+                isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-home">
               </x-navbar.navbar-item>
 
-              @canany(['responder_formulário', 'adicionar_formulário'])
-                <x-navbar.navbar-item route="" title="Formulário"
-                  isActive="{{ request()->routeIs(['forms.*', 'response.*']) ? true : false }}"
-                  icon="ti-clipboard-text">
-                  <x-slot:links>
-                    @can('responder_formulário')
-                      <a class="dropdown-item" href="{{ route('forms.index') }}">Responder</a>
-                    @endcan
-                    @can('adicionar_formulário')
-                      <a class="dropdown-item" href="{{ route('forms.create') }}">Formulários</a>
-                    @endcan
-                  </x-slot:links>
+              @can('ver_dashboard')
+                <x-navbar.navbar-item route="{{ route('dashboard.index') }}" title="Dashboard"
+                  isActive="{{ request()->routeIs(['dashboard.*']) ? true : false }}" icon="ti-chart-bar">
                 </x-navbar.navbar-item>
-              @endcanany
+              @endcan
 
-              {{-- @canany(['adicionar_cursos', 'adicionar_projetos'])
-                <x-navbar.navbar-item route="" title="Dados"
-                  isActive="{{ request()->routeIs(['courses.*', 'projects.*']) ? true : false }}"
+              @can('ver_seus_projetos')
+                <x-navbar.navbar-item route="{{ route('projects.my') }}" title="Meus Projetos"
+                  isActive="{{ request()->routeIs(['projects.my', 'response.session', 'response.index']) ? true : false }}" icon="ti-layout-dashboard">
+                </x-navbar.navbar-item>
+              @endcan
+
+              @can('adicionar_formulário')
+                <x-navbar.navbar-item route="{{ route('forms.index') }}" title="Formulários"
+                  isActive="{{ request()->routeIs(['forms.*']) ? true : false }}" icon="ti-clipboard-text">
+                </x-navbar.navbar-item>
+              @endcan
+
+              @canany(['adicionar_cursos', 'adicionar_projetos'])
+                <x-navbar.navbar-item route="" title="Cadastros"
+                  isActive="{{ request()->routeIs(['courses.*', 'projects.index', 'projects.create']) ? true : false }}"
                   icon="ti-file-database">
                   <x-slot:links>
                     @can('adicionar_cursos')
@@ -113,7 +118,7 @@
                     @endcan
                   </x-slot:links>
                 </x-navbar.navbar-item>
-              @endcanany --}}
+              @endcanany
 
               @canany(['adicionar_usuário', 'adicionar_grupo', 'adicionar_permissões'])
                 <x-navbar.navbar-item route="" title="Configurações"
@@ -152,13 +157,13 @@
             <div class="col-12 col-lg-auto mt-3 mt-lg-0">
               <ul class="list-inline list-inline-dots mb-0">
                 <li class="list-inline-item">
-                  Copyright &copy; 2024
+                  Copyright &copy; 2025
                   <a href="." class="link-secondary">Proex</a>.
                   All rights reserved.
                 </li>
                 <li class="list-inline-item">
                   <a href="./changelog.html" class="link-secondary" rel="noopener">
-                    v1.0.0-beta
+                    v2.0.0-beta
                   </a>
                 </li>
               </ul>

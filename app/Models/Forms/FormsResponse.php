@@ -20,13 +20,13 @@ class FormsResponse extends Model
     protected $fillable = [
         'forms_id',
         'user_id',
-        'title_action',
-        'type_action',
-        'action_modality',
-        'cordinator_name',
-        'cordinator_profile',
-        'cordinator_siape',
-        'coordinator_course',
+        'project_id',
+        // 'type_action',
+        // 'action_modality',
+        // 'cordinator_name',
+        // 'cordinator_profile',
+        // 'cordinator_siape',
+        // 'coordinator_course',
         'qtd_internal_audience',
         'qtd_external_audience',
         'advances_extensionist_action',
@@ -35,47 +35,58 @@ class FormsResponse extends Model
         'was_finished'
     ];
 
-    public function activitys() : HasMany{
+    public function activitys(): HasMany
+    {
         return $this->hasMany(Activitys::class, 'response_forms_id', 'id');
     }
 
-    public function internal_partners() : HasMany{
+    public function internal_partners(): HasMany
+    {
         return $this->hasMany(InternalPartners::class, 'response_forms_id', 'id');
     }
 
-    public function external_partners() : HasMany{
+    public function external_partners(): HasMany
+    {
         return $this->hasMany(ExternalPartners::class, 'response_forms_id', 'id');
     }
 
-    public function extension_actions() : HasMany{
+    public function extension_actions(): HasMany
+    {
         return $this->hasMany(ExtensionActions::class, 'response_forms_id', 'id');
     }
 
-    public function social_medias() : HasMany{
+    public function social_medias(): HasMany
+    {
         return $this->hasMany(SocialMedia::class, 'response_forms_id', 'id');
     }
 
-    public function images() : HasMany{
+    public function images(): HasMany
+    {
         return $this->hasMany(Images::class, 'response_forms_id', 'id');
     }
 
-    public function user() : BelongsTo{
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function action() : BelongsTo{
-        return $this->belongsTo(Projects::class, 'title_action', 'id');
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Projects::class, 'project_id', 'id');
     }
 
-    public function course() : BelongsTo{
+    public function course(): BelongsTo
+    {
         return $this->belongsTo(Courses::class, 'coordinator_course', 'id');
     }
 
-    public function comment() : HasOne{
+    public function comment(): HasOne
+    {
         return $this->hasOne(Comments::class, 'form_response_id', 'id');
     }
 
-    // public function form():BelongsToMany{
-    //     return $this->belongsToMany(Forms::class, 'id', 'forms_id');
-    // }
+    public function form()
+    {
+        return $this->belongsTo(Forms::class, 'forms_id');
+    }
 }

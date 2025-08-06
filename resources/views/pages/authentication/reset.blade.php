@@ -1,24 +1,27 @@
 @extends('templates.auth')
 
 @section('content')
-
-<div class="page page-center">
+  <div class="page page-center">
     <div class="container container-tight py-4">
       <div class="text-center mb-4">
-        <a href="." class="navbar-brand navbar-brand-autodark"><img src="./static/logo.svg" height="36" alt=""></a>
+        <a href="." class="navbar-brand navbar-brand-autodark"><img src="./static/logo.svg" height="36"
+            alt=""></a>
       </div>
-      <form class="card card-md bg-transparent shadow-none border-0" action="{{route('login.send')}}" method="post" autocomplete="off" novalidate>
+      <form class="card card-md bg-transparent shadow-none border-0" action="{{ route('login.send') }}" method="post" id="form-create"
+        autocomplete="off" novalidate>
         @csrf
         <div class="card-body">
           <h2 class="card-title text-center mb-4">Esqueceu sua senha?</h2>
-          <p class="text-muted mb-4">Digite seu endereço de email e um email de restauraçõa de senha será enviado para você</p>
+          <p class="text-muted mb-4">Digite seu endereço de email e um email de restauraçõa de senha será enviado para
+            você</p>
           <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" placeholder="Digite seu email" value="{{old('email')}}" required>
+            <input type="email" class="form-control" name="email" placeholder="Digite seu email"
+              value="{{ old('email') }}" required>
           </div>
           <div class="form-footer">
             <button type="submit" class="btn btn-primary w-100">
-               <i class="icon ti ti-mail"></i>
+              <i class="icon ti ti-mail"></i>
               Enviar email
             </button>
           </div>
@@ -29,5 +32,16 @@
       </div>
     </div>
   </div>
+@endsection
+@section('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('form-create');
+      const overlay = document.getElementById('loading-overlay');
 
+      form.addEventListener('submit', function() {
+        overlay.style.display = 'flex';
+      });
+    });
+  </script>
 @endsection

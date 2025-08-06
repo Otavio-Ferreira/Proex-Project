@@ -20,6 +20,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Mail\Autenticator\EmailToSetPassword as AutenticatorEmailToSetPassword;
+use Illuminate\Support\Facades\Mail;
+
 
 class LoginController extends Controller
 {
@@ -79,7 +82,7 @@ class LoginController extends Controller
             try {
 
                 $data = $this->loginRepository->createToken($user, "reset_password");
-                
+
                 TokenCreated::dispatch(
                     $data['name'],
                     $data['email'],
@@ -88,7 +91,7 @@ class LoginController extends Controller
                     $data['title'],
                 );
 
-                return redirect()->back()->with("toast_success", "Verifique a caixa de entrada do seu email.");
+                return to_route('page.success')->with("message", "Verifique a caixa de entrada do seu email e siga os passos para redefinir sua senha.");
             } catch (\Throwable $th) {
                 return redirect()->back()->with("toast_error", "Erro ao enviar o email, tente novamente em alguns instantes.")->withInput();
             }
@@ -121,39 +124,35 @@ class LoginController extends Controller
         return to_route('login');
     }
 
-    public function first(){
+    public function first()
+    {
         return view("pages.authentication.first");
     }
 
-    public function fill(FillRequest $request){
+    public function fill(FillRequest $request)
+    {
+
         try {
             $user = $this->usersRepository->set($request);
-            $user->assignRole("Professor");
-
+            $user->assignRole("Visitante");
             $data = $this->loginRepository->createToken($user, "first_access");
 
-            UserCreated::dispatch(
+            $mail = new AutenticatorEmailToSetPassword(
                 $data['name'],
                 $data['email'],
                 $data['time'],
                 $data['token'],
-                $data['title'],
+                $data['title']
             );
-            // $password = Str::random(7);
-            // $user = $this->usersRepository->setUser($request, $password);
-            $user->assignRole("Professor");
-            
-            // NewUser::dispatch(
-            //     $user->name,
-            //     $user->email,
-            //     Carbon::now('America/Sao_paulo')->format('d/m/Y H:i:s'),
-            //     "Sistema",
-            //     $password,
-            // );
 
-            return redirect()->back()->with("toast_success", "Cadastro feito com sucesso, verifique sua caixa de email.");
+            Mail::to($user)->send($mail);
+
+            return to_route('page.success')->with("message", "Cadastro feito com sucesso, verifique sua caixa de email.");
         } catch (\Throwable $th) {
-            return redirect()->back()->with("toast_error", "Erro ao fazer cadastro, tente novamente em alguns instantes.")->withInput();
+            if (!empty($user)) {
+                $user->forceDelete();
+            }
+            return redirect()->back()->with("toast_error", "Erro ao fazer cadastro, verifique se digitou o email corretamente e tente novamente em alguns instantes.")->withInput();
         }
     }
 }

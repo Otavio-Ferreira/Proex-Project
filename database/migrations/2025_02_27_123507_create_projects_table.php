@@ -14,7 +14,17 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->text('title')->nullable();
+            $table->text('type')->nullable();
+            $table->text('modality')->nullable();
+            $table->uuid('course')->nullable();
+            $table->foreign('course')->references('id')->on('courses')->onDelete('cascade');
+            $table->uuid('coordinator')->nullable();
+            $table->foreign('coordinator')->references('id')->on('users')->onDelete('cascade');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

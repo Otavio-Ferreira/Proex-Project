@@ -10,5 +10,5 @@ class Images extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ["response_forms_id", "image", "address", "date", "description"];
+    protected $fillable = ["response_forms_id", "image", "address", "date", "description", "latitude", "longitude", "place_id"];
 }

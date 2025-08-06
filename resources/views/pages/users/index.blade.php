@@ -1,5 +1,24 @@
 @extends('templates.template')
 
+@section('styles')
+  <link rel="stylesheet" href="{{ asset('assets/css/kanban/dataTables.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/kanban/styleDataTable.css') }}">
+  <style>
+    #table thead th {
+      white-space: nowrap;
+      width: auto;
+    }
+
+    #table tbody td {
+      white-space: nowrap;
+    }
+
+    #table {
+      table-layout: fixed;
+      width: 100%;
+    }
+  </style>
+@endsection
 @section('content')
   <div class="page-header">
     <div class="">
@@ -21,6 +40,14 @@
               <i class="icon ti ti-user-plus"></i>
               Adicionar usuário
             </a>
+            <div class="d-flex align-items-center">
+              <div class="input-icon me-2">
+                <input type="text" value="" id="customFilter" class="form-control" placeholder="Pesquisar ...">
+                <span class="input-icon-addon">
+                  <i class="ti icon text-primary ti-search"></i>
+                </span>
+              </div>
+            </div>
             <x-modal.modal route="{{ route('users.store') }}" id="modal-add-user" class="modal-dialog-centered"
               title="Adicionar usuário" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
               typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
@@ -57,22 +84,31 @@
     </div>
   </div>
   <div class="page-body">
-    <div class="card">
+    <div class="">
       <div class="table-responsive">
-        <x-table.table tableClass="table-vcenter card-table table-striped">
-          <x-slot:ths>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Grupo</th>
-            <th>Status</th>
-            <th width="5%"></th>
-            <th width="5%"></th>
-          </x-slot:ths>
-          <x-slot:trs>
+        <table class="border unded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped" id="userTable">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              {{-- <th>Email</th> --}}
+              {{-- <th>Perfil</th> --}}
+              <th>Curso</th>
+              <th>Siape</th>
+              <th>Grupo</th>
+              <th>Status</th>
+              <th width="5%"></th>
+              <th width="5%"></th>
+              <th width="5%"></th>
+            </tr>
+          </thead>
+          <tbody>
             @foreach ($users as $user)
               <tr>
                 <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
+                {{-- <td>{{ $user->email }}</td> --}}
+                {{-- <td>{{ $user->persons->coordinator_profile ?? 'Não informado' }}</td> --}}
+                <td>{{ $user->persons->course->name ?? 'Não informado' }}</td>
+                <td>{{ $user->persons->coordinator_siape ?? 'Não informado' }}</td>
                 <td>{{ $user->roles->first()->name }}</td>
                 <td>
                   <x-badge.badge class="{{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
@@ -134,11 +170,67 @@
                     </x-slot:content>
                   </x-modal.modal-alert>
                 </td>
+                <td>
+                  <button class="btn btn-azure" data-bs-toggle="offcanvas"
+                    data-bs-target="#modal-details-{{ $user->id }}"><i class="ti ti-dots-vertical"></i></button>
+                </td>
               </tr>
             @endforeach
-          </x-slot:trs>
-        </x-table.table>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+  @foreach ($users as $user)
+    <x-modal.offcanvas id="modal-details-{{ $user->id }}" class="offcanvas-end" title="{{ $user->name }}">
+      <x-slot:content>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Email:</strong> {{ $user->email }}</li>
+          <li class="list-group-item"><strong>Perfil:</strong> {{ $user->persons->coordinator_profile ?? 'Não informado' }}</li>
+          <li class="list-group-item"><strong>Curso:</strong> {{ $user->persons->course->name ?? 'Não informado' }}</li>
+          <li class="list-group-item"><strong>Siape:</strong> {{ $user->persons->coordinator_siape ?? 'Não informado' }}</li>
+          <li class="list-group-item"><strong>Grupo:</strong> {{ $user->roles->first()->name }}</li>
+          <li class="list-group-item"><strong>Status:</strong> {{ $user->status == 1 ? 'Ativo' : 'Inativo' }}</li>
+        </ul>
+      </x-slot:content>
+    </x-modal.offcanvas>
+  @endforeach
+@endsection
+@section('scripts')
+  <script src="{{ asset('assets/js/kanban/dataTables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/kanban/startDataTable.js') }}"></script>
+  <script src="{{ asset('assets/js/kanban/kanbanColumn.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      var table = $('#userTable').DataTable({
+        info: false,
+        ordering: false,
+        paging: true,
+        searching: true,
+        autoWidth: false,
+        scrollCollapse: false,
+        border: false,
+        lengthChange: false,
+        pagingType: 'simple_numbers',
+        language: {
+          zeroRecords: " ",
+          emptyTable: " ",
+          paginate: {
+            first: "Primeiro",
+            last: "Último",
+            next: "Próximo",
+            previous: "Anterior"
+          }
+        }
+      });
+
+      $('#customFilter').on('keyup', function() {
+        table.search(this.value).draw();
+      });
+
+      $('.customFilter').on('keyup', function() {
+        table.search(this.value).draw();
+      });
+    });
+  </script>
 @endsection

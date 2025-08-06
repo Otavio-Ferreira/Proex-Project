@@ -38,4 +38,9 @@ class EloquentRolesRepository implements RolesRepository{
 
         });
     }
+
+    public function updateUserRole($user, $role) : void
+    {
+        $user->syncRoles($role);
+    }
 }

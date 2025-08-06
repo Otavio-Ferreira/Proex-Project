@@ -17,6 +17,9 @@ class EloquentImageRepository implements ImageRepository
             "response_forms_id" => $response_id,
             "image" => $image_url,
             "address" => $request->address,
+            "latitude" => $request->latitude, 
+            "longitude" => $request->longitude, 
+            "place_id" => $request->place_id,
             "date" => $request->date,
             "description" => $request->description,
         ]);

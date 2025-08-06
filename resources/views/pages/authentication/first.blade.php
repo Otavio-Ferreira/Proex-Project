@@ -10,7 +10,7 @@
       <div class="card card-md bg-transparent shadow-none border-0">
         <div class="card-body">
           <h2 class="h2 text-center mb-4">Primeiro acesso</h2>
-          <form action="{{ route('login.fill') }}" method="post" autocomplete="off" novalidate>
+          <form action="{{ route('login.fill') }}" id="form-create" method="post" autocomplete="off" novalidate>
             @csrf
             <div class="mb-3">
               <label class="form-label">Nome</label>
@@ -36,4 +36,14 @@
 @endsection
 
 @section('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('form-create');
+      const overlay = document.getElementById('loading-overlay');
+
+      form.addEventListener('submit', function() {
+        overlay.style.display = 'flex';
+      });
+    });
+  </script>
 @endsection

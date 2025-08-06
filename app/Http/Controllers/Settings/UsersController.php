@@ -31,7 +31,7 @@ class UsersController extends Controller
     public function index()
     {
 
-        $this->data['users'] = User::all();
+        $this->data['users'] = User::orderBy('created_at', 'desc')->get();
         $this->data['roles'] = Role::all();
 
         return view('pages.users.index')->with($this->data);
