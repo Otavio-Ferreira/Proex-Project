@@ -66,6 +66,26 @@ class EloquentProjectsRepository implements ProjectsRepository
         }
 
         return $query->orderBy('created_at', 'desc')->paginate(5);
-        // return Projects::where('coordinator', $uuid)->with('responses')->orderBy('created_at', 'desc')->paginate(5);
+    }
+
+    public function getByFilter($filter_year, $filter_course, $filter_status, $type, $modality){
+        $query = Projects::query();
+
+        if (isset($filter_year)) {
+            $query->whereYear('start_date', $filter_year);
+        }
+        if (isset($filter_course)) {
+            $query->where('course', $filter_course);
+        }
+        if (isset($filter_status)) {
+            $query->where('status', $filter_status);
+        }
+        if (isset($type)) {
+            $query->where('type', $type);
+        }
+        if (isset($modality)) {
+            $query->where('modality', $modality);
+        }
+        return $query;
     }
 }

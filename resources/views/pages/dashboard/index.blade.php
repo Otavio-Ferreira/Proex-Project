@@ -29,6 +29,14 @@
       position: relative;
     }
   </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+  </style>
 @endsection
 @section('content')
   <div class="page-header">
@@ -43,70 +51,100 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
-          <form action="{{ route('dashboard.index') }}" method="GET">
-            @csrf
-            <div class="d-flex">
-              <select class="form-select me-1" id="" name="form" required>
-                <option value="" selected disabled>Selecione um ano</option>
-                @foreach ($forms as $year)
-                  <option value="{{ $year->id }}" {{ old('year') == $year->id ? 'selected' : '' }}>
-                    {{ date('Y', strtotime($year->date)) }}</option>
-                @endforeach
-                <option value="">Tudo</option>
-              </select>
-              <button class="btn btn-primary">Filtrar</button>
+          @can('ver_dashboard')
+            <div class="btn-list">
+              <button type="button" class="btn btn-secondary" onclick="copyToClipboard('{{ route('map.map') }}')">
+                Compartilhar Mapa
+              </button>
+
+              <button type="button" class="btn btn-secondary"
+                onclick="copyToClipboard('{{ route('dashboard_public.dashboard') }}')">
+                Compartilhar Dashboard
+              </button>
+              <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+                Filtros
+              </button>
             </div>
-          </form>
+          @endcan
         </div>
       </div>
     </div>
   </div>
   <div class="page-body row">
     @can('ver_dashboard')
-      <div class="col-12 col-md-6">
+      <div class="collapse mb-3" id="collapseExample">
+        <div class="card card-body">
+          <form action="{{ route('dashboard.index') }}" method="POST" class="row">
+            @csrf
+            <div class="d-flex col-12 col-md-3">
+              <select class="form-select me-1" id="" name="year">
+                <option value="" disabled {{ session('filter_year') === null ? 'selected' : '' }}>Ano</option>
+                @foreach ($forms as $year)
+                  @php $yearValue = date('Y', strtotime($year->created_at)); @endphp
+                  <option value="{{ $yearValue }}" {{ session('filter_year') == $yearValue ? 'selected' : '' }}>
+                    {{ $yearValue }}
+                  </option>
+                @endforeach
+                <option value="" {{ session('filter_year') === '' ? 'selected' : '' }}>Tudo</option>
+              </select>
+            </div>
+            <div class="d-flex col-12 col-md-3">
+              <select class="form-select me-1" id="" name="form">
+                <option value="" disabled {{ session('filter_form') === null ? 'selected' : '' }}>Formulário</option>
+                @foreach ($forms as $form)
+                  <option value="{{ $form->id }}" {{ session('filter_form') == $form->id ? 'selected' : '' }}>
+                    {{ $form->title }}
+                  </option>
+                @endforeach
+                <option value="" {{ session('filter_form') === '' ? 'selected' : '' }}>Tudo</option>
+              </select>
+            </div>
+            <div class="d-flex col-12 col-md-3">
+              <select class="form-select me-1" id="" name="course">
+                <option value="" disabled {{ session('filter_course') === null ? 'selected' : '' }}>Curso</option>
+                @foreach ($courses as $course)
+                  <option value="{{ $course->id }}" {{ session('filter_course') == $course->id ? 'selected' : '' }}>
+                    {{ $course->name }}
+                  </option>
+                @endforeach
+                <option value="" {{ session('filter_course') === '' ? 'selected' : '' }}>Tudo</option>
+              </select>
+            </div>
+            <div class="d-flex col-12 col-md-3">
+              <select class="form-select me-1" id="" name="status">
+                <option value="" disabled {{ session('filter_status') === null ? 'selected' : '' }}>Status dos
+                  trabalhos</option>
+                <option value="1" {{ session('filter_status') === '1' ? 'selected' : '' }}>Ativos</option>
+                <option value="0" {{ session('filter_status') === '0' ? 'selected' : '' }}>Inativos</option>
+                <option value="" {{ session('filter_status') === '' ? 'selected' : '' }}>Tudo</option>
+              </select>
+            </div>
+            <div class="col-12 d-flex justify-content-end mt-3">
+              <button class="btn btn-secondary">Filtrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-12">
         <div class="row">
-          @foreach ($cards_alcance as $item)
-            <div class="col-6">
+          @foreach ($cards as $item)
+            <div class="col-12 col-md-3">
               <div class="alert alert-primary card-body">
                 <div class="pt-3 pb-3">
-                  <div class="subheader">Total de pessoas</div>
+                  <div class="subheader">{{ $item['title'] }}</div>
                   <div class="d-flex align-items-baseline">
                     <div class="h1 mb-0 me-2">{{ number_format($item['value'], 0, ',', '.') }}</div>
                     <div class="me-auto">
                     </div>
                   </div>
-                  <div class="text-secondary mt-2">{{ $item['title'] }}</div>
+                  <div class="text-secondary mt-2">{{ $item['description'] }}</div>
                 </div>
               </div>
             </div>
           @endforeach
         </div>
       </div>
-
-      <div class="col-12 col-md-6">
-        <div class="row row-cards">
-          @foreach ($cards_projeto as $item)
-            <div class="col-sm-6 col-lg-6">
-              <div class="card card-sm">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <div class="bg-{{ $item['color'] }} text-white avatar">
-                        <i class="icon ti {{ $item['icon'] }} "></i>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="font-weight-medium">{{ $item['title'] }}</div>
-                      <div class="text-secondary">{{ $item['value'] }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          @endforeach
-        </div>
-      </div>
-
       <div class="col-12 col-lg-4 row">
         <h3 class="text-muted mb-2">Quantidade de projetos por tipo de ações</h3>
         <div class="col-6">
@@ -127,19 +165,26 @@
         <div class="">
           <div id="chart-container3" class="w-100 card" data-value='{{ $ranking_course }}'></div>
         </div>
-        {{-- <div class="col-6">
-          <div id="chart-container4" class="w-100 card" data-value='{{ $ranking_projects }}'></div>
-        </div> --}}
       </div>
-
       <div class="col-12 mt-2">
-        <h3 class="text-muted mb-2">Mapa de projetos do Ceará</h3>
-        <div id="mapa-ceara" class="card" style="width: 100%; height: 800px;"></div>
+        <h3 class="text-muted mb-2">Mapa da extensão</h3>
+        <div>
+          <div id="map" class="w-100 card"></div>
+        </div>
       </div>
     @endcan
   </div>
 @endsection
 @section('scripts')
+  <script>
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Link copiado com sucesso!');
+      }).catch(err => {
+        alert('Erro ao copiar o link: ' + err);
+      });
+    }
+  </script>
   <script src="{{ asset('assets/js/dashboard.js') }}"></script>
   <script>
     var dom = document.getElementById('chart-container');
@@ -237,7 +282,7 @@
     function renderCharts() {
       // Chart 1: Ranking por curso
       const dataCourse = JSON.parse(document.getElementById('chart-container3').dataset.value);
-      const courseNames = dataCourse.map(item => item.course.name);
+      const courseNames = dataCourse.map(item => item.course_name);
       const courseCounts = dataCourse.map(item => item.total);
 
       const chart1 = echarts.init(document.getElementById('chart-container3'));
@@ -317,7 +362,7 @@
         yAxis: {
           type: 'value',
           interval: 5,
-          max: 40
+          max: Math.ceil(Math.max(...totais) / 10) * 10,
         },
         series: [{
           name: 'Total',
@@ -329,7 +374,8 @@
           },
           itemStyle: {
             color: '#91cc75'
-          }
+          },
+          areaStyle: {}
         }]
       });
 
@@ -343,45 +389,26 @@
     document.addEventListener('DOMContentLoaded', renderCharts);
   </script>
 
-  <div id="mapa-ceara" style="width: 100%; height: 600px;"></div>
-
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
   <script>
-    const chartDataCe = {!! $chartDataCity !!}; // Laravel -> envia dados [{name: "Fortaleza", value: 10}, ...]
+    const map = L.map('map').setView([-5.2, -39.3], 7); // Ajuste a localização central
 
-    const chart = echarts.init(document.getElementById('mapa-ceara'));
+    // Adiciona o mapa base (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-    fetch('/assets/js/geojs-23-mun.json')
-      .then(response => response.json())
-      .then(geoJson => {
-        echarts.registerMap('ceara', geoJson);
+    // Dados vindos do Laravel
+    const markers = @json($markers);
 
-        chart.setOption({
-          tooltip: {
-            trigger: 'item',
-            formatter: function(params) {
-              return `${params.name}: ${params.value}`;
-            }
-          },
-          visualMap: {
-            min: 0,
-            max: Math.max(...chartDataCe.map(d => d.value)),
-            inRange: {
-              color: ['#e0f3f8', '#005824']
-            },
-            show: false
-          },
-          series: [{
-            name: 'Atividades',
-            type: 'map',
-            map: 'ceara',
-            label: {
-              show: false
-            },
-            data: chartDataCe
-          }]
-        });
-      });
+    // Adiciona marcadores no mapa
+    markers.forEach(marker => {
+      L.marker([marker.lat, marker.lng]).addTo(map)
+        .bindPopup(`
+        <strong>Endereço:</strong> ${marker.address}<br>
+        <strong>Título:</strong> ${marker.title}
+        `);
+    });
   </script>
 @endsection

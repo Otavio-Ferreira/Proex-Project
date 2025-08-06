@@ -14,9 +14,8 @@ use App\Repositories\Projects\ProjectsRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DashboardController extends Controller
+class PublicController extends Controller
 {
-
     private $data = [];
     private $responseRepository;
     private $projectsRepository;
@@ -32,7 +31,7 @@ class DashboardController extends Controller
         $this->coursesRepository = $coursesRepository;
     }
 
-    public function index(Request $request)
+    public function dashboard(Request $request)
     {
 
         $filter_year = $request->input('year');
@@ -60,7 +59,7 @@ class DashboardController extends Controller
             [
                 "title" => "Total de trabalhos",
                 "description" => "Quantidade total de trabalhos cadastrados.",
-                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, null)->count()
+                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status)->count()
             ],
             [
                 "title" => "Total de cursos",
@@ -75,13 +74,11 @@ class DashboardController extends Controller
                 "cards" => [
                     [
                         "title" => "Projeto",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, "Projeto", null)->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Projeto', null)->count()
+                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Projeto', null)->count()
                     ],
                     [
                         "title" => "Programa",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, "Programa", null)->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Programa', null)->count()
+                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Programa', null)->count()
                     ]
                 ]
             ],
@@ -90,18 +87,15 @@ class DashboardController extends Controller
                 "cards" => [
                     [
                         "title" => "UFCA Itinerante",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, "UFCA Itinerante")->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'UFCA Itinerante')->count()
+                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'UFCA Itinerante')->count()
                     ],
                     [
                         "title" => "PROPE",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, "PROPE")->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'PROPE')->count()
+                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'PROPE')->count()
                     ],
                     [
                         "title" => "Ampla Concorrência",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, "Ampla Concorrência")->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'Ampla Concorrência')->count()
+                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'Ampla Concorrência')->count()
                     ]
                 ]
             ],
@@ -111,8 +105,6 @@ class DashboardController extends Controller
             $filter_year,
             null,
             $filter_status,
-            null,
-            null
         );
 
         $ranking_course = $query->selectRaw('projects.course, courses.name as course_name, COUNT(projects.id) as total')
@@ -125,9 +117,7 @@ class DashboardController extends Controller
         $query_two = $this->projectsRepository->getByFilter(
             null,
             $filter_course,
-            $filter_status,
-            null,
-            null
+            $filter_status
         );
 
         $ranking_projects = $query_two->get()->groupBy(function ($item) {
@@ -154,9 +144,9 @@ class DashboardController extends Controller
             'activitys.longitude',
             DB::raw('count(*) as total')
         )
-        ->groupBy('activitys.address', 'activitys.latitude', 'activitys.longitude', 'activitys.response_forms_id')
-        ->get();
-    
+            ->groupBy('activitys.address', 'activitys.latitude', 'activitys.longitude', 'activitys.response_forms_id')
+            ->get();
+
         $markers = $data->map(function ($item) {
             return [
                 'lat' => $item->latitude,
@@ -166,9 +156,36 @@ class DashboardController extends Controller
                 'title' => Projects::find(FormsResponse::find($item->response_forms_id)->project_id)->title,
             ];
         });
-        
+
         $this->data['markers'] = $markers;
 
-        return view('pages.dashboard.index', $this->data);
+        return view('templates.public', $this->data);
+    }
+
+    public function map()
+    {
+        $data = Activitys::select(
+            'activitys.response_forms_id',
+            'activitys.address',
+            'activitys.latitude',
+            'activitys.longitude',
+            DB::raw('count(*) as total')
+        )
+            ->groupBy('activitys.address', 'activitys.latitude', 'activitys.longitude', 'activitys.response_forms_id')
+            ->get();
+
+        $markers = $data->map(function ($item) {
+            return [
+                'lat' => $item->latitude,
+                'lng' => $item->longitude,
+                'address' => $item->address,
+                'total' => $item->total,
+                'title' => Projects::find(FormsResponse::find($item->response_forms_id)->project_id)->title,
+            ];
+        });
+
+        $this->data['markers'] = $markers;
+
+        return view('templates.map', $this->data);
     }
 }

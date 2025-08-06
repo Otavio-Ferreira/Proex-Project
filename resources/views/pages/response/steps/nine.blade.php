@@ -124,42 +124,6 @@
           <h3 class="p-0 m-0">Imagens das atividades realizadas (minímo 3)</h3>
         </div>
         <div class="card-body">
-          {{-- <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
-            data-bs-target="#modal-add-image">
-            <i class="icon ti ti-image-plus"></i>
-            Adicionar imagem
-          </a>
-          <x-modal.modal route="{{ route('images.store', $response->id) }}" id="modal-add-image"
-            class="modal-dialog-centered" title="Adicionar imagem" typeBtnClose="button" classBtnClose="me-auto"
-            textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
-            <x-slot:content>
-              @include('components.form-elements.input.input', [
-                  'title' => 'Imagem',
-                  'type' => 'file',
-                  'class' => 'mb-3',
-                  'name' => 'image',
-                  'required' => 'true',
-                  'accept' => 'jpeg, .jpg, .png',
-              ])
-              @include('components.form-elements.input.input', [
-                  'title' => 'Data',
-                  'type' => 'date',
-                  'class' => 'mb-3',
-                  'name' => 'date',
-                  'placeholder' => 'Digite a data da atividade',
-                  'required' => 'true',
-              ])
-              @include('components.form-elements.textarea.textarea', [
-                  'title' => 'Descrição',
-                  'type' => 'text',
-                  'class' => 'mb-3',
-                  'name' => 'description',
-                  'required' => 'true',
-                  'placeholder' => 'Digite a descrição da atividade',
-              ])
-            </x-slot:content>
-          </x-modal.modal> --}}
-
           <div class="table-responsive">
             @if ($response->images->count() == 0)
               <div class="alert alert-yellow mt-3">

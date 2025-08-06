@@ -18,6 +18,7 @@ use App\Http\Controllers\System\Forms\SocialMediaController;
 use App\Http\Controllers\System\Forms\FormsController;
 use App\Http\Controllers\System\HomeController;
 use App\Http\Controllers\System\Profile\ProfileController;
+use App\Http\Controllers\System\PublicController;
 use App\Http\Middleware\Authenticate;
 use App\Models\Forms\Images;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,10 @@ Route::post('login/cadastrar', [LoginController::class, 'fill'])->name('login.fi
 Route::get('sucesso', function () {
     return view('templates.success');
 })->name('page.success');
+
+Route::get('dashboard_publica/', [PublicController::class, 'dashboard'])->name('dashboard_public.dashboard');
+Route::post('dashboard_publica/', [PublicController::class, 'dashboard'])->name('dashboard_public.dashboard');
+Route::get('mapa/', [PublicController::class, 'map'])->name('map.map');
 
 Route::middleware(Authenticate::class)->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home.index');
@@ -158,8 +163,11 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::get('meus_projetos/baixar_relatorio/{uuid}', [FormsResponseController::class, 'report'])->name('response.report');
     });
 
+    Route::group(['middleware' => ['auth', 'permission:ver_dashboard']], function () {
+        Route::get('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::post('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
+    });
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
     Route::get('perfil', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('perfil', [ProfileController::class, 'store'])->name('profile.store');
-    Route::get('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
 });

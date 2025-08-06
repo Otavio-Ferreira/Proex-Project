@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
             'coordinator_name' => 'required|string',
             'coordinator_profile' => 'required|string|in:Docente,Técnico Administrativo,Discente',
             'coordinator_siape' => 'required|integer',
-            'coordinator_course' => 'required|exists:courses,id',
+            'coordinator_course' => 'nullable|exists:courses,id',
         ];
     }
 
@@ -42,7 +42,7 @@ class StoreRequest extends FormRequest
             'coordinator_siape.required' => 'O campo "SIAPE do Coordenador" é obrigatório.',
             'coordinator_siape.integer' => 'O campo "SIAPE do Coordenador" deve ser um número inteiro.',
 
-            'coordinator_course.required' => 'O campo "Curso do Coordenador" é obrigatório.',
+            // 'coordinator_course.required' => 'O campo "Curso do Coordenador" é obrigatório.',
             'coordinator_course.exists' => 'O "Curso do Coordenador" informado não existe.',
         ];
     }

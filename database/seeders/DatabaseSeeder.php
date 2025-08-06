@@ -65,6 +65,22 @@ class DatabaseSeeder extends Seeder
             "adicionar_formulário",
         ]);
 
+        $role4 = Role::create([
+            'name' => 'Técnico',
+            'guard_name' => 'web'
+        ]);
+
+        $role4->givePermissionTo([
+            "adicionar_usuário",
+            "ver_dashboard",
+            "adicionar_cursos",
+            "adicionar_projetos",
+            "responder_formulário",
+            "ver_respostas",
+            "ver_seus_projetos",
+            "adicionar_formulário",
+        ]);
+
         $role3 = Role::create([
             'name' => 'Visitante',
             'guard_name' => 'web'

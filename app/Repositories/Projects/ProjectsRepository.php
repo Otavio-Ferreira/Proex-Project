@@ -13,4 +13,6 @@ interface ProjectsRepository{
     public function create($request);
     
     public function update($request, $uuid);
+
+    public function getByFilter($filter_year, $filter_course, $filter_status, $type, $modality);
 }

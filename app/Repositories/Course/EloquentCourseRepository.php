@@ -38,4 +38,14 @@ class EloquentCourseRepository implements CourseRepository
         $course = Courses::find($id);
         $course->delete();
     }
+
+    public function getByFilter($filter_status){
+        $query = Courses::query();
+
+        if (isset($filter_status)) {
+            $query->where('status', $filter_status);
+        }
+
+        return $query;
+    }
 }

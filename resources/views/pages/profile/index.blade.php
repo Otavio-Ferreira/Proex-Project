@@ -64,7 +64,7 @@
 
             <div class="mb-3">
               <label class="form-label">Curso</label>
-              <select class="form-select" id="select-courses" name="coordinator_course" required>
+              <select class="form-select" id="select-courses" name="coordinator_course">
                 <option value="" selected disabled>Selecione</option>
                 @foreach ($base_courses as $base_course)
                   <option value="{{ $base_course->id }}"
