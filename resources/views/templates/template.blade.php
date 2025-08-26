@@ -107,14 +107,14 @@
 
               @canany(['adicionar_cursos', 'adicionar_projetos'])
                 <x-navbar.navbar-item route="" title="Cadastros"
-                  isActive="{{ request()->routeIs(['courses.*', 'projects.index', 'projects.create']) ? true : false }}"
+                  isActive="{{ request()->routeIs(['courses.*', 'projects.index', 'projects.create', 'projects.import']) ? true : false }}"
                   icon="ti-file-database">
                   <x-slot:links>
                     @can('adicionar_cursos')
-                      <a class="dropdown-item" href="{{ route('courses.index') }}">Cursos</a>
+                      <a class="dropdown-item" href="{{ route('courses.index') }}">Cursos/Departamentos</a>
                     @endcan
                     @can('adicionar_projetos')
-                      <a class="dropdown-item" href="{{ route('projects.index') }}">Projetos</a>
+                      <a class="dropdown-item" href="{{ route('projects.index') }}">Trabalhos</a>
                     @endcan
                   </x-slot:links>
                 </x-navbar.navbar-item>

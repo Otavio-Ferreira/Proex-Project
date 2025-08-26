@@ -26,10 +26,10 @@
         <div class="col">
           <div class="col">
             <div class="page-pretitle">
-              <a href="{{ route('courses.index') }}">Cursos</a>
+              <a href="{{ route('courses.index') }}">Cursos/Departamentos</a>
             </div>
             <h2 class="page-title">
-              Cursos
+              Cursos/Departamentos
             </h2>
           </div>
         </div>
@@ -37,7 +37,7 @@
           <div class="btn-list">
             <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
               data-bs-target="#modal-add-course">
-              Adicionar curso
+              Adicionar
             </a>
             <div class="d-flex align-items-center">
               <div class="input-icon me-2">
@@ -48,7 +48,7 @@
               </div>
             </div>
             <x-modal.modal route="{{ route('courses.store') }}" id="modal-add-course" class="modal-dialog-centered"
-              title="Adicionar curso" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
+              title="Adicionar curso/departamento" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
               typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
               <x-slot:content>
                 @include('components.form-elements.input.input', [

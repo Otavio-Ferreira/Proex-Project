@@ -25,8 +25,9 @@ services:
         depends_on:
             - redis
             - mysql_repoex
-        
-
+        dns:
+          - 8.8.8.8
+          - 1.1.1.1
     # nginx
     nginx:
         image: nginx:alpine

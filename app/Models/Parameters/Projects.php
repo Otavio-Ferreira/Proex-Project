@@ -15,7 +15,7 @@ class Projects extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
     
-    protected $fillable = ['title', 'type', 'modality', 'course', 'coordinator', 'start_date', 'end_date', 'status'];
+    protected $fillable = ['title', 'type', 'modality', 'course', 'coordinator', 'start_date', 'end_date', 'status', 'id_atividade', 'id_projeto', 'year', 'thematic_area', 'type_submit', 'id_submit'];
 
     public function user() :BelongsTo{
         return $this->belongsTo(User::class, 'coordinator', 'id');

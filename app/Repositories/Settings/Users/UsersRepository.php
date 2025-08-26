@@ -9,5 +9,5 @@ interface UsersRepository{
 
     public function delete($id) : void;
 
-    // public function setUser($request, $password);
+    public function setForce($name, $siape, $email, $course);
 }

@@ -35,6 +35,9 @@
         </div>
         <div class="col-auto ms-auto">
           <div class="btn-list">
+            <a href="{{ route('projects.import') }}" class="btn btn-secondary d-sm-inline-block">
+              Importar
+            </a>
             <a href="{{ route('projects.create') }}" class="btn btn-primary d-sm-inline-block">
               Adicionar
             </a>

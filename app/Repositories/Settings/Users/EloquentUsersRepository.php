@@ -3,6 +3,7 @@
 namespace App\Repositories\Settings\Users;
 
 use App\Http\Requests\Users\StoreRequest;
+use App\Models\Persons\Persons;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -31,13 +32,22 @@ class EloquentUsersRepository implements UsersRepository
         });
     }
 
-    // public function setUser($request, $password){
-    //     $user = User::create([
-    //         "name" => $request->name,
-    //         "email" => $request->email,
-    //         "status" => 1,
-    //         "password" => Hash::make($password)
-    //     ]);
-    //     return $user;
-    // }
+    public function setForce($name, $siape, $email, $course){
+        $user = User::create([
+            "name" => $name,
+            "email" => $email,
+            "status" => 1,
+            "password" => null
+        ]);
+
+        Persons::create([
+            "user_id" => $user->id,
+            "coordinator_name" => $user->name,
+            "coordinator_profile" => null,
+            "coordinator_siape" => $siape,
+            "coordinator_course" => $course
+        ]);
+        
+        return $user;
+    }
 }
