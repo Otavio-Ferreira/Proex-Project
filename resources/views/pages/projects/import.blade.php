@@ -36,6 +36,7 @@
         </div>
         <div class="col-auto ms-auto">
           <div class="btn-list">
+            <a href="{{ route('projects.index') }}" class="btn btn-cyan">Voltar</a>
             {{-- <a href="{{ route('projects.import') }}" class="btn d-sm-inline-block">
               Importar
             </a>
@@ -98,8 +99,9 @@
                         <td>{{ $project['qtd'] }}</td>
                         <td>{{ $project['msg'] }}</td>
                         <td>
-                          <a href="{{ route('projects.edit', $project['id_submit']) }}" class="btn btn-secondary"><i
-                              class="ti ti-edit"></i></a>
+                          <a href="{{ route('projects.analysis', $project['id_submit']) }}" class="btn btn-secondary">
+                            <i class="ti ti-edit"></i>
+                          </a>
                         </td>
                       </tr>
                     @endforeach

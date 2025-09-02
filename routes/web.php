@@ -98,6 +98,7 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::post('projetos/importarDados', [ProjectsController::class, 'storeImport'])->name('projects.storeImport');
         Route::get('projetos/ver/{uuid}', [ProjectsController::class, 'edit'])->name('projects.edit');
         Route::post('projetos/atualizar/{uuid}', [ProjectsController::class, 'update'])->name('projects.update');
+        Route::get('projetos/importar/analisar/{uuid}', [ProjectsController::class, 'analysis'])->name('projects.analysis');
     });
 
     Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {

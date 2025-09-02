@@ -73,7 +73,7 @@
             @foreach ($projects as $project)
               <tr>
                 <td>{{ $project->title }}</td>
-                <td>{{ $project->user->name }}</td>
+                <td>{{ $project->user->name ?? ''}}</td>
                 <td>{{ date('d/m/Y', strtotime($project->start_date)) }}</td>
                 <td>{{ date('d/m/Y', strtotime($project->end_date)) }}</td>
                 <td>
@@ -106,7 +106,7 @@
           <li class="list-group-item"><strong>Tipo:</strong> {{ $project->type }}</li>
           <li class="list-group-item"><strong>Modalidade:</strong> {{ $project->modality }}</li>
           <li class="list-group-item"><strong>Curso:</strong> {{ $project->course_name->name }}</li>
-          <li class="list-group-item"><strong>Orientador:</strong> {{ $project->user->name }}</li>
+          <li class="list-group-item"><strong>Orientador:</strong> {{ $project->user->name ?? '' }}</li>
           <li class="list-group-item"><strong>Início:</strong> {{ date('d/m/Y', strtotime($project->start_date)) }}</li>
           <li class="list-group-item"><strong>Fim:</strong> {{ date('d/m/Y', strtotime($project->end_date)) }}</li>
           <li class="list-group-item"><strong>Status:</strong> {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>

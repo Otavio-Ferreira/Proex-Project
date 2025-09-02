@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('parameters', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->text('function');
-            $table->uuid('value');
+            $table->text('value');
             $table->boolean('status')->default(1);
             $table->timestamps();
         });
