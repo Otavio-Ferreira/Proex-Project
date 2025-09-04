@@ -13,6 +13,34 @@ class EloquentProjectsRepository implements ProjectsRepository
         return Projects::orderBy('created_at', 'desc')->get();
     }
 
+    public function getAllPaginate($request = null, $id = null)
+    {
+        $query = Projects::query();
+
+        if($id){
+            $query->where('id_submit', $id);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('type', 'like', '%' . $search . '%')
+                    ->orWhere('modality', 'like', '%' . $search . '%')
+                    ->orWhere('start_date', 'like', '%' . $search . '%')
+                    ->orWhere('end_date', 'like', '%' . $search . '%')
+                    ->orWhere('id_atividade', 'like', '%' . $search . '%')
+                    ->orWhere('id_projeto', 'like', '%' . $search . '%')
+                    ->orWhere('year', 'like', '%' . $search . '%')
+                    ->orWhere('thematic_area', 'like', '%' . $search . '%');
+            });
+        }
+
+        return $query->orderBy('title', 'asc')->paginate(20);
+
+    }
+
     public function getById($uuid)
     {
         return Projects::find($uuid);
@@ -46,6 +74,10 @@ class EloquentProjectsRepository implements ProjectsRepository
         $projetc->start_date = $request->start_date;
         $projetc->end_date = $request->end_date;
         $projetc->status = $request->status;
+        $projetc->year = $request->year;
+        $projetc->id_atividade = $request->id_atividade;
+        $projetc->id_projeto = $request->id_projeto;
+        $projetc->thematic_area = $request->thematic_area;
         $projetc->save();
 
         return $projetc;

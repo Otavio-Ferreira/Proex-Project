@@ -36,14 +36,10 @@
         </div>
         <div class="col-auto ms-auto">
           <div class="btn-list">
-            <div class="d-flex align-items-center">
-              <a href="{{ route('projects.import') }}" class="btn btn-cyan">Voltar</a>
-              {{-- <div class="input-icon me-2">
-                <input type="text" value="" id="customFilter" class="form-control" placeholder="Pesquisar ...">
-                <span class="input-icon-addon">
-                  <i class="ti icon text-primary ti-search"></i>
-                </span>
-              </div> --}}
+            <a href="{{ route('projects.import') }}" class="btn btn-cyan">Voltar</a>
+            <div>
+              <x-table.search route="" action="GET" value="{{ request('search') }}" placeholder="Pesquisar..."
+                button="true"></x-table.search>
             </div>
           </div>
         </div>
@@ -74,94 +70,190 @@
           </div>
         </div>
       @endforeach
-
-      {{-- <div class="table-responsive">
-        <table class="border unded-3 w-100 table table-vcenter exclude bg-white  card-table table-striped" id="userTable">
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Orientador</th>
-              <th>Início</th>
-              <th>Fim</th>
-              <th>Status</th>
-              <th width="5%"></th>
-              <th width="5%"></th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach ($projects as $project)
-              <tr>
-                <td>{{ $project->title }}</td>
-                <td>{{ $project->user->name ?? ''}}</td>
-                <td>{{ date('d/m/Y', strtotime($project->start_date)) }}</td>
-                <td>{{ date('d/m/Y', strtotime($project->end_date)) }}</td>
-                <td>
-                  <x-badge.badge
-                    class="{{ $project->status == 0 ? 'bg-danger' : ($project->status == 1 ? 'bg-success' : 'bg-primary') }}">
-                    <x-slot:content>
-                      {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}
-                    </x-slot:content>
-                  </x-badge.badge>
-                </td>
-                <td>
-                  <a href="{{route('projects.edit', $project->id)}}" class="btn btn-secondary"><i
-                      class="ti ti-edit"></i></a>
-                </td>
-                <td>
-                  <button class="btn btn-azure" data-bs-toggle="offcanvas"
-                    data-bs-target="#modal-details-{{ $project->id }}"><i class="ti ti-dots-vertical"></i></button>
-                </td>
-              </tr>
-            @endforeach
-          </tbody>
-        </table>
-      </div> --}}
+    </div>
+    <div class="d-flex justify-content-center mt-5">
+      {{ $projects->links() }}
     </div>
   </div>
+
   @foreach ($projects as $project)
     <x-modal.offcanvas id="modal-details-{{ $project->id }}" class="offcanvas-end" title="Detalhes">
       <x-slot:content>
         <ul class="list-group list-group-flush">
           <li class="list-group-item {{ $project->title ?? 'text-danger' }}"><strong>Título:</strong>
             {{ $project->title ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->id_atividade ?? 'text-danger' }}"><strong>Id da atividade:</strong>
+            {{ $project->id_atividade ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->id_projeto ?? 'text-danger' }}"><strong>Id do projeto:</strong>
+            {{ $project->id_projeto ?? 'Vazio' }}</li>
           <li class="list-group-item {{ $project->type ?? 'text-danger' }}"><strong>Tipo:</strong>
             {{ $project->type ?? 'Vazio' }}</li>
           <li class="list-group-item {{ $project->modality ?? 'text-danger' }}"><strong>Modalidade:</strong>
             {{ $project->modality ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->thematic_area ?? 'text-danger' }}"><strong>Área temática:</strong>
+            {{ $project->thematic_area ?? 'Vazio' }}</li>
           <li class="list-group-item {{ $project->course_name->name ?? 'text-danger' }}"><strong>Curso:</strong>
             {{ $project->course_name->name ?? 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->user->name ?? 'text-danger' }}"><strong>Orientador:</strong>
+          <li class="list-group-item {{ $project->user->name ?? 'text-danger' }}"><strong>Coordenador:</strong>
             {{ $project->user->name ?? 'Vazio' }}</li>
           <li class="list-group-item {{ $project->start_date ? '' : 'text-danger' }}"><strong>Início:</strong>
             {{ $project->start_date ? date('d/m/Y', strtotime($project->start_date)) : 'Vazio' }}</li>
           <li class="list-group-item {{ $project->end_date ? '' : 'text-danger' }}"><strong>Fim:</strong>
             {{ $project->end_date ? date('d/m/Y', strtotime($project->end_date)) : 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->year ? '' : 'text-danger' }}"><strong>Ano:</strong>
+            {{ $project->year ? date('Y', strtotime($project->year)) : 'Vazio' }}</li>
           <li class="list-group-item"><strong>Status:</strong>
             {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>
         </ul>
       </x-slot:content>
     </x-modal.offcanvas>
 
-    <x-modal.offcanvas id="modal-edit-{{ $project->id }}" class="offcanvas-end" title="Editar">
+    <x-modal.offcanvas id="modal-edit-{{ $project->id }}" class="offcanvas-end" title="Editar"
+      route="{{ route('projects.update', $project->id) }}">
       <x-slot:content>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item {{ $project->title ?? 'text-danger' }}"><strong>Título:</strong>
-            {{ $project->title ?? 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->type ?? 'text-danger' }}"><strong>Tipo:</strong>
-            {{ $project->type ?? 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->modality ?? 'text-danger' }}"><strong>Modalidade:</strong>
-            {{ $project->modality ?? 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->course_name->name ?? 'text-danger' }}"><strong>Curso:</strong>
-            {{ $project->course_name->name ?? 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->user->name ?? 'text-danger' }}"><strong>Orientador:</strong>
-            {{ $project->user->name ?? 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->start_date ? '' : 'text-danger' }}"><strong>Início:</strong>
-            {{ $project->start_date ? date('d/m/Y', strtotime($project->start_date)) : 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->end_date ? '' : 'text-danger' }}"><strong>Fim:</strong>
-            {{ $project->end_date ? date('d/m/Y', strtotime($project->end_date)) : 'Vazio' }}</li>
-          <li class="list-group-item"><strong>Status:</strong>
-            {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>
-        </ul>
+        <div class="col-12">
+          @include('components.form-elements.input.input', [
+              'title' => 'Título',
+              'type' => 'text',
+              'class' => 'mb-3',
+              'name' => 'title',
+              'required' => 'true',
+              'placeholder' => 'Digite o título',
+              'value' => $project->title ?? '',
+          ])
+
+          @include('components.form-elements.input.input', [
+              'title' => 'Id da atividade',
+              'type' => 'text',
+              'class' => 'mb-3',
+              'name' => 'id_atividade',
+              'required' => 'true',
+              'placeholder' => 'Digite o id da atividade',
+              'value' => $project->id_atividade ?? '',
+          ])
+
+          @include('components.form-elements.input.input', [
+              'title' => 'Id do projeto',
+              'type' => 'text',
+              'class' => 'mb-3',
+              'name' => 'id_projeto',
+              'required' => 'true',
+              'placeholder' => 'Digite o id do projeto',
+              'value' => $project->id_projeto ?? '',
+          ])
+
+          <div class="mb-3">
+            <label class="form-label required">Tipo</label>
+            <select class="form-select" id="type" name="type" required>
+              <option value="">
+                Selecione
+              </option>
+              @foreach ($types as $type)
+                <option value="{{ $type->value }}" {{ $project->type == $project->type ? 'selected' : '' }}>
+                  {{ $type->value }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label required">Modalidade</label>
+            <select class="form-select" id="modality" name="modality" required>
+              <option value="">
+                Selecione
+              </option>
+              @foreach ($modalities as $modality)
+                <option value="{{ $modality->value }}" {{ $project->modality == $project->modality ? 'selected' : '' }}>
+                  {{ $modality->value }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label required">Área temática</label>
+            <select class="form-select" id="thematic_area" name="thematic_area" required>
+              <option value="">
+                Selecione
+              </option>
+              @foreach ($thematic_area as $area)
+                <option value="{{ $area->value }}" {{ $project->thematic_area == $area->value ? 'selected' : '' }}>
+                  {{ $area->value }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label required">Curso/Departamento</label>
+            <select class="form-select" id="select-courses" name="course" required>
+              <option value="">
+                Selecione
+              </option>
+              @foreach ($courses as $base_course)
+                <option value="{{ $base_course->id }}"
+                  {{ $project->course ? ($project->course == $base_course->id ? 'selected' : '') : ' ' }}>
+                  {{ $base_course->name }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="mb-3">
+            <label class="form-label required">Coordenador</label>
+            <select class="form-select" id="teachers" name="teacher">
+              <option value="">
+                Selecione
+              </option>
+              @foreach ($teachers as $teacher)
+                <option value="{{ $teacher->id }}"
+                  {{ $project->coordinator ? ($project->coordinator == $teacher->id ? 'selected' : '') : ' ' }}>
+                  {{ $teacher->name }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          @include('components.form-elements.input.input', [
+              'title' => 'Data de início',
+              'type' => 'date',
+              'class' => 'mb-3',
+              'name' => 'start_date',
+              'required' => 'true',
+              'value' => $project->start_date ?? '',
+          ])
+
+          @include('components.form-elements.input.input', [
+              'title' => 'Data de término',
+              'type' => 'date',
+              'class' => 'mb-3',
+              'name' => 'end_date',
+              'required' => 'true',
+              'value' => $project->end_date ?? '',
+          ])
+
+          @include('components.form-elements.input.input', [
+              'title' => 'Ano do projeto',
+              'type' => 'text',
+              'class' => 'mb-3',
+              'name' => 'year',
+              'required' => 'true',
+              'value' => $project->year ?? '',
+          ])
+
+          <div class="mb-3">
+            <label class="form-label required">Status</label>
+            <select class="form-select" id="status" name="status" required>
+              <option value="0" {{ $project->status ? ($project->status == '0' ? 'selected' : '') : ' ' }}>
+                Inativo</option>
+
+              <option value="1" {{ $project->status ? ($project->status == '1' ? 'selected' : '') : ' ' }}>
+                Ativo</option>
+
+              <option value="2" {{ $project->status ? ($project->status == '2' ? 'selected' : '') : ' ' }}>
+                Finalizado</option>
+            </select>
+          </div>
+        </div>
       </x-slot:content>
     </x-modal.offcanvas>
   @endforeach

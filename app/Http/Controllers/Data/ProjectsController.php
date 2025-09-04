@@ -30,10 +30,9 @@ class ProjectsController extends Controller
         $this->projetcsRepository = $projetcsRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-
-        $this->data['projects'] = $this->projetcsRepository->getAll();
+        $this->data['projects'] = $this->projetcsRepository->getAllPaginate($request);
 
         return view('pages.projects.index', $this->data);
     }
@@ -224,8 +223,11 @@ class ProjectsController extends Controller
 
     public function edit($uuid)
     {
-        $this->data['courses'] = Courses::all();
-        $this->data['teachers'] = User::role('Professor')->get();
+        $this->data['types'] = Parameters::where(['function' => 'TIPO', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['modalities'] = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['thematic_area'] = Parameters::where(['function' => 'ÁREA TEMÁTICA', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['courses'] = Courses::orderBy('name', 'asc')->get();
+        $this->data['teachers'] = User::get();
         $this->data['project'] = $this->projetcsRepository->getById($uuid);
 
         return view('pages.projects.edit', $this->data);
@@ -248,9 +250,14 @@ class ProjectsController extends Controller
         return view('pages.projects.my', $this->data);
     }
 
-    public function analysis(String $id)
+    public function analysis(String $id, Request $request)
     {
-        $this->data['projects'] = Projects::where('id_submit', $id)->get();
+        $this->data['projects'] = $this->projetcsRepository->getAllPaginate($request, $id);
+        $this->data['types'] = Parameters::where(['function' => 'TIPO', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['modalities'] = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['thematic_area'] = Parameters::where(['function' => 'ÁREA TEMÁTICA', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['courses'] = Courses::orderBy('name', 'asc')->get();
+        $this->data['teachers'] = User::orderBy('name', 'asc')->get();
         return view('pages.projects.analysis', $this->data);
     }
 }
