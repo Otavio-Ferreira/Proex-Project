@@ -16,7 +16,7 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
-            <a href="{{route('projects.index')}}" class="btn btn-cyan">Voltar</a>
+          <a href="{{ route('projects.index') }}" class="btn btn-cyan">Voltar</a>
         </div>
       </div>
     </div>
@@ -39,52 +39,73 @@
                   'value' => old('title') ?? '',
               ])
 
+              @include('components.form-elements.input.input', [
+                  'title' => 'Id da atividade',
+                  'type' => 'text',
+                  'class' => 'mb-3',
+                  'name' => 'id_atividade',
+                  'required' => 'true',
+                  'placeholder' => 'Digite o id da atividade',
+                  'value' => old('id_atividade') ?? '',
+              ])
+
+              @include('components.form-elements.input.input', [
+                  'title' => 'Id do projeto',
+                  'type' => 'text',
+                  'class' => 'mb-3',
+                  'name' => 'id_projeto',
+                  'required' => 'true',
+                  'placeholder' => 'Digite o id do projeto',
+                  'value' => old('id_projeto') ?? '',
+              ])
+
               <div class="mb-3">
                 <label class="form-label required">Tipo</label>
                 <select class="form-select" id="type" name="type" required>
-                  <option value="" selected disabled>Selecione</option>
-                  <option value="Programa" {{ old('type') ? (old('type') == 'Programa' ? 'selected' : '') : '' }}>
-                    Programa</option>
-                  <option value="Projeto" {{ old('type') ? (old('type') == 'Projeto' ? 'selected' : '') : '' }}>
-                    Projeto
+                  <option value="">
+                    Selecione
                   </option>
+                  @foreach ($types as $type)
+                    <option value="{{ $type->value }}" {{ old('type') == $type->value ? 'selected' : '' }}>
+                      {{ $type->value }}
+                    </option>
+                  @endforeach
                 </select>
               </div>
 
               <div class="mb-3">
                 <label class="form-label required">Modalidade</label>
                 <select class="form-select" id="modality" name="modality" required>
-                  <option value="" selected disabled>Selecione</option>
-                  <option value="UFCA Itinerante"
-                    {{ old('modality') ? (old('modality') == 'UFCA Itinerante' ? 'selected' : '') : ' ' }}>
-                    UFCA Itinerante</option>
-
-                  <option value="Ampla Concorrência"
-                    {{ old('modality') ? (old('modality') == 'Ampla Concorrência' ? 'selected' : '') : ' ' }}>
-                    Ampla Concorrência</option>
-
-                  <option value="PROPE" {{ old('modality') ? (old('modality') == 'PROPE' ? 'selected' : '') : ' ' }}>
-                    PROPE</option>
+                  <option value="">
+                    Selecione
+                  </option>
+                  @foreach ($modalities as $modality)
+                    <option value="{{ $modality->value }}" {{ old('modality') == $modality->value ? 'selected' : '' }}>
+                      {{ $modality->value }}
+                    </option>
+                  @endforeach
                 </select>
               </div>
 
               <div class="mb-3">
-                <label class="form-label required">Curso</label>
-                <select class="form-select" id="select-courses" name="course" required>
-                  <option value="" selected disabled>Selecione</option>
-                  @foreach ($courses as $base_course)
-                    <option value="{{ $base_course->id }}"
-                      {{ old('course') ? (old('course') == $base_course->id ? 'selected' : '') : ' ' }}>
-                      {{ $base_course->name }}</option>
+                <label class="form-label required">Área temática</label>
+                <select class="form-select" id="thematic_area" name="thematic_area" required>
+                  <option value="">
+                    Selecione
+                  </option>
+                  @foreach ($thematic_area as $area)
+                    <option value="{{ $area->value }}" {{ old('thematic_area') == $area->value ? 'selected' : '' }}>
+                      {{ $area->value }}
+                    </option>
                   @endforeach
                 </select>
               </div>
             </div>
             <div class="col-12 col-md-6">
               <div class="mb-3">
-                <label class="form-label">Professor/Orientador</label>
+                <label class="form-label required">Coordenador</label>
                 <select class="form-select" id="teachers" name="teacher">
-                  <option value="" selected disabled>Selecione</option>
+                  <option value="">Selecione</option>
                   @foreach ($teachers as $teacher)
                     <option value="{{ $teacher->id }}"
                       {{ old('teacher') ? (old('teacher') == $teacher->id ? 'selected' : '') : ' ' }}>
@@ -111,15 +132,40 @@
                   'value' => old('end_date') ?? '',
               ])
 
+              @include('components.form-elements.input.input', [
+                  'title' => 'Ano do projeto',
+                  'type' => 'text',
+                  'class' => 'mb-3',
+                  'name' => 'year',
+                  'placeholder' => 'Digite o ano do projeto',
+                  'required' => 'true',
+                  'value' => old('year') ?? '',
+              ])
+
               <div class="mb-3">
                 <label class="form-label required">Status</label>
                 <select class="form-select" id="status" name="status" required>
-                  <option value="" selected disabled>Selecione</option>
+                  <option value="" disabled selected>Selecione</option>
                   <option value="0" {{ old('status') ? (old('status') == '0' ? 'selected' : '') : ' ' }}>
                     Inativo</option>
 
                   <option value="1" {{ old('status') ? (old('status') == '1' ? 'selected' : '') : ' ' }}>
                     Ativo</option>
+
+                  <option value="2" {{ old('status') ? (old('status') == '2' ? 'selected' : '') : ' ' }}>
+                    Finalizado</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label required">Curso/Departamento</label>
+                <select class="form-select" id="select-courses" name="course" required>
+                  <option value="">Selecione</option>
+                  @foreach ($courses as $base_course)
+                    <option value="{{ $base_course->id }}"
+                      {{ old('course') ? (old('course') == $base_course->id ? 'selected' : '') : ' ' }}>
+                      {{ $base_course->name }}</option>
+                  @endforeach
                 </select>
               </div>
             </div>

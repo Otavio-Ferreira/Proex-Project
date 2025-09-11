@@ -73,7 +73,7 @@
             @foreach ($projects as $project)
               <tr>
                 <td>{{ $project->title ? Str::limit($project->title, 50) : 'Vazio' }}</td>
-                <td>{{ $project->user->name ? Str::words($project->user->name, 3) : '' }}</td>
+                <td>{{ $project->user ? Str::words($project->user->name, 3) : '' }}</td>
                 <td>{{ $project->start_date ? date('d/m/Y', strtotime($project->start_date)) : 'Vazio' }}</td>
                 <td>{{ $project->end_date ? date('d/m/Y', strtotime($project->end_date)) : 'Vazio' }}</td>
                 <td>

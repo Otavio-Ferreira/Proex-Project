@@ -33,6 +33,13 @@
 
 <body>
   <script src="{{ asset('assets/js/demo-theme.min.js?1684106062') }}"></script>
+  <!-- Spinner fullscreen -->
+  <div id="loading-overlay"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); z-index: 9999; display: none; justify-content: center; align-items: center;">
+    <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
   <div class="page">
     <!-- Navbar -->
     <header class="navbar navbar-expand-md d-print-none">
@@ -95,7 +102,8 @@
 
               @can('ver_seus_projetos')
                 <x-navbar.navbar-item route="{{ route('projects.my') }}" title="Meus Projetos"
-                  isActive="{{ request()->routeIs(['projects.my', 'response.session', 'response.index']) ? true : false }}" icon="ti-layout-dashboard">
+                  isActive="{{ request()->routeIs(['projects.my', 'response.session', 'response.index']) ? true : false }}"
+                  icon="ti-layout-dashboard">
                 </x-navbar.navbar-item>
               @endcan
 

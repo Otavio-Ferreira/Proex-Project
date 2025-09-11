@@ -59,7 +59,7 @@
   <div class="page-body">
     <div class="tab-content" id="tabContent">
       <div class="tab-pane fade show active" id="pdf-tab-pane" role="tabpanel" aria-labelledby="pdf-tab" tabindex="0">
-        <form action="{{ route('projects.storeImport') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('projects.storeImport') }}" id="form-create" method="post" enctype="multipart/form-data">
           @csrf
           <div class="row">
             <div class="col-12 col-md-4">
@@ -222,6 +222,16 @@
         dropArea.classList.remove("dragover");
         const file = e.dataTransfer.files[0];
         handleFile(file);
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('form-create');
+      const overlay = document.getElementById('loading-overlay');
+
+      form.addEventListener('submit', function() {
+        overlay.style.display = 'flex';
       });
     });
   </script>

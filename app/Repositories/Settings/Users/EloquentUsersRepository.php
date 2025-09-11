@@ -36,7 +36,7 @@ class EloquentUsersRepository implements UsersRepository
         $user = User::create([
             "name" => $name,
             "email" => $email,
-            "status" => 0,
+            "status" => 3,
             "password" => null
         ]);
 

@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class ProjectsController extends Controller
 {
@@ -39,8 +38,11 @@ class ProjectsController extends Controller
 
     public function create()
     {
-        $this->data['courses'] = Courses::all();
-        $this->data['teachers'] = User::role('Professor')->get();
+        $this->data['types'] = Parameters::where(['function' => 'TIPO', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['modalities'] = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['thematic_area'] = Parameters::where(['function' => 'ÁREA TEMÁTICA', 'status' => 1])->orderBy('value', 'asc')->get();
+        $this->data['courses'] = Courses::orderBy('name', 'asc')->get();
+        $this->data['teachers'] = User::get();
 
         return view('pages.projects.create', $this->data);
     }
@@ -114,44 +116,52 @@ class ProjectsController extends Controller
             $now = now();
 
             while (($row = fgetcsv($handle, 0, $delimiter)) !== false) {
-                $row = array_map(fn($field) => mb_convert_encoding($field, 'UTF-8', 'auto'), $row);
+                // Força UTF-8 e aplica trim() em todos os campos
+                $row = array_map(function ($field) {
+                    return trim(mb_convert_encoding($field, 'UTF-8', 'auto'));
+                }, $row);
+
                 // Preenche com null se faltar coluna
                 $row = array_pad($row, 13, null);
 
                 // Normaliza email
-                $email = strtolower(trim($row[5] ?? ''));
+                $email = strtolower($row[5] ?? '');
 
                 // Curso
-                $course = Courses::firstOrCreate(['name' => trim($row[6])]);
+                $course = null;
+                if (!empty($row[6])) {
+                    $course = Courses::firstOrCreate(['name' => $row[6]]);
+                }
 
                 // Usuário
                 $user = null;
-                if (!empty($email)) {
+                if (!empty($row[5])) {
                     $user = User::where('email', $email)->first();
                     if (!$user) {
                         $user = $this->usersRepository->setForce($row[3], $row[4], $email, $course->id);
+                        $user->assignRole("Visitante");
                     }
                 }
 
                 // Parâmetros
-                $type = !empty(trim($row[10]))
+                $type = !empty($row[10])
                     ? Parameters::firstOrCreate(
-                        ['function' => 'TIPO', 'value' => strtoupper(trim($row[10]))],
-                        ['value' => trim($row[10])]
+                        ['function' => 'TIPO', 'value' => strtoupper($row[10])],
+                        ['value' => $row[10]]
                     )
                     : null;
 
-                $thematic_area = !empty(trim($row[11]))
+                $thematic_area = !empty($row[11])
                     ? Parameters::firstOrCreate(
-                        ['function' => 'ÁREA TEMÁTICA', 'value' => strtoupper(trim($row[11]))],
-                        ['value' => trim($row[11])]
+                        ['function' => 'ÁREA TEMÁTICA', 'value' => strtoupper($row[11])],
+                        ['value' => $row[11]]
                     )
                     : null;
 
-                $modality = !empty(trim($row[12]))
+                $modality = !empty($row[12])
                     ? Parameters::firstOrCreate(
-                        ['function' => 'MODALIDADE', 'value' => strtoupper(trim($row[12]))],
-                        ['value' => trim($row[12])]
+                        ['function' => 'MODALIDADE', 'value' => strtoupper($row[12])],
+                        ['value' => $row[12]]
                     )
                     : null;
 
@@ -159,32 +169,32 @@ class ProjectsController extends Controller
                 $startDate = null;
                 $endDate = null;
 
-                if (!empty(trim($row[7]))) {
+                if (!empty($row[7])) {
                     try {
-                        $startDate = Carbon::createFromFormat('d/m/Y', trim($row[7]))->format('Y-m-d');
+                        $startDate = Carbon::createFromFormat('d/m/Y', $row[7])->format('Y-m-d');
                     } catch (\Exception $e) {
                         try {
-                            $startDate = Carbon::createFromFormat('d/m/Y H:i:s', trim($row[7]))->format('Y-m-d');
+                            $startDate = Carbon::createFromFormat('d/m/Y H:i:s', $row[7])->format('Y-m-d');
                         } catch (\Exception $e) {
                             $startDate = null;
                         }
                     }
                 }
 
-                if (!empty(trim($row[8]))) {
+                if (!empty($row[8])) {
                     try {
-                        $endDate = Carbon::createFromFormat('d/m/Y', trim($row[8]))->format('Y-m-d');
+                        $endDate = Carbon::createFromFormat('d/m/Y', $row[8])->format('Y-m-d');
                     } catch (\Exception $e) {
                         try {
-                            $endDate = Carbon::createFromFormat('d/m/Y H:i:s', trim($row[8]))->format('Y-m-d');
+                            $endDate = Carbon::createFromFormat('d/m/Y H:i:s', $row[8])->format('Y-m-d');
                         } catch (\Exception $e) {
                             $endDate = null;
                         }
                     }
                 }
 
-                $projectsToInsert[] = [
-                    'id'            => Str::uuid(),
+                // Monta o projeto
+                $projectData = [
                     'id_atividade'  => $row[0] ?? null,
                     'id_projeto'    => $row[1] ?? null,
                     'title'         => $row[2] ?? null,
@@ -200,8 +210,31 @@ class ProjectsController extends Controller
                     'id_submit'     => $idSubmit,
                     'created_at'    => $now,
                     'updated_at'    => $now,
-                    'status'        => 1, // mantém consistente com integer
+                    'status'        => 1,
                 ];
+
+                // Campos usados para checar duplicados
+                $checkData = [
+                    'id_atividade'  => $row[0] ?? null,
+                    'id_projeto'    => $row[1] ?? null,
+                    'title'         => $row[2] ?? null,
+                    'coordinator'   => $user->id ?? null,
+                    'course'        => $course->id ?? null,
+                    'start_date'    => $startDate,
+                    'end_date'      => $endDate,
+                    'year'          => $row[9] ?? null,
+                    'type'          => $type->value ?? null,
+                    'thematic_area' => $thematic_area->value ?? null,
+                    'modality'      => $modality->value ?? null,
+                    'status'        => 1,
+                ];
+
+                // Verifica se já existe (comparando todos os campos relevantes)
+                $exists = DB::table('projects')->where($checkData)->exists();
+
+                if (!$exists) {
+                    $projectsToInsert[] = array_merge(['id' => Str::uuid()], $projectData);
+                }
             }
 
             if (!empty($projectsToInsert)) {
