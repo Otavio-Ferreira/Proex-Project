@@ -28,11 +28,24 @@ class UsersController extends Controller
         $this->loginRepository = $loginRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-
-        $this->data['users'] = User::orderBy('created_at', 'desc')->get();
+        $this->data['users'] = $this->usersRepository->getAllPaginate($request);
         $this->data['roles'] = Role::all();
+        $this->data['status'] = [
+            [
+                "color" => "danger",
+                "name" => "Inativo"
+            ],
+            [
+                "color" => "success",
+                "name" => "Ativo"
+            ],
+            [
+                "color" => "primary",
+                "name" => "Pré-Cadastrado"
+            ],
+        ];
 
         return view('pages.users.index')->with($this->data);
     }
@@ -40,7 +53,7 @@ class UsersController extends Controller
     public function store(StoreRequest $request)
     {
         try {
-            
+
             $user = $this->usersRepository->set($request);
             $this->rolesRepository->set($user, $request);
 
@@ -94,5 +107,22 @@ class UsersController extends Controller
     {
         Auth::logout();
         return to_route('login');
+    }
+
+    public function changePortal(Role $portal)
+    {
+        try {
+            $portals = Auth::user()->roles;
+            
+            if ($portals->contains($portal)) {
+                $user = User::find(Auth::user()->id);
+                $user->active_role = $portal->name;
+                $user->save();
+            }
+
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return redirect()->back();
+        }
     }
 }

@@ -16,7 +16,7 @@
           </h2>
         </div>
         <div class="col-auto ms-auto">
-            <a href="{{route('projects.index')}}" class="btn btn-cyan">Voltar</a>
+          <a href="{{ route('projects.index') }}" class="btn btn-cyan">Voltar</a>
         </div>
       </div>
     </div>
@@ -105,12 +105,10 @@
               <div class="mb-3">
                 <label class="form-label required">Coordenador</label>
                 <select class="form-select" id="teachers" name="teacher">
-                  <option value="">
-                    Selecione
-                  </option>
+                  <option value="">Selecione</option>
                   @foreach ($teachers as $teacher)
                     <option value="{{ $teacher->id }}"
-                      {{ $project->coordinator ? ($project->coordinator == $teacher->id ? 'selected' : '') : ' ' }}>
+                      {{ $project->coordinator != null ? ($project->coordinator == $teacher->id ? 'selected' : '') : '' }}>
                       {{ $teacher->name }}</option>
                   @endforeach
                 </select>
@@ -146,23 +144,18 @@
               <div class="mb-3">
                 <label class="form-label required">Status</label>
                 <select class="form-select" id="status" name="status" required>
-                  <option value="0" {{ $project->status ? ($project->status == '0' ? 'selected' : '') : ' ' }}>
-                    Inativo</option>
+                  <option value="0" {{ $project->status ? ($project->status == '0' ? 'selected' : '') : ' ' }}>Inativo</option>
 
-                  <option value="1" {{ $project->status ? ($project->status == '1' ? 'selected' : '') : ' ' }}>
-                    Ativo</option>
+                  <option value="1" {{ $project->status ? ($project->status == '1' ? 'selected' : '') : ' ' }}>Ativo</option>
 
-                  <option value="2" {{ $project->status ? ($project->status == '2' ? 'selected' : '') : ' ' }}>
-                    Finalizado</option>
+                  <option value="2" {{ $project->status ? ($project->status == '2' ? 'selected' : '') : ' ' }}>Finalizado</option>
                 </select>
               </div>
 
               <div class="mb-3">
                 <label class="form-label required">Curso/Departamento</label>
                 <select class="form-select" id="select-courses" name="course" required>
-                  <option value="">
-                    Selecione
-                  </option>
+                  <option value="">Selecione</option>
                   @foreach ($courses as $base_course)
                     <option value="{{ $base_course->id }}"
                       {{ $project->course ? ($project->course == $base_course->id ? 'selected' : '') : ' ' }}>

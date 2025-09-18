@@ -41,20 +41,16 @@
             <a href="{{ route('projects.create') }}" class="btn btn-primary d-sm-inline-block">
               Adicionar
             </a>
-            <div class="d-flex align-items-center">
-              <div class="input-icon me-2">
-                <input type="text" value="" id="customFilter" class="form-control" placeholder="Pesquisar ...">
-                <span class="input-icon-addon">
-                  <i class="ti icon text-primary ti-search"></i>
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="page-body">
+    <div class="d-flex justify-content-end mb-2">
+      <x-table.search route="{{ route('projects.index') }}" action="GET" value="{{ request('search') }}"
+        placeholder="Pesquisar..." button="true"></x-table.search>
+    </div>
     <div class="card">
       <div class="table-responsive card-body p-0">
         <table class="unded-3 w-100 table table-vcenter exclude table-hover card-table table-striped">

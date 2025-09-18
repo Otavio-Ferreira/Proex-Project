@@ -66,7 +66,7 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::post('/home', [HomeController::class, 'index']);
 
     Route::group(['middleware' => ['auth', 'permission:adicionar_grupo']], function () {
-        Route::get('gupos', [RolesController::class, 'index'])->name('roles.index');
+        Route::get('grupos', [RolesController::class, 'index'])->name('roles.index');
         Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
         Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
     });
@@ -173,4 +173,5 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
     Route::get('perfil', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('perfil', [ProfileController::class, 'store'])->name('profile.store');
+    Route::get('portal/{portal}', [UsersController::class, 'changePortal'])->name('portal.change');
 });

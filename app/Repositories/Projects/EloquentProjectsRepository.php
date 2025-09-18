@@ -34,7 +34,10 @@ class EloquentProjectsRepository implements ProjectsRepository
                     ->orWhere('id_atividade', 'like', '%' . $search . '%')
                     ->orWhere('id_projeto', 'like', '%' . $search . '%')
                     ->orWhere('year', 'like', '%' . $search . '%')
-                    ->orWhere('thematic_area', 'like', '%' . $search . '%');
+                    ->orWhere('thematic_area', 'like', '%' . $search . '%')
+                    ->orWhereHas('user', function ($coordinatorQuery) use ($search) {
+                        $coordinatorQuery->where('name', 'like', '%' . $search . '%');
+                    });
             });
         }
 

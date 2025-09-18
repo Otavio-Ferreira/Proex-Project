@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -52,5 +53,16 @@ class User extends Authenticatable
     public function persons()
     {
         return $this->hasOne(Persons::class, 'user_id');
+    }
+
+    public function activeRoleHasPermission(string $permission): bool
+    {
+        if (!$this->active_role) {
+            return false;
+        }
+
+        $role = Role::findByName($this->active_role);
+
+        return $role ? $role->hasPermissionTo($permission) : false;
     }
 }

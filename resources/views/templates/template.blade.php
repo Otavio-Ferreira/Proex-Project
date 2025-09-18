@@ -73,11 +73,14 @@
               </span>
               <div class="d-none d-xl-block ps-2">
                 <div>{{ strtok(Auth::user()->name, ' ') }}</div>
-                <div class="mt-1 fs-6 text-muted">{{ ucfirst(Auth::user()->roles->first()->name) }}</div>
+                <div class="mt-1 fs-6 text-muted">{{ ucfirst(Auth::user()->active_role) }}</div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a href="{{ route('profile.index') }}" class="dropdown-item m-0">Perfil</a>
+              <div class="dropdown-divider m-0"></div>
+              <button data-bs-toggle="offcanvas" data-bs-target="#modal-modules"
+                class="dropdown-item m-0">Portais</button>
               <div class="dropdown-divider m-0"></div>
               <a href="{{ route('logout') }}" class="dropdown-item">Sair</a>
             </div>
@@ -94,54 +97,78 @@
                 isActive="{{ request()->routeIs(['home.*']) ? true : false }}" icon="ti-home">
               </x-navbar.navbar-item>
 
-              @can('ver_dashboard')
+              {{-- @can('ver_dashboard') --}}
+              @if (Auth::user()?->activeRoleHasPermission('ver_dashboard'))
                 <x-navbar.navbar-item route="{{ route('dashboard.index') }}" title="Dashboard"
                   isActive="{{ request()->routeIs(['dashboard.*']) ? true : false }}" icon="ti-chart-bar">
                 </x-navbar.navbar-item>
-              @endcan
+              @endif
+              {{-- @endcan --}}
 
-              @can('ver_seus_projetos')
+              {{-- @can('ver_seus_projetos') --}}
+              @if (Auth::user()?->activeRoleHasPermission('ver_seus_projetos'))
                 <x-navbar.navbar-item route="{{ route('projects.my') }}" title="Meus Projetos"
                   isActive="{{ request()->routeIs(['projects.my', 'response.session', 'response.index']) ? true : false }}"
                   icon="ti-layout-dashboard">
                 </x-navbar.navbar-item>
-              @endcan
+              @endif
+              {{-- @endcan --}}
 
-              @can('adicionar_formulário')
+              {{-- @can('adicionar_formulário') --}}
+              @if (Auth::user()?->activeRoleHasPermission('adicionar_formulário'))
                 <x-navbar.navbar-item route="{{ route('forms.index') }}" title="Formulários"
                   isActive="{{ request()->routeIs(['forms.*']) ? true : false }}" icon="ti-clipboard-text">
                 </x-navbar.navbar-item>
-              @endcan
+              @endif
+              {{-- @endcan --}}
 
-              @canany(['adicionar_cursos', 'adicionar_projetos'])
+              {{-- @canany(['adicionar_cursos', 'adicionar_projetos']) --}}
+              @if (Auth::user()?->activeRoleHasPermission('adicionar_cursos') ||
+                      Auth::user()?->activeRoleHasPermission('adicionar_projetos'))
                 <x-navbar.navbar-item route="" title="Cadastros"
                   isActive="{{ request()->routeIs(['courses.*', 'projects.index', 'projects.create', 'projects.import', 'projects.analysis']) ? true : false }}"
                   icon="ti-file-database">
                   <x-slot:links>
-                    @can('adicionar_cursos')
+
+                    {{-- @can('adicionar_cursos') --}}
+                    @if (Auth::user()?->activeRoleHasPermission('adicionar_cursos'))
                       <a class="dropdown-item" href="{{ route('courses.index') }}">Cursos/Departamentos</a>
-                    @endcan
-                    @can('adicionar_projetos')
+                    @endif
+                    {{-- @endcan --}}
+
+                    {{-- @can('adicionar_projetos') --}}
+                    @if (Auth::user()?->activeRoleHasPermission('adicionar_projetos'))
                       <a class="dropdown-item" href="{{ route('projects.index') }}">Trabalhos</a>
-                    @endcan
+                    @endif
+                    {{-- @endcan --}}
+
                   </x-slot:links>
                 </x-navbar.navbar-item>
-              @endcanany
+              @endif
+              {{-- @endcanany --}}
 
-              @canany(['adicionar_usuário', 'adicionar_grupo', 'adicionar_permissões'])
+              {{-- @canany(['adicionar_usuário', 'adicionar_grupo', 'adicionar_permissões']) --}}
+              @if (Auth::user()?->activeRoleHasPermission('adicionar_usuário') ||
+                      Auth::user()?->activeRoleHasPermission('adicionar_grupo'))
+
                 <x-navbar.navbar-item route="" title="Configurações"
                   isActive="{{ request()->routeIs(['users.*', 'roles.*', 'permissions.*']) ? true : false }}"
                   icon="ti-settings">
                   <x-slot:links>
-                    @can('adicionar_usuário')
+                    {{-- @can('adicionar_usuário') --}}
+                    @if (Auth::user()?->activeRoleHasPermission('adicionar_usuário'))
                       <a class="dropdown-item" href="{{ route('users.index') }}">Usuários</a>
-                    @endcan
-                    @can('adicionar_grupo')
+                    @endif
+                    {{-- @endcan --}}
+                    {{-- @can('adicionar_grupo') --}}
+                    @if (Auth::user()?->activeRoleHasPermission('adicionar_grupo'))
                       <a class="dropdown-item" href="{{ route('roles.index') }}">Grupos</a>
-                    @endcan
+                    @endif
+                    {{-- @endcan --}}
                   </x-slot:links>
                 </x-navbar.navbar-item>
-              @endcanany
+              @endif
+              {{-- @endcanany --}}
             </ul>
           </div>
         </div>
@@ -180,6 +207,29 @@
         </div>
       </footer>
     </div>
+
+    <x-modal.offcanvas id="modal-modules" class="offcanvas-start" title="Seus portais">
+      <x-slot:content>
+        <div class="row">
+          @foreach (Auth::user()->roles as $role)
+            <div class="col-12 col-md-6 p-1">
+              <a href="{{ route('portal.change', $role->id) }}" class="card card-sm">
+                <div class="card-body">
+                  <div class="align-items-center">
+                    <div class="text-center">
+                      <span class="bg-primary text-white avatar">
+                        <i class="icon ti ti-user"></i>
+                      </span>
+                      <div class="font-weight-medium">{{ $role->name }}</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          @endforeach
+        </div>
+      </x-slot:content>
+    </x-modal.offcanvas>
   </div>
 
   <script src="{{ asset('assets/js/jquery-3.5.1.js') }}"></script>

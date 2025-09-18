@@ -36,22 +36,34 @@
         </div>
         <div class="col-auto ms-auto">
           <div class="btn-list">
+            <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+              aria-expanded="false" aria-controls="collapseExample">
+              <i class="icon ti ti-info-circle m-auto"></i>
+            </button>
             <a href="{{ route('projects.index') }}" class="btn btn-cyan">Voltar</a>
-            {{-- <a href="{{ route('projects.import') }}" class="btn d-sm-inline-block">
-              Importar
-            </a>
-            <a href="{{ route('projects.create') }}" class="btn btn-primary d-sm-inline-block">
-              Adicionar
-            </a>
-            <div class="d-flex align-items-center">
-              <div class="input-icon me-2">
-                <input type="text" value="" id="customFilter" class="form-control" placeholder="Pesquisar ...">
-                <span class="input-icon-addon">
-                  <i class="ti icon text-primary ti-search"></i>
-                </span>
-              </div>
-            </div> --}}
           </div>
+        </div>
+      </div>
+      <div class="collapse mt-2" id="collapseExample">
+        <div class="card card-body">
+          <h3>Atenção para a Importação de Dados</h3>
+          <p>Para importar os dados corretamente, o seu arquivo .csv deve conter as
+            seguintes colunas, na ordem exata especificada abaixo:</p>
+          <div class="mb-2">
+            <span class="badge badge-dark">Código</span>
+            <span class="badge badge-dark">ID Projeto</span>
+            <span class="badge badge-dark">Título</span>
+            <span class="badge badge-dark">Coordenador</span>
+            <span class="badge badge-dark">SIAPE</span>
+            <span class="badge badge-dark">Centro/Departamento</span>
+            <span class="badge badge-dark">Data Inicio</span>
+            <span class="badge badge-dark">Data Fim</span>
+            <span class="badge badge-dark">Ano</span>
+            <span class="badge badge-dark">Tipo Ação</span>
+            <span class="badge badge-dark">Area Tematica</span>
+            <span class="badge badge-dark">Modalidade</span>
+          </div>
+          <p><strong class="text-danger">Importante:</strong> Certifique-se de que o cabeçalho do seu arquivo .csv corresponda exatamente a estes nomes para evitar erros durante o processo de importação.</p>
         </div>
       </div>
     </div>
@@ -113,21 +125,6 @@
       </div>
     </div>
   </div>
-  {{-- @foreach ($projects as $project)
-    <x-modal.offcanvas id="modal-details-{{ $project->id }}" class="offcanvas-end" title="{{ $project->title }}">
-      <x-slot:content>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item"><strong>Tipo:</strong> {{ $project->type }}</li>
-          <li class="list-group-item"><strong>Modalidade:</strong> {{ $project->modality }}</li>
-          <li class="list-group-item"><strong>Curso:</strong> {{ $project->course_name->name }}</li>
-          <li class="list-group-item"><strong>Orientador:</strong> {{ $project->user->name }}</li>
-          <li class="list-group-item"><strong>Início:</strong> {{ date('d/m/Y', strtotime($project->start_date)) }}</li>
-          <li class="list-group-item"><strong>Fim:</strong> {{ date('d/m/Y', strtotime($project->end_date)) }}</li>
-          <li class="list-group-item"><strong>Status:</strong> {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>
-        </ul>
-      </x-slot:content>
-    </x-modal.offcanvas>
-  @endforeach --}}
 @endsection
 @section('scripts')
   <script src="{{ asset('assets/js/kanban/dataTables.min.js') }}"></script>
