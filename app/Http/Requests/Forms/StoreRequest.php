@@ -26,7 +26,8 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required|string',
             'date' => 'required|date|after_or_equal:today',
-            'status' => 'required|integer|in:0,1'
+            'status' => 'required|integer|in:0,1',
+            'modalities' => 'required|array'
         ];
     }
 
@@ -41,6 +42,8 @@ class StoreRequest extends FormRequest
             "status.required" => "É necessário escolher um status",
             "status.integer" => "O campo status precisa ser válido.",
             "status.in" => "O campo status deve ser 0 ou 1.",
+            "modalities.required" => "É necessário escolher uma modalidade",
+            "modalities.array" => "É necessário escolher uma modalidade válida",
         ];
     }
 }

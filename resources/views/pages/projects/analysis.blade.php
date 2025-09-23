@@ -65,15 +65,18 @@
               data-bs-target="#modal-edit-{{ $project->id }}">
               <i class="ti ti-edit"></i>
             </button>
-            <button class="btn btn-azure" data-bs-toggle="offcanvas"
+            <button class="btn btn-azure me-2" data-bs-toggle="offcanvas"
               data-bs-target="#modal-details-{{ $project->id }}"><i class="ti ti-dots-vertical"></i></button>
+            <button class="btn btn-danger" data-bs-toggle="modal"
+              data-bs-target="#modal-delete-project{{ $project->id }}"><i class="ti ti-trash"></i></button>
           </div>
         </div>
       @endforeach
     </div>
-    <div class="d-flex justify-content-center mt-5">
-      {{ $projects->links() }}
-    </div>
+  </div>
+  <div class="d-flex justify-content-center mt-5">
+    {{ $projects->links() }}
+  </div>
   </div>
 
   @foreach ($projects as $project)
@@ -256,6 +259,19 @@
         </div>
       </x-slot:content>
     </x-modal.offcanvas>
+
+    <x-modal.modal-alert route="{{ route('projects.destroy', $project->id) }}"
+      id="modal-delete-project{{ $project->id }}" class="modal-dialog-centered modal-sm" background="bg-danger"
+      classBody="text-center py-4" title="Excluír projeto" typeBtnClose="button" classBtnClose="me-auto w-100"
+      textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-danger w-100" textBtnSave="Deletar">
+      <x-slot:content>
+        <i class="ti ti-alert-triangle icon icon-lg text-danger"></i>
+        <h3>Tem certeza?</h3> 
+        <div class="text-secondary">
+          Você realmente deseja remover esse registro? Não será possível restaurá-lo depois!
+        </div>
+      </x-slot:content>
+    </x-modal.modal-alert>
   @endforeach
 @endsection
 @section('scripts')

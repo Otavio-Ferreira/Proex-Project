@@ -108,21 +108,38 @@
                         <button type="submit" class="btn btn-primary">Salvar</button>
                       </div>
                     </form>
-                    <div class="mt-3" style="text-align: justify;">
-                      Esse formulário foi disponibilizado para {{ $form->responses->count() }} projetos ativos
-                      @if ($total_inative_projects > 0)
-                        , e {{ $total_inative_projects }} projetos inativos ficaram de fora.
-                      @else
-                        .
-                      @endif
-                      @if ($total_active_projects - $form->responses->count() > 0)
-                        No entanto, detectamos que tem {{ $total_active_projects - $form->responses->count() > 0 }}
-                        projetos ativos novos, caso deseje que esses projetos também respondam esse formulário clique aqui
-                        abaixo.
-                        <div class="w-100 d-flex justify-content-end mt-3">
-                          <a href="{{route('forms.makeAvailable', $form->id)}}" type="submit" class="btn btn-green w-100">Disponibilizar para projetos novos</a>
-                        </div>
-                      @endif
+                    <div class="mt-3" style="">
+                      <h4>Esse formulário foi disponibilizados para as seguintes modalidades, totalizando
+                        {{ $form->responses->count() }} trabalhos</h4>
+                      <ul class="list-group fs-5">
+                        @foreach ($form->responses->pluck('project.modality')->unique() as $modality)
+                          <li class="list-group-item">{{ $modality }}</li>
+                        @endforeach
+                      </ul>
+
+                      <form action="{{ route('forms.makeAvailable', $form->id) }}" id="formup{{$form->id}}" method="post">
+                        @csrf
+                        @if ($form->status == 1)
+                          <div class="mt-3">
+                            <div class="form-label required">Selecione para quais modalidades deseja disponibilizar esse
+                              formulário novamente</div>
+                            <div class="fs-5">
+                              @foreach ($modalities as $modality)
+                                <label class="form-check">
+                                  <input value="{{ $modality->value }}" name="modalities[]" class="form-check-input"
+                                    type="checkbox">
+                                  <span class="form-check-label">{{ $modality->value }}</span>
+                                </label>
+                              @endforeach
+                            </div>
+                          </div>
+
+                          <div class="w-100 d-flex justify-content-end mt-3">
+                            <button form="formup{{$form->id}}" type="submit" class="btn btn-green w-100">Disponibilizar para projetos
+                              novos</button>
+                          </div>
+                        @endif
+                      </form>
                     </div>
                   </div>
                 </div>

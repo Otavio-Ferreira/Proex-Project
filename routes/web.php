@@ -99,6 +99,7 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::get('projetos/ver/{uuid}', [ProjectsController::class, 'edit'])->name('projects.edit');
         Route::post('projetos/atualizar/{uuid}', [ProjectsController::class, 'update'])->name('projects.update');
         Route::get('projetos/importar/analisar/{uuid}', [ProjectsController::class, 'analysis'])->name('projects.analysis');
+        Route::delete('projetos/deletar/{uuid}', [ProjectsController::class, 'destroy'])->name('projects.destroy');
     });
 
     Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {
@@ -111,7 +112,7 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::get('resposta/relatórios/{id}', [FormsController::class, 'reports'])->name('forms.reports');
         Route::get('resposta/editar/{id}', [FormsResponseController::class, 'edit'])->name('response.edit');
         Route::post('resposta/editar/{id}', [FormsResponseController::class, 'update'])->name('response.update');
-        Route::get('resposta/disponibilizar/{id}', [FormsController::class, 'makeAvailable'])->name('forms.makeAvailable');
+        Route::post('resposta/disponibilizar/{id}', [FormsController::class, 'makeAvailable'])->name('forms.makeAvailable');
         Route::post('relatorio/{id}', [FormReportController::class, 'generate'])->name('form.report');
     });
 

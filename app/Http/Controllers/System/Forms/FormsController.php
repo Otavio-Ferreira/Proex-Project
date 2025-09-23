@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Forms\StoreRequest;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
+use App\Models\Parameters\Parameters;
 use App\Models\Parameters\Projects;
 use App\Models\User;
 use App\Repositories\Forms\Form\FormRepository;
@@ -33,7 +34,7 @@ class FormsController extends Controller
         $this->data['forms'] = $this->formRepository->getAllForm($request);
         $this->data['total_active_projects'] = Projects::where('status', 1)->count();
         $this->data['total_inative_projects'] = Projects::where('status', 0)->count();
-
+        $this->data['modalities'] = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->get();
         $this->data['qtd_users'] = User::where('status', 1)->get()->filter(function ($user) {
             return $user->hasPermissionTo('responder_formulário');
         })->count();
@@ -43,6 +44,7 @@ class FormsController extends Controller
 
     public function create()
     {
+        $this->data['modalities'] = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->get();
         return view('pages.forms.create', $this->data);
     }
 
@@ -146,20 +148,25 @@ class FormsController extends Controller
         return $this->formService->updateResponse($request, $id);
     }
 
-    public function makeAvailable($id)
+    public function makeAvailable(Request $request, $id)
     {
+
         try {
             $form = $this->formRepository->getFormById($id);
-            $active_projects = Projects::where('status', 1)->get();
-            foreach ($active_projects as $project) {
-                $response = FormsResponse::where(['project_id' => $project->id,'forms_id' => $id])->first();
-    
-                if (!$response) {
-                    FormsResponse::create([
-                        'forms_id' => $form->id,
-                        'user_id' => $project->coordinator,
-                        'project_id' => $project->id,
-                    ]);
+            
+            foreach($request->modalities as $modality){
+                $active_projects = Projects::where(['status' => 1, 'modality' => $modality])->get();
+                foreach ($active_projects as $project) {
+                    if($project->coordinator){
+                        $response = FormsResponse::where('project_id', $project->id)->first();
+                        if(!$response){
+                            FormsResponse::create([
+                                'forms_id' => $form->id,
+                                'user_id' => $project->coordinator,
+                                'project_id' => $project->id,
+                            ]);
+                        }
+                    }
                 }
             }
             return redirect()->back()->with('toast_success', 'Formulário disponibilizado com sucesso!');

@@ -293,4 +293,14 @@ class ProjectsController extends Controller
         $this->data['teachers'] = User::orderBy('name', 'asc')->get();
         return view('pages.projects.analysis', $this->data);
     }
+
+    public function destroy($uuid) {
+        try {
+            $project = Projects::find($uuid);
+            $project->delete();
+            return redirect()->back()->with('toast_success', 'Registro removido com sucesso.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('toast_error', 'Registro não encontrado.');
+        }
+    }
 }
