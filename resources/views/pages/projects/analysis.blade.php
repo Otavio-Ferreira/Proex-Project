@@ -132,7 +132,7 @@
               'name' => 'id_atividade',
               'required' => 'true',
               'placeholder' => 'Digite o id da atividade',
-              'value' => $project->id_atividade ?? '',
+              'value' => ($project->id_atividade || !empty($project->id_atividade)) ? $project->id_atividade : $last->id_atividade+1,
           ])
 
           @include('components.form-elements.input.input', [
@@ -142,7 +142,7 @@
               'name' => 'id_projeto',
               'required' => 'true',
               'placeholder' => 'Digite o id do projeto',
-              'value' => $project->id_projeto ?? '',
+              'value' => ($project->id_projeto || !empty($project->id_projeto)) ? $project->id_projeto : $last->id_projeto+1,
           ])
 
           <div class="mb-3">

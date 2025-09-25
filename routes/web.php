@@ -107,6 +107,7 @@ Route::middleware(Authenticate::class)->group(function () {
 
         Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
         Route::get('formulario/detalhes/{id}', [FormsController::class, 'show'])->name('forms.show');
+        Route::post('formulario/atualizar/projetos/{id}', [FormsController::class, 'store'])->name('forms.update.projects');
         Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
         Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
         Route::get('resposta/relatórios/{id}', [FormsController::class, 'reports'])->name('forms.reports');

@@ -99,7 +99,7 @@
     </div>
   </div>
   @foreach ($projects as $project)
-    <x-modal.offcanvas id="modal-details-{{ $project->id }}" class="offcanvas-end" title="{{ $project->title }}">
+    <x-modal.offcanvas id="modal-details-{{ $project->id }}" class="offcanvas-end" title="Detalhes">
       <x-slot:content>
         <ul class="list-group list-group-flush">
           <li class="list-group-item {{ $project->title ?? 'text-danger' }}"><strong>Título:</strong>

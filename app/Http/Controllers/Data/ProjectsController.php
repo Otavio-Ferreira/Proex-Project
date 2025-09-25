@@ -43,6 +43,7 @@ class ProjectsController extends Controller
         $this->data['thematic_area'] = Parameters::where(['function' => 'ÁREA TEMÁTICA', 'status' => 1])->orderBy('value', 'asc')->get();
         $this->data['courses'] = Courses::orderBy('name', 'asc')->get();
         $this->data['teachers'] = User::get();
+        $this->data['last'] = Projects::orderBy('id_atividade', 'desc')->first();
 
         return view('pages.projects.create', $this->data);
     }
@@ -286,6 +287,7 @@ class ProjectsController extends Controller
     public function analysis(String $id, Request $request)
     {
         $this->data['projects'] = $this->projetcsRepository->getAllPaginate($request, $id);
+        $this->data['last'] = Projects::orderBy('id_atividade', 'desc')->first();
         $this->data['types'] = Parameters::where(['function' => 'TIPO', 'status' => 1])->orderBy('value', 'asc')->get();
         $this->data['modalities'] = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->orderBy('value', 'asc')->get();
         $this->data['thematic_area'] = Parameters::where(['function' => 'ÁREA TEMÁTICA', 'status' => 1])->orderBy('value', 'asc')->get();

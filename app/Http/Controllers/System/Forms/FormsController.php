@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Repositories\Forms\Form\FormRepository;
 use App\Services\Forms\FormService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 use Spatie\Permission\Models\Permission;
 
@@ -129,6 +130,25 @@ class FormsController extends Controller
         $this->data['type'] = $type_status;
         $this->data['form'] = Forms::find($id);
 
+        $dateRanges = [];
+
+        foreach ($this->data['form']->responses as $response) {
+            if ($project = $response->project) {
+                if ($project->start_date && $project->end_date) {
+
+                    $startYear = Carbon::parse($project->start_date)->year;
+                    $endYear = Carbon::parse($project->end_date)->year;
+
+                    $value = "{$startYear}-{$endYear}";
+                    $label = "{$startYear} até {$endYear}";
+
+                    $dateRanges[$value] = $label;
+                }
+            }
+        }
+
+        $this->data['dateRanges'] = $dateRanges;
+
         return view('pages.forms.show', $this->data);
     }
 
@@ -153,13 +173,13 @@ class FormsController extends Controller
 
         try {
             $form = $this->formRepository->getFormById($id);
-            
-            foreach($request->modalities as $modality){
+
+            foreach ($request->modalities as $modality) {
                 $active_projects = Projects::where(['status' => 1, 'modality' => $modality])->get();
                 foreach ($active_projects as $project) {
-                    if($project->coordinator){
-                        $response = FormsResponse::where('project_id', $project->id)->first();
-                        if(!$response){
+                    if ($project->coordinator) {
+                        $response = FormsResponse::where(['project_id' => $project->id, 'forms_id' => $form->id])->first();
+                        if (!$response) {
                             FormsResponse::create([
                                 'forms_id' => $form->id,
                                 'user_id' => $project->coordinator,
@@ -173,6 +193,5 @@ class FormsController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('toast_error', 'Erro ao disponibilizar formulário, tente novamente mais tarde!');
         }
-
     }
 }

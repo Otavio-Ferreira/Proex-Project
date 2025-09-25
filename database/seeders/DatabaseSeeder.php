@@ -113,6 +113,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'status' => 1,
+            'active_role' => "Desenvolvimento"
         ]);
 
         Persons::create([
