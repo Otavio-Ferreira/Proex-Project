@@ -180,6 +180,9 @@
                                   <option value="Contrato (CT)"
                                     {{ $externalPartner->partnership_type == 'Contrato (CT)' ? 'selected' : '' }}>
                                     Contrato (CT)</option>
+                                  <option value="Não Oficial"
+                                    {{ $externalPartner->partnership_type == 'Não Oficial' ? 'selected' : '' }}>
+                                    Não Oficial</option>
                                 </x-slot:options>
                               </x-form-elements.select.select>
                             </x-slot:content>
@@ -218,9 +221,9 @@
               <i class="icon ti ti-chevron-left"></i>
               Voltar</a>
             @if (isset($response))
-              @if ($response->external_partners->count() > 0)
+              {{-- @if ($response->external_partners->count() > 0) --}}
                 <a href="{{ route('forms.advance', [$response->id, 6]) }}" class="btn btn-info ms-auto">Avançar</a>
-              @endif
+              {{-- @endif --}}
             @endif
           </div>
         </div>

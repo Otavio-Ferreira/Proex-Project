@@ -59,13 +59,13 @@ class DatabaseSeeder extends Seeder
                 "permissions" => [
                     "adicionar_grupo",
                     "adicionar_usuário",
-                    "ver_dashboard",
-                    "adicionar_cursos",
-                    "adicionar_projetos",
-                    "responder_formulário",
-                    "ver_respostas",
-                    "ver_seus_projetos",
-                    "adicionar_formulário",
+                    // "ver_dashboard",
+                    // "adicionar_cursos",
+                    // "adicionar_projetos",
+                    // "responder_formulário",
+                    // "ver_respostas",
+                    // "ver_seus_projetos",
+                    // "adicionar_formulário",
                 ]
             ],
             [
@@ -76,9 +76,9 @@ class DatabaseSeeder extends Seeder
                     "ver_dashboard",
                     "adicionar_cursos",
                     "adicionar_projetos",
-                    "responder_formulário",
+                    // "responder_formulário",
                     "ver_respostas",
-                    "ver_seus_projetos",
+                    // "ver_seus_projetos",
                     "adicionar_formulário",
                 ]
             ],
@@ -124,7 +124,7 @@ class DatabaseSeeder extends Seeder
             "coordinator_course" => null
         ]);
 
-        $user->assignRole('Desenvolvimento');
+        $user->assignRole(['Desenvolvimento', 'Coordenador', 'Administrador', 'Visitante']);
 
         $this->call([
             ParameterSeeder::class

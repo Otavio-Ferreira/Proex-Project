@@ -93,8 +93,6 @@
         </div>
         <div class="d-flex align-items-center col-sm-12 col-md-auto">
           <div class="btn-list">
-            <button data-bs-toggle="offcanvas" data-bs-target="#modal-finalizar" class="btn btn-outline-lime">Finalizar
-              projetos</button>
             <a href="{{ route('forms.index') }}" class="btn btn-cyan">Voltar</a>
             <div class="input-icon me-2">
               <input type="text" value="" id="customFilter" class="form-control" placeholder="Pesquisar ...">
@@ -154,25 +152,6 @@
       @endforeach
     </div>
   </div>
-  <x-modal.offcanvas id="modal-finalizar" route="{{route('forms.update.projects', $form->id)}}" class="offcanvas-end" title="Finalizar projetos em massa">
-    <x-slot:content>
-      <div class="mb-3">
-        <h4>Finalize em massa os projetos que já tiveram seus relatórios aprovados!</h4>
-      </div>
-      esse formulário contempla X projetos, Y estao prontos para ser finalizados
-      <div class="">
-        <div class="form-label">Selecione os anos dos projetos que deseja finalizar</div>
-        <div>
-          @foreach ($dateRanges as $value => $label)
-            <label class="form-check">
-              <input value="{{ $value }}" name="date_range[]" class="form-check-input" type="checkbox">
-              <span class="form-check-label">{{ $label }}</span>
-            </label>
-          @endforeach
-        </div>
-      </div>
-    </x-slot:content>
-  </x-modal.offcanvas>
 @endsection
 @section('scripts')
   <script src="{{ asset('assets/js/kanban/dataTables.min.js') }}"></script>

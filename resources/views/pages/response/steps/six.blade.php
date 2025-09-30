@@ -65,7 +65,7 @@
       <div class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step"
         id="card-8">
         <div class="card-header">
-          <h3 class="p-0 m-0">Ações vinculadas ao programa de extensão</h3>
+          <h3 class="p-0 m-0">Ações vinculadas ao {{strtolower($response->project->type)}} de extensão</h3>
         </div>
         <div class="card-body">
           <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"

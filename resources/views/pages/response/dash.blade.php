@@ -118,6 +118,10 @@
             <p>{{ $response->project->type ?? 'Não enviado' }}</p>
           </div>
           <div class="col-12 col-md-6">
+            <h4 class="mb-0">Área temática</h4>
+            <p>{{ $response->project->thematic_area ?? 'Não enviado' }}</p>
+          </div>
+          <div class="col-12 col-md-12">
             <h4 class="mb-0">Modalidade da ação</h4>
             <p>{{ $response->project->modality ?? 'Não enviado' }}</p>
           </div>

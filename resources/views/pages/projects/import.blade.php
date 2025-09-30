@@ -50,7 +50,6 @@
           <p>Para importar os dados corretamente, o seu arquivo .csv deve conter as
             seguintes colunas, na ordem exata especificada abaixo:</p>
           <div class="mb-2">
-            <span class="badge badge-dark">Código</span>
             <span class="badge badge-dark">ID Projeto</span>
             <span class="badge badge-dark">Título</span>
             <span class="badge badge-dark">Coordenador</span>

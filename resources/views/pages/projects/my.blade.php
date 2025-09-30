@@ -80,12 +80,28 @@
     <x-modal.offcanvas id="modal-details-{{ $project->id }}" class="offcanvas-end" title="{{ $project->title }}">
       <x-slot:content>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><strong>Tipo:</strong> {{ $project->type }}</li>
-          <li class="list-group-item"><strong>Modalidade:</strong> {{ $project->modality }}</li>
-          <li class="list-group-item"><strong>Curso:</strong> {{ $project->course_name->name }}</li>
-          <li class="list-group-item"><strong>Orientador:</strong> {{ $project->user->name }}</li>
-          <li class="list-group-item"><strong>Início:</strong> {{ date('d/m/Y', strtotime($project->start_date)) }}</li>
-          <li class="list-group-item"><strong>Fim:</strong> {{ date('d/m/Y', strtotime($project->end_date)) }}</li>
+          <li class="list-group-item {{ $project->title ?? 'text-danger' }}"><strong>Título:</strong>
+            {{ $project->title ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->id_atividade ?? 'text-danger' }}"><strong>Id da atividade:</strong>
+            {{ $project->id_atividade ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->id_projeto ?? 'text-danger' }}"><strong>Id do projeto:</strong>
+            {{ $project->id_projeto ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->type ?? 'text-danger' }}"><strong>Tipo:</strong>
+            {{ $project->type ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->modality ?? 'text-danger' }}"><strong>Modalidade:</strong>
+            {{ $project->modality ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->thematic_area ?? 'text-danger' }}"><strong>Área temática:</strong>
+            {{ $project->thematic_area ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->course_name->name ?? 'text-danger' }}"><strong>Curso:</strong>
+            {{ $project->course_name->name ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->user->name ?? 'text-danger' }}"><strong>Coordenador:</strong>
+            {{ $project->user->name ?? 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->start_date ? '' : 'text-danger' }}"><strong>Início:</strong>
+            {{ $project->start_date ? date('d/m/Y', strtotime($project->start_date)) : 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->end_date ? '' : 'text-danger' }}"><strong>Fim:</strong>
+            {{ $project->end_date ? date('d/m/Y', strtotime($project->end_date)) : 'Vazio' }}</li>
+          <li class="list-group-item {{ $project->year ? '' : 'text-danger' }}"><strong>Ano:</strong>
+            {{ $project->year ? date('Y', strtotime($project->year)) : 'Vazio' }}</li>
           <li class="list-group-item"><strong>Status:</strong>
             {{ $project->status == 0 ? 'Inativo' : ($project->status == 1 ? 'Ativo' : 'Finalizado') }}</li>
         </ul>
@@ -96,7 +112,7 @@
       <x-slot:content>
         <ol class="list-group list-group-numbered">
           @foreach ($project->responses as $response)
-            <a href="{{route('response.index', $response->id)}}" class="text-decoration-none">
+            <a href="{{ route('response.index', $response->id) }}" class="text-decoration-none">
               <li class="list-group-item d-flex justify-content-between align-items-start">
                 <div class="ms-2 me-auto">
                   <div class="fw-bold">{{ $response->form->title }}</div>

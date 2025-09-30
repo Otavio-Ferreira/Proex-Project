@@ -126,7 +126,7 @@
               @if (Auth::user()?->activeRoleHasPermission('adicionar_cursos') ||
                       Auth::user()?->activeRoleHasPermission('adicionar_projetos'))
                 <x-navbar.navbar-item route="" title="Cadastros"
-                  isActive="{{ request()->routeIs(['courses.*', 'projects.index', 'projects.create', 'projects.import', 'projects.analysis']) ? true : false }}"
+                  isActive="{{ request()->routeIs(['courses.*', 'projects.index', 'projects.edit', 'projects.create', 'projects.import', 'projects.analysis']) ? true : false }}"
                   icon="ti-file-database">
                   <x-slot:links>
 

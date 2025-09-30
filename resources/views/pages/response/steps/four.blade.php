@@ -135,9 +135,9 @@
                 <i class="icon ti ti-chevron-left"></i>
                 Voltar</a>
               @if (isset($response))
-                @if ($response->internal_partners->count() > 0)
+                {{-- @if ($response->internal_partners->count() > 0) --}}
                   <a href="{{ route('forms.advance', [$response->id, 5]) }}" class="btn btn-info ms-auto">Avançar</a>
-                @endif
+                {{-- @endif --}}
               @endif
             </div>
           </div>

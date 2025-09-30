@@ -152,7 +152,7 @@
                 Selecione
               </option>
               @foreach ($types as $type)
-                <option value="{{ $type->value }}" {{ $project->type == $project->type ? 'selected' : '' }}>
+                <option value="{{ $type->value }}" {{ $project->type == $type->value ? 'selected' : '' }}>
                   {{ $type->value }}
                 </option>
               @endforeach
@@ -166,7 +166,7 @@
                 Selecione
               </option>
               @foreach ($modalities as $modality)
-                <option value="{{ $modality->value }}" {{ $project->modality == $project->modality ? 'selected' : '' }}>
+                <option value="{{ $modality->value }}" {{ $project->modality == $modality->value ? 'selected' : '' }}>
                   {{ $modality->value }}
                 </option>
               @endforeach

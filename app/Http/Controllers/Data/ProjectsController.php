@@ -78,7 +78,7 @@ class ProjectsController extends Controller
             ];
         });
 
-        $history = $grouped->values()->toArray();
+        $history = $grouped->values()->sortByDesc('first_date')->toArray();
 
         $this->data['projects'] = $history;
 

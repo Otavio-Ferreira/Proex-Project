@@ -30,13 +30,13 @@ class PersonService {
             if($person){
                 $this->personRepository->update($request, $user->id);
                 if($request->coordinator_profile == "Técnico Administrativo"){
-                    $this->rolesRepository->updateUserRole($user, 'Visitante');
+                    // $this->rolesRepository->updateUserRole($user, 'Visitante');
                 }
             }
             else{
                 $this->personRepository->set($request, $user->id);
                 if($request->coordinator_profile == "Docente"){
-                    $this->rolesRepository->updateUserRole($user, 'Professor');
+                    $this->rolesRepository->updateUserRole($user, 'Coordenador');
                 }
             }
 

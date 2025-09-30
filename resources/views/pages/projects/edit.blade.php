@@ -57,7 +57,6 @@
                   'placeholder' => 'Digite o id do projeto',
                   'value' => $project->id_projeto ?? '',
               ])
-
               <div class="mb-3">
                 <label class="form-label required">Tipo</label>
                 <select class="form-select" id="type" name="type" required>
@@ -65,7 +64,7 @@
                     Selecione
                   </option>
                   @foreach ($types as $type)
-                    <option value="{{ $type->value }}" {{ $project->type == $project->type ? 'selected' : '' }}>
+                    <option value="{{ $type->value }}" {{ $project->type == $type->value ? 'selected' : '' }}>
                       {{ $type->value }}
                     </option>
                   @endforeach
@@ -80,7 +79,7 @@
                   </option>
                   @foreach ($modalities as $modality)
                     <option value="{{ $modality->value }}"
-                      {{ $project->modality == $project->modality ? 'selected' : '' }}>
+                      {{ $project->modality == $modality->value ? 'selected' : '' }}>
                       {{ $modality->value }}
                     </option>
                   @endforeach

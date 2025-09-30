@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
         return [
             'name_partner' => 'required|string',
             'institution_type' => 'required|string|in:Movimento Social Organizado (MSO),Privado (PR),Público Municipal (PM),Público Estadual (PE),Público Federal (PF)',
-            'partnership_type' => 'required|string|in:Cooperação (CP),Convênio (CV),Contrato (CT)'
+            'partnership_type' => 'required|string|in:Cooperação (CP),Convênio (CV),Contrato (CT),Não Oficial'
         ];
     }
 
