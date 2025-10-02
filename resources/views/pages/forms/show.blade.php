@@ -120,7 +120,6 @@
                   class="text-decoration-none card alert border-0 alert-{{ $column['COR'] }} p-2">
                   <div class="row">
                     <div class="col-8">
-                      {{-- <p class="m-0 fs-3 text-dark">{{ $item['RESPONSE']->user->name }}</p> --}}
                       <p class="m-0 text-muted">
                         {{ \Illuminate\Support\Str::limit($item['RESPONSE']->project->title, 45, '...') }}</p>
                     </div>
@@ -197,7 +196,7 @@
 
       circles.forEach(function(circle) {
         let value = parseInt(circle.getAttribute('data-value')) || 0;
-        let maxValue = 10; // Defina o valor máximo
+        let maxValue = 8; // Defina o valor máximo
         let percentage = (value / maxValue) * 100; // Converte para percentual
 
         // Aplica o progresso ao estilo de background

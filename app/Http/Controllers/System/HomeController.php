@@ -69,28 +69,28 @@ class HomeController extends Controller
 
         $this->data['profile'] = $profile;
 
-        $role = $user->roles->first()->name;
+        $role = $user->active_role;
 
         $this->data['tasks'] = [];
-        if ($role == "Professor") {
+        if ($role == "Coordenador") {
             $responses = FormsResponse::where(['user_id' => $user->id])->whereIn('was_finished', [0, 2])->get();
             $tasks = [];
             foreach ($responses as $key => $response) {
                 $steps = [
-                    "1" => isset($response->activitys) && count($response->activitys) > 0,
-                    "2" => isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
-                    "3" => isset($response->advances_extensionist_action),
-                    "4" => isset($response->internal_partners) && count($response->internal_partners) > 0,
-                    "5" => isset($response->external_partners) && count($response->external_partners) > 0,
-                    "6" => isset($response->extension_actions) && count($response->extension_actions) > 0,
-                    "7" => isset($response->social_technology_development),
-                    "8" => isset($response->social_medias) && count($response->social_medias) > 0,
-                    "9" => isset($response->images) && count($response->images) > 0,
-                    "10" => isset($response->instrument_avaliation),
+                    isset($response->activitys) && count($response->activitys) > 0,
+                    isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
+                    isset($response->advances_extensionist_action),
+                    // isset($response->internal_partners) && count($response->internal_partners) > 0,
+                    // isset($response->external_partners) && count($response->external_partners) > 0,
+                    isset($response->extension_actions) && count($response->extension_actions) > 0,
+                    isset($response->social_technology_development),
+                    isset($response->social_medias) && count($response->social_medias) > 0,
+                    isset($response->images) && count($response->images) > 0,
+                    isset($response->instrument_avaliation),
                 ];
 
                 $form = Forms::find($response->forms_id);
-                $progress = collect($steps)->filter()->count() * 10;
+                $progress = number_format(collect($steps)->filter()->count() * 12.5);
 
                 if ($form->status = 1) {
                     if ($response->was_finished == 0) {
@@ -109,7 +109,7 @@ class HomeController extends Controller
                 $this->data['form'] = $form;
             }
             $this->data['tasks'] = $tasks;
-        } elseif ($role == "Técnico") {
+        } elseif ($role == "Administrador") {
             $users_to_check = User::whereHas('persons', function ($q) {
                 $q->where('coordinator_profile', 'Técnico Administrativo');
             })->whereHas('roles', function ($q) {

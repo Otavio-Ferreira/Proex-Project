@@ -18,7 +18,7 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 

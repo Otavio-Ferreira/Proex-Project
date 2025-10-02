@@ -17,6 +17,7 @@
           </h2>
         </div>
         <div class="d-flex align-items-center col-sm-12 col-md-auto">
+            <a href="{{ route('forms.show', $response->forms_id) }}" class="btn btn-cyan">Voltar</a>
         </div>
       </div>
     </div>
@@ -25,20 +26,38 @@
     <div class="col-12 col-md-9 mb-3 mb-md-0 overflow-auto" style="height: calc(100vh - 300px);">
       <div class="card border-top-0 border-end-0 border-bottom-0 border-4 border-primary mb-3">
         <div class="card-header">
-          <h3 class="p-0 m-0">Título da ação de extensão</h3>
+          <h3 class="p-0 m-0">Detalhes da ação de extensão</h3>
         </div>
         <div class="card-body">
           <div class="">
             <h4 class="mb-0">Título da ação</h4>
-            <p>{{ $response->action->title ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->title ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Tipo da ação</h4>
-            <p>{{ $response->type_action ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->type ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Modalidade da ação</h4>
-            <p>{{ $response->action_modality ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->modality ?? 'Não enviado' }}</p>
+          </div>
+          <div class="">
+            <h4 class="mb-0">Área temática</h4>
+            <p>{{ $response->project->thematic_area ?? 'Não enviado' }}</p>
+          </div>
+          <div class="">
+            <h4 class="mb-0">Centro/Departamento</h4>
+            <p>{{ $response->project->course_name->name ?? 'Não enviado' }}</p>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <h4 class="mb-0">Id da atividade</h4>
+              <p>{{ $response->project->id_atividade ?? 'Não enviado' }}</p>
+            </div>
+            <div class="col-12 col-md-6">
+              <h4 class="mb-0">Id do projeto</h4>
+              <p>{{ $response->project->id_projeto ?? 'Não enviado' }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -50,19 +69,19 @@
         <div class="card-body">
           <div class="">
             <h4 class="mb-0">Nome</h4>
-            <p>{{ $response->coordinator_name ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_name ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Perfil</h4>
-            <p>{{ $response->coordinator_profile ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_profile ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">SIAPE</h4>
-            <p>{{ $response->coordinator_siape ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_siape ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Curso</h4>
-            <p>{{ $response->course->name ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_course ?? 'Não enviado' }}</p>
           </div>
         </div>
       </div>

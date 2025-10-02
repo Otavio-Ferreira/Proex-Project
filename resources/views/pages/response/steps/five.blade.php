@@ -18,11 +18,11 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 
-            <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
+            <x-modal.modal-alert route="{{ route('forms.finish', $response->id) }}" id="modal-finish-response"
               class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
               title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
               typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
@@ -102,6 +102,7 @@
                   <option value="Cooperação (CP)">Cooperação (CP)</option>
                   <option value="Convênio (CV)">Convênio (CV)</option>
                   <option value="Contrato (CT)">Contrato (CT)</option>
+                  <option value="Não Oficial">Não Oficial</option>
                 </x-slot:options>
               </x-form-elements.select.select>
             </x-slot:content>

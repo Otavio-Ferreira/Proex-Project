@@ -26,7 +26,7 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 
@@ -76,12 +76,13 @@
             <form action="{{ route('images.store', $response->id) }}" method="post" class="row" enctype="multipart/form-data">
               @csrf
               @include('components.form-elements.input.input', [
-                  'title' => 'Imagem',
+                  'title' => 'Imagem (Max: 2mb)',
                   'type' => 'file',
                   'class' => 'mb-3 col-12 col-md-6',
                   'name' => 'image',
                   'required' => 'true',
                   'accept' => 'jpeg, .jpg, .png',
+                  'id' => 'inputFile',
               ])
               @include('components.form-elements.input.input', [
                   'title' => 'Data',
@@ -333,6 +334,22 @@
         }
         return nomeCompleto.trim();
       }
+    });
+  </script>
+  <script>
+        const fileInput = document.getElementById('inputFile');
+    fileInput.addEventListener('change', event => {
+        const files = fileInput.files;
+        const maxFileSizeInMB = 2;
+        const maxFileSizeInBytes = maxFileSizeInMB * 1024 * 1024;
+
+        for (const file of files) {
+            if (file.size > maxFileSizeInBytes) {
+                alert(`A imagem "${file.name}" é muito pesada. a imagem deve ter no máximo ${maxFileSizeInMB}MB.`);
+                event.target.value = null; 
+                return;
+            }
+        }
     });
   </script>
 @endsection

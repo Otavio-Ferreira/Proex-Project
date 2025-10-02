@@ -117,7 +117,7 @@
               {{-- @can('adicionar_formulário') --}}
               @if (Auth::user()?->activeRoleHasPermission('adicionar_formulário'))
                 <x-navbar.navbar-item route="{{ route('forms.index') }}" title="Formulários"
-                  isActive="{{ request()->routeIs(['forms.*']) ? true : false }}" icon="ti-clipboard-text">
+                  isActive="{{ request()->routeIs(['forms.*', 'response.edit']) ? true : false }}" icon="ti-clipboard-text">
                 </x-navbar.navbar-item>
               @endif
               {{-- @endcan --}}

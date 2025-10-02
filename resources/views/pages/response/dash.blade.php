@@ -125,6 +125,14 @@
             <h4 class="mb-0">Modalidade da ação</h4>
             <p>{{ $response->project->modality ?? 'Não enviado' }}</p>
           </div>
+          <div class="col-12 col-md-6">
+            <h4 class="mb-0">Id da atividade</h4>
+            <p>{{ $response->project->id_atividade ?? 'Não enviado' }}</p>
+          </div>
+          <div class="col-12 col-md-6">
+            <h4 class="mb-0">Id do projeto</h4>
+            <p>{{ $response->project->id_projeto ?? 'Não enviado' }}</p>
+          </div>
           <hr class="mb-3">
           <div class="col-12 col-md-6">
             <h4 class="mb-0">Nome do coordenador</h4>
@@ -231,7 +239,7 @@
           </div>
           <hr class="mb-3">
           <div class="col-12">
-            <h4 class="mb-0">Ações vinculadas ao programa de extensão</h4>
+            <h4 class="mb-0">Ações vinculadas ao {{strtolower($response->project->type)}} de extensão</h4>
             @if ($response->extension_actions->count() > 0)
               <x-table.table tableClass="table-vcenter card-table table-striped">
                 <x-slot:ths>
@@ -329,7 +337,7 @@
 
       circles.forEach(function(circle) {
         let value = parseInt(circle.getAttribute('data-value')) || 0;
-        let maxValue = 10; // Defina o valor máximo
+        let maxValue = 8; // Defina o valor máximo
         let percentage = (value / maxValue) * 100; // Converte para percentual
 
         // Aplica o progresso ao estilo de background

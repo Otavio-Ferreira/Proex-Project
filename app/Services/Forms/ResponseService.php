@@ -72,7 +72,7 @@ class ResponseService
             $response = FormsResponse::find($uuid);
             $this->responseRepository->finish($response);
 
-            return redirect()->back()->with("toast_success", "Formulário finalizado com sucesso.");
+            return to_route('response.index', $uuid)->with("toast_success", "Formulário finalizado com sucesso.");
         } catch (\Throwable $th) {
             return redirect()->back()->with("toast_error", "Erro ao finalizar formulário, tente novamente em alguns instantes.")->withInput();
         }

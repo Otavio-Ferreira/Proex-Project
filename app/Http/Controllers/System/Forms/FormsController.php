@@ -100,18 +100,18 @@ class FormsController extends Controller
             foreach ($responses as $key2 => $response) {
                 $finished = 0;
                 $steps = [
-                    "1" => isset($response->title_action) && isset($response->action_modality) && isset($response->type_action),
-                    "2" => isset($response->coordinator_name) && isset($response->coordinator_profile) && isset($response->coordinator_course) && isset($response->coordinator_siape),
-                    "3" => isset($response->activitys) && count($response->activitys) > 0,
-                    "4" => isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
-                    "5" => isset($response->advances_extensionist_action),
-                    "6" => isset($response->internal_partners) && count($response->internal_partners) > 0,
-                    "7" => isset($response->external_partners) && count($response->external_partners) > 0,
-                    "8" => isset($response->extension_actions) && count($response->extension_actions) > 0,
-                    "9" => isset($response->social_technology_development),
-                    "10" => isset($response->social_medias) && count($response->social_medias) > 0,
-                    "11" => isset($response->images) && count($response->images) >= 3,
-                    "12" => isset($response->instrument_avaliation),
+                    isset($response->title_action) && isset($response->action_modality) && isset($response->type_action),
+                    isset($response->coordinator_name) && isset($response->coordinator_profile) && isset($response->coordinator_course) && isset($response->coordinator_siape),
+                    isset($response->activitys) && count($response->activitys) > 0,
+                    isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
+                    isset($response->advances_extensionist_action),
+                    // isset($response->internal_partners) && count($response->internal_partners) > 0,
+                    // isset($response->external_partners) && count($response->external_partners) > 0,
+                    isset($response->extension_actions) && count($response->extension_actions) > 0,
+                    isset($response->social_technology_development),
+                    isset($response->social_medias) && count($response->social_medias) > 0,
+                    isset($response->images) && count($response->images) >= 3,
+                    isset($response->instrument_avaliation),
                 ];
 
                 foreach ($steps as $step_f) {
