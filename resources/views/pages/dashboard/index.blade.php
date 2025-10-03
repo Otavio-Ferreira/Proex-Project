@@ -145,8 +145,8 @@
           @endforeach
         </div>
       </div>
-      <div class="col-12 col-lg-4 row">
-        <h3 class="text-muted mb-2">Quantidade de projetos por tipo de ações</h3>
+      <div class="col-12 row">
+        <h3 class="text-muted mb-2">Quantidade de projetos por tipo de ações e modalidades</h3>
         <div class="col-6">
           <div id="chart-container" class="w-100 card" data-value='@json($cards_acao[0]['cards'])'></div>
         </div>
@@ -155,7 +155,7 @@
         </div>
       </div>
 
-      <div class="col-12 col-lg-8 p-0">
+      <div class="col-12 p-0">
         <h3 class="text-muted mb-2">Ranking de projetos da UFCA por ano</h3>
         <div id="chart-container4" class="w-100 card" data-value='{{ $ranking_projects }}'></div>
       </div>
@@ -202,18 +202,28 @@
     });
 
     var option = {
+      title: {
+        text: 'Tipo de ação',
+        left: 'center',
+        top: '2%',
+        textStyle: {
+          fontSize: 16,
+          fontWeight: 'bold'
+        }
+      },
       tooltip: {
         trigger: 'item'
       },
       legend: {
-        top: '5%',
-        center: 'center'
+        orient: 'vertical', // legenda em coluna
+        right: '5%', // fixa na direita
+        top: 'middle',
       },
       series: [{
         name: 'Tipo de Ação',
         type: 'pie',
         radius: ['40%', '70%'],
-        center: ['50%', '60%'],
+        center: ['30%', '60%'],
         startAngle: 180,
         endAngle: 360,
         data: pieData,
@@ -249,18 +259,28 @@
     });
 
     var option = {
+      title: {
+        text: 'Tipo de modalidade',
+        left: 'center',
+        top: '2%',
+        textStyle: {
+          fontSize: 16,
+          fontWeight: 'bold'
+        }
+      },
       tooltip: {
         trigger: 'item'
       },
       legend: {
-        top: '5%',
-        center: 'center'
+        orient: 'vertical', // legenda em coluna
+        right: '5%', // fixa na direita
+        top: 'middle',
       },
       series: [{
         name: 'Tipo de Ação',
         type: 'pie',
         radius: ['40%', '70%'],
-        center: ['50%', '60%'],
+        center: ['30%', '60%'],
         startAngle: 180,
         endAngle: 360,
         data: pieData,

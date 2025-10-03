@@ -7,6 +7,7 @@ use App\Models\Forms\Activitys;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
 use App\Models\Parameters\Courses;
+use App\Models\Parameters\Parameters;
 use App\Models\Parameters\Projects;
 use App\Repositories\Course\CourseRepository;
 use App\Repositories\Forms\Response\ResponseRepository;
@@ -63,49 +64,37 @@ class DashboardController extends Controller
                 "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, null)->count()
             ],
             [
-                "title" => "Total de cursos",
+                "title" => "Total de Centros/Departamentos",
                 "description" => "Quantidade de cursos com trabalhos.",
                 "value" => $this->coursesRepository->getByFilter($filter_status)->count()
             ],
         ];
 
+        $modalidades = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->get();
+        $tipos = Parameters::where(['function' => 'TIPO', 'status' => 1])->get();
+
         $cards_acao = [
             [
                 "title" => "Quantidade por tipo de ações.",
-                "cards" => [
-                    [
-                        "title" => "Projeto",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, "Projeto", null)->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Projeto', null)->count()
-                    ],
-                    [
-                        "title" => "Programa",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, "Programa", null)->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Programa', null)->count()
-                    ]
-                ]
             ],
             [
                 "title" => "Quantidade por modalidade de ações.",
-                "cards" => [
-                    [
-                        "title" => "UFCA Itinerante",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, "UFCA Itinerante")->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'UFCA Itinerante')->count()
-                    ],
-                    [
-                        "title" => "PROPE",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, "PROPE")->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'PROPE')->count()
-                    ],
-                    [
-                        "title" => "Ampla Concorrência",
-                        "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, "Ampla Concorrência")->count(),
-                        // 'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'Ampla Concorrência')->count()
-                    ]
-                ]
             ],
         ];
+
+        foreach ($tipos as $key => $tipo) {
+            $cards_acao[0]["cards"][$key] = [
+                "title" => $tipo->value,
+                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, $tipo->value, null)->count(),
+            ];
+        }
+
+        foreach ($modalidades as $key => $modalidade) {
+            $cards_acao[1]["cards"][$key] = [
+                "title" => $modalidade->value,
+                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, $modalidade->value)->count(),
+            ];
+        }
 
         $query = $this->projectsRepository->getByFilter(
             $filter_year,
@@ -154,9 +143,9 @@ class DashboardController extends Controller
             'activitys.longitude',
             DB::raw('count(*) as total')
         )
-        ->groupBy('activitys.address', 'activitys.latitude', 'activitys.longitude', 'activitys.response_forms_id')
-        ->get();
-    
+            ->groupBy('activitys.address', 'activitys.latitude', 'activitys.longitude', 'activitys.response_forms_id')
+            ->get();
+
         $markers = $data->map(function ($item) {
             return [
                 'lat' => $item->latitude,
@@ -166,7 +155,7 @@ class DashboardController extends Controller
                 'title' => Projects::find(FormsResponse::find($item->response_forms_id)->project_id)->title,
             ];
         });
-        
+
         $this->data['markers'] = $markers;
 
         return view('pages.dashboard.index', $this->data);

@@ -7,6 +7,7 @@ use App\Models\Forms\Activitys;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
 use App\Models\Parameters\Courses;
+use App\Models\Parameters\Parameters;
 use App\Models\Parameters\Projects;
 use App\Repositories\Course\CourseRepository;
 use App\Repositories\Forms\Response\ResponseRepository;
@@ -59,52 +60,47 @@ class PublicController extends Controller
             [
                 "title" => "Total de trabalhos",
                 "description" => "Quantidade total de trabalhos cadastrados.",
-                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status)->count()
+                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, null)->count()
             ],
             [
-                "title" => "Total de cursos",
+                "title" => "Total de Centros/Departamentos",
                 "description" => "Quantidade de cursos com trabalhos.",
                 "value" => $this->coursesRepository->getByFilter($filter_status)->count()
             ],
         ];
 
+        $modalidades = Parameters::where(['function' => 'MODALIDADE', 'status' => 1])->get();
+        $tipos = Parameters::where(['function' => 'TIPO', 'status' => 1])->get();
+
         $cards_acao = [
             [
                 "title" => "Quantidade por tipo de ações.",
-                "cards" => [
-                    [
-                        "title" => "Projeto",
-                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Projeto', null)->count()
-                    ],
-                    [
-                        "title" => "Programa",
-                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, 'Programa', null)->count()
-                    ]
-                ]
             ],
             [
                 "title" => "Quantidade por modalidade de ações.",
-                "cards" => [
-                    [
-                        "title" => "UFCA Itinerante",
-                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'UFCA Itinerante')->count()
-                    ],
-                    [
-                        "title" => "PROPE",
-                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'PROPE')->count()
-                    ],
-                    [
-                        "title" => "Ampla Concorrência",
-                        'value' => $this->responseRepository->getByFilter($filter_year, $filter_form, $filter_course, $filter_status, null, 'Ampla Concorrência')->count()
-                    ]
-                ]
             ],
         ];
+
+        foreach ($tipos as $key => $tipo) {
+            $cards_acao[0]["cards"][$key] = [
+                "title" => $tipo->value,
+                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, $tipo->value, null)->count(),
+            ];
+        }
+
+        foreach ($modalidades as $key => $modalidade) {
+            $cards_acao[1]["cards"][$key] = [
+                "title" => $modalidade->value,
+                "value" => $this->projectsRepository->getByFilter($filter_year, $filter_course, $filter_status, null, $modalidade->value)->count(),
+            ];
+        }
 
         $query = $this->projectsRepository->getByFilter(
             $filter_year,
             null,
             $filter_status,
+            null,
+            null
         );
 
         $ranking_course = $query->selectRaw('projects.course, courses.name as course_name, COUNT(projects.id) as total')
@@ -117,7 +113,9 @@ class PublicController extends Controller
         $query_two = $this->projectsRepository->getByFilter(
             null,
             $filter_course,
-            $filter_status
+            $filter_status,
+            null,
+            null
         );
 
         $ranking_projects = $query_two->get()->groupBy(function ($item) {
