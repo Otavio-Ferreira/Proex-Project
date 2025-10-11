@@ -75,7 +75,7 @@
                 'class' => 'mb-3',
                 'name' => 'qtd_internal_audience',
                 'required' => 'true',
-                'placeholder' => 'Digite o seu nome',
+                'placeholder' => 'Digite o total',
                 'value' => isset($response->qtd_internal_audience) ? $response->qtd_internal_audience : '',
             ])
             @include('components.form-elements.input.input', [
@@ -84,7 +84,7 @@
                 'class' => 'mb-3',
                 'name' => 'qtd_external_audience',
                 'required' => 'true',
-                'placeholder' => 'Digite o seu nome',
+                'placeholder' => 'Digite o total',
                 'value' => isset($response->qtd_external_audience) ? $response->qtd_external_audience : '',
             ])
 

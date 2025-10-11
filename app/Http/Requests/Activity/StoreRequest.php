@@ -28,7 +28,8 @@ class StoreRequest extends FormRequest
             'address' => 'required|string',
             'latitude' => 'required|string',
             'longitude' => 'required|string',
-            'place_id' => 'required|string'
+            'place_id' => 'required|string',
+            'addressChose' => 'nullable|string'
         ];
     }
 
@@ -44,7 +45,8 @@ class StoreRequest extends FormRequest
             "longitude.required" => "É necessário inserir um endereço",
             "longitude.string" => "O campo endereço precisa ser um texto.",
             "place_id.required" => "É necessário inserir um endereço",
-            "place_id.string" => "O campo endereço precisa ser um texto."
+            "place_id.string" => "O campo endereço precisa ser um texto.",
+            "addressChose.string" => "O campo nome do local deve ser um texto."
         ];
     }
 }

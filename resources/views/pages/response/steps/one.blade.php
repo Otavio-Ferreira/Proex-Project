@@ -83,11 +83,25 @@
                   'placeholder' => 'Digite uma atividade',
               ])
               <div class="mb-3">
-                <label class="form-label required">Digite o local ou procure no mapa</label>
-                <div class="d-flex gap-2">
+                <div class="d-flex justify-content-between">
+                  <label class="form-label required">
+                    Digite o local ou procure no mapa
+                  </label>
+                  <a class="text-decoration-none" onclick="chose()" href="#">
+                    Não encontrou seu local?
+                  </a>
+                </div>
+                <div class="gap-2" id="div-select-local">
                   <select class="form-select" id="select-local" id="address" name="address" required>
                     <option value="" selected>Pesquisar</option>
                   </select>
+                </div>
+                <div class="d-none" id="div-chose">
+                  <input type="text" class="form-control" id="input-local" name="addressChose"
+                    placeholder="Digite o nome do local">
+                  <p class="text-red">
+                    Selecione no mapa o local onde foi realizado.
+                  </p>
                 </div>
               </div>
               <div id="map"></div>
@@ -168,6 +182,7 @@
   <script src="{{ asset('assets/libs/tom-select/dist/js/tom-select.base.min.js') }}" defer></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      const cearaViewbox = "-41.4,-2.7,-37.2,-7.8";
       var map = L.map('map').setView([-7.2287, -39.3126], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
       var marker;
@@ -191,7 +206,7 @@
         preload: false,
         load: function(query, callback) {
           if (!query.length) return callback();
-          fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+          fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=${cearaViewbox}`)
             .then(res => res.json())
             .then(json => {
               json.forEach(item => item.display_name = resumirNome(item.display_name));
@@ -263,5 +278,27 @@
         return nomeCompleto.trim();
       }
     });
+  </script>
+  <script>
+    var set = 0
+
+    function chose() {
+      var div = document.getElementById('div-chose')
+      var input = document.getElementById('input-local')
+      var select = document.getElementById('div-select-local')
+
+      if (set == 0) {
+        div.classList.remove('d-none')
+        select.classList.add('d-none')
+        input.setAttribute('required', '')
+        set = 1
+      } else {
+        div.classList.add('d-none')
+        select.classList.remove('d-none')
+        input.removeAttribute('required')
+        input.value = null
+        set = 0
+      }
+    }
   </script>
 @endsection
