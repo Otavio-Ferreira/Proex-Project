@@ -78,7 +78,7 @@
             textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
             <x-slot:content>
               @include('components.form-elements.input.input', [
-                  'title' => 'Ação que se articula ao programa de extensão',
+                  'title' => 'Ação que se articula ao '. strtolower($response->project->type).' de extensão',
                   'type' => 'text',
                   'class' => 'mb-3',
                   'name' => 'title_action',

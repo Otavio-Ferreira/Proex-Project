@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Forms\Activitys;
 use App\Models\Forms\Forms;
 use App\Models\Forms\FormsResponse;
+use App\Models\Forms\Images;
 use App\Models\Parameters\Courses;
 use App\Models\Parameters\Parameters;
 use App\Models\Parameters\Projects;
@@ -179,10 +180,12 @@ class PublicController extends Controller
                 'address' => $item->address,
                 'total' => $item->total,
                 'title' => Projects::find(FormsResponse::find($item->response_forms_id)->project_id)->title,
+                'id' => Projects::find(FormsResponse::find($item->response_forms_id)->project_id)->id,
             ];
         });
 
         $this->data['markers'] = $markers;
+        $this->data['projects'] = Projects::whereIn('status', [1,2])->get();
 
         return view('templates.map', $this->data);
     }

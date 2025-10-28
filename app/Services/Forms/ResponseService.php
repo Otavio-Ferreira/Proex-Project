@@ -4,6 +4,7 @@ namespace App\Services\Forms;
 
 use App\Models\Forms\Comments;
 use App\Models\Forms\FormsResponse;
+use App\Models\Parameters\Projects;
 use App\Repositories\Forms\Form\FormRepository;
 use App\Repositories\Forms\Response\ResponseRepository;
 
@@ -58,6 +59,17 @@ class ResponseService
                         "comment" => $request->comment
                     ]);
                 }
+            }
+
+            if($request->status == 4 && $request->has('finished')){
+                $project = Projects::find($form_response->project_id);
+                if($request->finished == 1){
+                    $project->status = 2;
+                }
+                else{
+                    $project->status = 1;
+                }
+                $project->save();
             }
 
             return redirect()->back()->with("toast_success", "Avaliação enviada com sucesso.");

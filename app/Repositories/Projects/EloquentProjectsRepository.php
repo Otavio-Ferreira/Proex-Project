@@ -115,19 +115,19 @@ class EloquentProjectsRepository implements ProjectsRepository
         $query = Projects::query();
 
         if (isset($filter_year)) {
-            $query->whereYear('start_date', $filter_year);
+            $query->whereYear('projects.start_date', $filter_year);
         }
         if (isset($filter_course)) {
-            $query->where('course', $filter_course);
+            $query->where('projects.course', $filter_course);
         }
         if (isset($filter_status)) {
-            $query->where('status', $filter_status);
+            $query->where('projects.status', $filter_status);
         }
         if (isset($type)) {
-            $query->where('type', $type);
+            $query->where('projects.type', $type);
         }
         if (isset($modality)) {
-            $query->where('modality', $modality);
+            $query->where('projects.modality', $modality);
         }
         return $query;
     }

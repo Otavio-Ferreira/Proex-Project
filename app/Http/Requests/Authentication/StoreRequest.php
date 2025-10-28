@@ -4,7 +4,7 @@ namespace App\Http\Requests\Authentication;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FillRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,12 @@ class FillRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|string",
+            "password" => "required|string",
             "email" => [
                 "required",
                 "email",
                 "regex:/^[a-zA-Z0-9._%+-]+@ufca\.edu\.br$/",
-                // "unique:users,email",
+                "exists:users,email",
             ]
         ];
     }
@@ -37,15 +37,13 @@ class FillRequest extends FormRequest
     public function messages()
     {
         return [
-            "name.required" => "O nome é obrigatório.",
-            "name.string" => "O nome deve ser um texto.",
-            "name.min" => "O nome deve ter pelo menos 3 caracteres.",
-            "name.max" => "O nome não pode ultrapassar 255 caracteres.",
+            "password.required" => "A senha é obrigatória.",
+            "password.string" => "A senha deve ser válida.",
 
             "email.required" => "O e-mail é obrigatório.",
             "email.email" => "Insira um e-mail válido.",
             "email.regex" => "O e-mail deve pertencer ao domínio @ufca.edu.br.",
-            // "email.unique" => "Este e-mail já está cadastrado.",
+            "email.exists" => "Este e-mail é inválido.",
         ];
     }
 }

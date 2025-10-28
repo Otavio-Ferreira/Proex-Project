@@ -17,7 +17,7 @@
           </h2>
         </div>
         <div class="d-flex align-items-center col-sm-12 col-md-auto">
-            <a href="{{ route('forms.show', $response->forms_id) }}" class="btn btn-cyan">Voltar</a>
+          <a href="{{ route('forms.show', $response->forms_id) }}" class="btn btn-cyan">Voltar</a>
         </div>
       </div>
     </div>
@@ -311,6 +311,22 @@
                   </option>
                 </x-slot:options>
               </x-form-elements.select.select>
+              <div id="finished" style="display: none;">
+                <x-form-elements.select.select title="Finalizar ação?" id="action" name="finished">
+                  <x-slot:options>
+                    <option value="" selected disabled>Selecione</option>
+                    <option value="1">
+                      Sim</option>
+                    <option value="0">
+                      Não
+                    </option>
+                  </x-slot:options>
+                </x-form-elements.select.select>
+                <p class="m-0"><strong class="text-red">Ano do início da ação:
+                  </strong>{{ date('Y', strtotime($response->project->start_date)) }}</p>
+                <p class="m-0"><strong class="text-red">Ano do fim da ação:
+                  </strong>{{ date('Y', strtotime($response->project->end_date)) }}</p>
+              </div>
               <div id="comment" style="display: none;">
                 @include('components.form-elements.textarea.textarea', [
                     'title' => 'Comentário',
@@ -335,15 +351,26 @@
 @endsection
 @section('scripts')
   <script>
+    var inputAction = document.getElementById('action');
+    inputAction.removeAttribute('required');
+
     document.getElementById('role').addEventListener('change', function() {
       var commentDiv = document.getElementById('comment');
       var roleValue = this.value;
       var textarea = document.getElementById('input_comment');
 
+      var finishedDiv = document.getElementById('finished');
+
       if (roleValue == '2') {
         commentDiv.style.display = 'block';
         textarea.setAttribute('required', 'true');
+
+        finishedDiv.style.display = 'none';
+        inputAction.removeAttribute('required');
       } else {
+        inputAction.setAttribute('required', 'true');
+        finishedDiv.style.display = 'block';
+
         commentDiv.style.display = 'none';
         textarea.removeAttribute('required');
       }
@@ -352,6 +379,10 @@
     if (document.getElementById('role').value == '2') {
       document.getElementById('comment').style.display = 'block';
       document.getElementById('input_comment').setAttribute('required', 'true');
+    }
+    else{
+        document.getElementById('finished').style.display = 'block';
+        document.getElementById('action').setAttribute('required', 'true');
     }
   </script>
 @endsection

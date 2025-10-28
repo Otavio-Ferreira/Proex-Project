@@ -40,7 +40,7 @@ class EloquentUsersRepository implements UsersRepository
                 "name" => $request->name,
                 "email" => $request->email,
                 "status" => 0,
-                "active_role" => $request->role[0]
+                "active_role" => $request->role[0] ?? 'Visitante'
             ]);
             return $user;
         });
@@ -73,5 +73,9 @@ class EloquentUsersRepository implements UsersRepository
         ]);
         
         return $user;
+    }
+
+    public function getByEmail($email){
+        return User::where('email', $email)->first();
     }
 }

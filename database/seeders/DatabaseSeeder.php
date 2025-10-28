@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
 
         $user = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@ufca.edu.br',
             'status' => 1,
             'active_role' => "Desenvolvimento"
         ]);

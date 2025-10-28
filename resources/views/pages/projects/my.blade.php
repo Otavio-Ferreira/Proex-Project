@@ -52,9 +52,9 @@
                     {{ date('d/m/Y', strtotime($project->end_date)) }}
                   </td>
                   <td>
-                    <x-badge.badge class="{{ $project->status == 1 ? 'bg-success' : 'bg-danger' }}">
+                    <x-badge.badge class="{{ $project->status == 1 ? 'bg-success' : ($project->status == 2 ? 'bg-primary' : 'bg-danger') }}">
                       <x-slot:content>
-                        {{ $project->status == 1 ? 'Ativo' : 'Inativo' }}
+                        {{ $project->status == 1 ? 'Ativo' : ($project->status == 2 ? 'Finalizado' : 'Inativo') }}
                       </x-slot:content>
                     </x-badge.badge>
                   </td>

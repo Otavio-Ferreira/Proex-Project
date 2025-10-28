@@ -10,6 +10,7 @@ use App\Http\Middleware\Autenticator;
 use App\Http\Requests\Authentication\FillRequest;
 use App\Http\Requests\Authentication\ResetRequest;
 use App\Http\Requests\Authentication\SendRequest;
+use App\Http\Requests\Authentication\StoreRequest;
 use App\Models\Authentication\Tokens;
 use App\Models\User;
 use App\Repositories\Authentication\LoginRepository;
@@ -42,7 +43,7 @@ class LoginController extends Controller
         return view('pages.authentication.index');
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
 
         $credentials = $request->only(['email', 'password']);
@@ -131,21 +132,38 @@ class LoginController extends Controller
 
     public function fill(FillRequest $request)
     {
-
         try {
-            $user = $this->usersRepository->set($request);
-            $user->assignRole("Visitante");
-            $data = $this->loginRepository->createToken($user, "first_access");
+            $valideUser = $this->usersRepository->getByEmail($request->email);
 
-            $mail = new AutenticatorEmailToSetPassword(
-                $data['name'],
-                $data['email'],
-                $data['time'],
-                $data['token'],
-                $data['title']
-            );
+            if ($valideUser) {
+                if ($valideUser->status == 2) {
+                    $data = $this->loginRepository->createToken($valideUser, "first_access");
+                    $mail = new AutenticatorEmailToSetPassword(
+                        $data['name'],
+                        $data['email'],
+                        $data['time'],
+                        $data['token'],
+                        $data['title']
+                    );
 
-            Mail::to($user)->send($mail);
+                    Mail::to($valideUser)->send($mail);
+                } else {
+                    return redirect()->back()->with("toast_error", "Insira um e-mail válido.");
+                }
+            } else {
+                $user = $this->usersRepository->set($request);
+                $user->assignRole("Visitante");
+                $data = $this->loginRepository->createToken($user, "first_access");
+                $mail = new AutenticatorEmailToSetPassword(
+                    $data['name'],
+                    $data['email'],
+                    $data['time'],
+                    $data['token'],
+                    $data['title']
+                );
+
+                Mail::to($user)->send($mail);
+            }
 
             return to_route('page.success')->with("message", "Cadastro feito com sucesso, verifique sua caixa de email.");
         } catch (\Throwable $th) {

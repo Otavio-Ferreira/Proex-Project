@@ -4,6 +4,7 @@ use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Data\CourseController;
 use App\Http\Controllers\Data\ProjectsController;
 use App\Http\Controllers\Reports\FormReportController;
+use App\Http\Controllers\Settings\LogsController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
@@ -172,6 +173,10 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::get('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::post('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
     });
+
+    Route::get('logs/', [LogsController::class, 'index'])->name('logs.index');
+
+
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
     Route::get('perfil', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('perfil', [ProfileController::class, 'store'])->name('profile.store');

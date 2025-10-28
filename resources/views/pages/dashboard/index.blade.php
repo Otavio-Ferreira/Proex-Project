@@ -126,6 +126,7 @@
           </form>
         </div>
       </div>
+      
       <div class="col-12">
         <div class="row">
           @foreach ($cards as $item)
@@ -145,7 +146,8 @@
           @endforeach
         </div>
       </div>
-      <div class="col-12 row">
+
+      <div class="col-12 row m-0 p-0">
         <h3 class="text-muted mb-2">Quantidade de projetos por tipo de ações e modalidades</h3>
         <div class="col-6">
           <div id="chart-container" class="w-100 card" data-value='@json($cards_acao[0]['cards'])'></div>
@@ -160,13 +162,14 @@
         <div id="chart-container4" class="w-100 card" data-value='{{ $ranking_projects }}'></div>
       </div>
 
-      <div class="col-12 mt-2">
+      <div class="col-12">
         <h3 class="text-muted mb-2">Ranking de projetos por cursos</h3>
         <div class="">
           <div id="chart-container3" class="w-100 card" data-value='{{ $ranking_course }}'></div>
         </div>
       </div>
-      <div class="col-12 mt-2">
+      
+      <div class="col-12">
         <h3 class="text-muted mb-2">Mapa da extensão</h3>
         <div>
           <div id="map" class="w-100 card"></div>
@@ -269,12 +272,27 @@
         }
       },
       tooltip: {
-        trigger: 'item'
+        trigger: 'item',
+        formatter: '{b}: {c}' // mostra nome completo e valor ao passar o mouse sobre o gráfico
       },
       legend: {
-        orient: 'vertical', // legenda em coluna
-        right: '5%', // fixa na direita
+        orient: 'vertical',
+        right: '5%',
         top: 'middle',
+
+        // aqui fazemos o "corte" dos nomes grandes
+        formatter: function(name) {
+          const maxLength = 15; // número máximo de caracteres antes de cortar
+          return name.length > maxLength ? name.substring(0, maxLength) + '…' : name;
+        },
+
+        // adiciona um tooltip HTML com o nome completo
+        tooltip: {
+          show: true,
+          formatter: function(params) {
+            return params.name; // mostra o nome completo da legenda
+          }
+        }
       },
       series: [{
         name: 'Tipo de Ação',
@@ -286,9 +304,9 @@
         data: pieData,
         label: {
           show: true,
-          position: 'inside', // ou 'outside' se preferir fora da barra
-          formatter: '{c}' // mostra apenas o valor (ex: 23)
-        },
+          position: 'inside',
+          formatter: '{c}'
+        }
       }]
     };
 
@@ -329,7 +347,7 @@
         },
         xAxis: {
           type: 'value',
-          interval: 3,
+          interval: 10,
           min: 0,
           max: Math.ceil(Math.max(...sortedValues) / 10) * 10,
           axisLabel: {
@@ -369,7 +387,7 @@
       const dataProjects = JSON.parse(document.getElementById('chart-container4').dataset.value);
       const anos = dataProjects.map(item => item.ano);
       const totais = dataProjects.map(item => item.total);
-
+      const max = Math.ceil(Math.max(...totais) / 10) * 10;
       const chart2 = echarts.init(document.getElementById('chart-container4'));
       chart2.setOption({
         tooltip: {
@@ -381,8 +399,8 @@
         },
         yAxis: {
           type: 'value',
-          interval: 5,
-          max: Math.ceil(Math.max(...totais) / 10) * 10,
+          interval: (max/5).toInt,
+          max: max,
         },
         series: [{
           name: 'Total',

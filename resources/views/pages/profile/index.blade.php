@@ -68,7 +68,7 @@
                 <option value="" selected disabled>Selecione</option>
                 @foreach ($base_courses as $base_course)
                   <option value="{{ $base_course->id }}"
-                    {{ isset($person->coordinator_course) ? ($person->coordinator_course == $base_course->name ? 'selected' : '') : '' }}>
+                    {{ isset($person->coordinator_course) ? ($person->coordinator_course == $base_course->id ? 'selected' : '') : '' }}>
                     {{ $base_course->name }}</option>
                 @endforeach
               </select>

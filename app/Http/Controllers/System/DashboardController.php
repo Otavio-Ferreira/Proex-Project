@@ -105,7 +105,7 @@ class DashboardController extends Controller
         );
 
         $ranking_course = $query->selectRaw('projects.course, courses.name as course_name, COUNT(projects.id) as total')
-            // ->join('projects', 'forms_responses.project_id', '=', 'projects.id')
+            //->join('projects', 'forms_responses.project_id', '=', 'projects.id')
             ->join('courses', 'projects.course', '=', 'courses.id')
             ->groupBy('projects.course', 'courses.name')
             ->orderByDesc('total')

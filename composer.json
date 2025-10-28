@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "realrashid/sweet-alert": "^7.2",
+        "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.10"
     },
     "require-dev": {

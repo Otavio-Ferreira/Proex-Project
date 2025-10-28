@@ -11,5 +11,7 @@ interface UsersRepository{
 
     public function delete($id) : void;
 
+    public function getByEmail($email);
+
     public function setForce($name, $siape, $email, $course);
 }
