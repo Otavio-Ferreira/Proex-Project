@@ -99,3 +99,11 @@
 @endsection
 @section('scripts')
 @endsection
+{
+    "attributes": {
+        "name": "JOSE GLADSTONE ALMEIDA JUNIOR",
+        "email": "jose.gladstone@ufca.edu.br",
+        "status": 2,
+        "active_role": null
+    }
+}

@@ -12,21 +12,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FormsResponse extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, LogsActivity;
 
     protected $fillable = [
         'forms_id',
         'user_id',
         'project_id',
-        // 'type_action',
-        // 'action_modality',
-        // 'cordinator_name',
-        // 'cordinator_profile',
-        // 'cordinator_siape',
-        // 'coordinator_course',
         'qtd_internal_audience',
         'qtd_external_audience',
         'advances_extensionist_action',
@@ -88,5 +84,14 @@ class FormsResponse extends Model
     public function form()
     {
         return $this->belongsTo(Forms::class, 'forms_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['forms_id', 'user_id', 'project_id', 'qtd_internal_audience', 'qtd_external_audience', 'advances_extensionist_action', 'social_technology_development', 'instrument_avaliation', 'was_finished'])
+            ->useLogName('form_response_params')
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

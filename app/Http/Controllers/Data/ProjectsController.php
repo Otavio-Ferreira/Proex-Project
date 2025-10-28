@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class ProjectsController extends Controller
 {
@@ -240,6 +241,15 @@ class ProjectsController extends Controller
 
             if (!empty($projectsToInsert)) {
                 DB::table('projects')->insert($projectsToInsert);
+
+                $user = auth()->user();
+                $project = Projects::first();
+
+                activity()->causedBy($user)->performedOn($project)->event('imported')->withProperties([
+                    'attributes' => [
+                        'message' => 'Uma importação em lote de ' . count($projectsToInsert) . ' projetos foi realizada.',
+                    ]
+                ])->log('imported');
             }
 
             DB::commit();
@@ -296,7 +306,8 @@ class ProjectsController extends Controller
         return view('pages.projects.analysis', $this->data);
     }
 
-    public function destroy($uuid) {
+    public function destroy($uuid)
+    {
         try {
             $project = Projects::find($uuid);
             $project->delete();

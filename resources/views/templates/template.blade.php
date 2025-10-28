@@ -153,7 +153,7 @@
                       Auth::user()?->activeRoleHasPermission('adicionar_grupo'))
 
                 <x-navbar.navbar-item route="" title="Configurações"
-                  isActive="{{ request()->routeIs(['users.*', 'roles.*', 'permissions.*']) ? true : false }}"
+                  isActive="{{ request()->routeIs(['users.*', 'roles.*', 'permissions.*', 'logs.*']) ? true : false }}"
                   icon="ti-settings">
                   <x-slot:links>
                     {{-- @can('adicionar_usuário') --}}

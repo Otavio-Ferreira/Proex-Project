@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Projects extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes, LogsActivity;
     
     protected $fillable = ['title', 'type', 'modality', 'course', 'coordinator', 'start_date', 'end_date', 'status', 'id_atividade', 'id_projeto', 'year', 'thematic_area', 'type_submit', 'id_submit'];
 
@@ -27,5 +29,14 @@ class Projects extends Model
 
     public function responses():HasMany{
         return $this->HasMany(FormsResponse::class, 'project_id', 'id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'type', 'modality', 'course', 'coordinator', 'start_date', 'end_date', 'status', 'id_atividade', 'id_projeto', 'year', 'thematic_area', 'type_submit', 'id_submit'])
+            ->useLogName('project_params')
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

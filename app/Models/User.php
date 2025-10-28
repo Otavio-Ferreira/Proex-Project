@@ -35,7 +35,15 @@ class User extends Authenticatable
     ];
     protected $primaryKey = 'id';
 
-    /**
+    /**public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['email', 'name', 'status', 'active_role'])
+            ->useLogName('user_params')
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
@@ -70,16 +78,6 @@ class User extends Authenticatable
 
         return $role ? $role->hasPermissionTo($permission) : false;
     }
-
-    // protected static function booted()
-    // {
-    //     static::creating(function ($user) {
-            
-    //         if (empty($user->int_id)) {
-    //             $user->int_id = (self::max('int_id') ?? 0) + 1;
-    //         }
-    //     });
-    // }
 
     public function getActivitylogOptions(): LogOptions
     {
