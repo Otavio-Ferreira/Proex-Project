@@ -13,6 +13,7 @@ class EloquentExternalPartnerRepository implements ExternalPartnerRepository
             "name_partner" => $request->name_partner,
             "institution_type" => $request->institution_type,
             "partnership_type" => $request->partnership_type,
+            "its_international" => $request->its_international,
         ]);
 
         return $external_partner;
@@ -24,6 +25,7 @@ class EloquentExternalPartnerRepository implements ExternalPartnerRepository
         $external_partner->name_partner = $request->name_partner;
         $external_partner->institution_type = $request->institution_type;
         $external_partner->partnership_type = $request->partnership_type;
+        $external_partner->its_international = $request->its_international;
         $external_partner->save();
         
         return $external_partner;

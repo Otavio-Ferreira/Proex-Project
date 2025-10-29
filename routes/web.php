@@ -174,7 +174,9 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::post('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
     });
 
-    Route::get('logs/', [LogsController::class, 'index'])->name('logs.index');
+    Route::group(['middleware' => ['auth', 'permission:ver_logs']], function () {
+        Route::get('logs/', [LogsController::class, 'index'])->name('logs.index');
+    });
 
 
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');

@@ -165,8 +165,10 @@
                     @if (Auth::user()?->activeRoleHasPermission('adicionar_grupo'))
                       <a class="dropdown-item" href="{{ route('roles.index') }}">Grupos</a>
                     @endif
+                    @if (Auth::user()?->activeRoleHasPermission('ver_logs'))
+                      <a class="dropdown-item" href="{{ route('logs.index') }}">Logs</a>
+                    @endif
                     {{-- @endcan --}}
-                    <a class="dropdown-item" href="{{ route('logs.index') }}">Logs</a>
                   </x-slot:links>
                 </x-navbar.navbar-item>
               @endif

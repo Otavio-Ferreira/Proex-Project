@@ -38,7 +38,8 @@ class DatabaseSeeder extends Seeder
             "6" => "responder_formulário",
             "7" => "adicionar_formulário",
             "8" => "ver_respostas",
-            "9" => "ver_seus_projetos"
+            "9" => "ver_seus_projetos",
+            "10" => "ver_logs",
         ];
 
         foreach ($permissions as $permission) {
@@ -59,6 +60,7 @@ class DatabaseSeeder extends Seeder
                 "permissions" => [
                     "adicionar_grupo",
                     "adicionar_usuário",
+                    "ver_logs",
                     // "ver_dashboard",
                     // "adicionar_cursos",
                     // "adicionar_projetos",

@@ -169,7 +169,9 @@
           <div class="d-flex w-100 justify-content-between mt-3">
             @if (isset($response))
               @if ($response->activitys->count() > 0)
-                <a href="{{ route('forms.advance', [$response->id, 2]) }}" class="btn btn-info ms-auto">Avançar</a>
+                <a href="{{ route('forms.advance', [$response->id, 2]) }}" class="btn btn-outline-info ms-auto">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
               @endif
             @endif
           </div>
@@ -206,7 +208,9 @@
         preload: false,
         load: function(query, callback) {
           if (!query.length) return callback();
-          fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=${cearaViewbox}`)
+          fetch(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=${cearaViewbox}`
+              )
             .then(res => res.json())
             .then(json => {
               json.forEach(item => item.display_name = resumirNome(item.display_name));

@@ -171,7 +171,7 @@
         </tr>
         <tr>
           @if (in_array('external_partners', $fields))
-            <th width="20%" style="text-align: left;">Parceiros internos</th>
+            <th width="20%" style="text-align: left;">Parceiros externos</th>
             <td width="80%" colspan="5" style="padding: 5px">
               <ul style="margin: 0%;">
                 @if (isset($response->external_partners))
@@ -181,6 +181,8 @@
                       <strong> Tipo de instituição: </strong> {{ $external_partner->institution_type }}
                     </li>
                     <strong> Tipo de parceria: </strong> {{ $external_partner->partnership_type }}</li>
+                    <strong> Parceria internacional? </strong>
+                    {{ $external_partner->its_international == 1 ? 'Sim' : 'Não' }}</li>
                   @endforeach
                 @else
                   Não informado
@@ -201,7 +203,7 @@
                       <strong> Escolas Públicas? </strong>
                       {{ $extension_action->its_for_public_schools ? 'Sim' : 'Não' }}
                     </li>
-                    <strong> Descrição: </strong> {{ $extension_action->international_description }}</li>
+                    {{-- <strong> Descrição: </strong> {{ $extension_action->international_description }}</li> --}}
                   @endforeach
                 @else
                   Não informado
@@ -264,13 +266,13 @@
           </tbody>
         </table>
       @else
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">Imagens não informadas</th>
-          </tr>
-        </thead>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th colspan="2">Imagens não informadas</th>
+            </tr>
+          </thead>
+        </table>
       @endif
     @endif
   @endforeach

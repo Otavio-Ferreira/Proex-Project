@@ -85,10 +85,11 @@
               <a href="{{ route('forms.return', [$response->id, 6]) }}" type="submit" class="btn btn-outline-info">
                 <i class="icon ti ti-chevron-left"></i>
                 Voltar</a>
+              <button type="submit" class="btn btn-green ms-auto">Salvar</button>
               @if (isset($response->social_technology_development))
-                <a href="{{ route('forms.advance', [$response->id, 8]) }}" class="btn btn-info ms-auto">Avançar</a>
-              @else
-                <button type="submit" class="btn btn-info ms-auto">Avançar</button>
+                <a href="{{ route('forms.advance', [$response->id, 8]) }}" class="btn btn-outline-info ms-2">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
               @endif
             </div>
           </form>

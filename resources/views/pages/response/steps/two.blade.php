@@ -92,10 +92,13 @@
               <a href="{{ route('forms.return', [$response->id, 1]) }}" type="submit" class="btn btn-outline-info">
                 <i class="icon ti ti-chevron-left"></i>
                 Voltar</a>
+              <button type="submit" class="btn btn-green ms-auto">Salvar</button>
+
               @if (isset($response->qtd_external_audience) && isset($response->qtd_internal_audience))
-                <a href="{{ route('forms.advance', [$response->id, 3]) }}" class="btn btn-info ms-auto">Avançar</a>
-              @else
-                <button type="submit" class="btn btn-info ms-auto">Avançar</button>
+                <a href="{{ route('forms.advance', [$response->id, 3]) }}" class="btn btn-outline-info ms-2">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i>
+                </a>
               @endif
             </div>
           </form>

@@ -171,6 +171,7 @@
                 <th>Nome do parceiro</th>
                 <th>Tipo de instituição</th>
                 <th>Tipo de parceria</th>
+                <th>Parceria internacional?</th>
               </x-slot:ths>
               <x-slot:trs>
                 @foreach ($response->external_partners as $externalPartner)
@@ -178,6 +179,7 @@
                     <td>{{ $externalPartner->name_partner }}</td>
                     <td>{{ $externalPartner->institution_type }}</td>
                     <td>{{ $externalPartner->partnership_type }}</td>
+                    <td>{{ $externalPartner->its_international == 1 ? 'Sim' : 'Não' }}</td>
                   </tr>
                 @endforeach
               </x-slot:trs>
@@ -196,14 +198,14 @@
               <x-slot:ths>
                 <th>Ação</th>
                 <th>Escolas públicas?</th>
-                <th>Descrição internacional</th>
+                {{-- <th>Descrição internacional</th> --}}
               </x-slot:ths>
               <x-slot:trs>
                 @foreach ($response->extension_actions as $extensionActions)
                   <tr>
                     <td>{{ $extensionActions->title_action }}</td>
                     <td>{{ $extensionActions->its_for_public_schools == 1 ? 'Sim' : 'Não' }}</td>
-                    <td>{{ $extensionActions->international_description }}</td>
+                    {{-- <td>{{ $extensionActions->international_description }}</td> --}}
                   </tr>
                 @endforeach
               </x-slot:trs>

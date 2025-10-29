@@ -12,7 +12,7 @@ class EloquentExtensionActionRepository implements ExtensionActionRepository
             "response_forms_id" => $response_id,
             "title_action" => $request->title_action,
             "its_for_public_schools" => $request->its_for_public_schools,
-            "international_description" => $request->international_description,
+            // "international_description" => $request->international_description,
         ]);
 
         return $extencion_action;
@@ -23,7 +23,7 @@ class EloquentExtensionActionRepository implements ExtensionActionRepository
 
         $extencion_action->title_action = $request->title_action;
         $extencion_action->its_for_public_schools = $request->its_for_public_schools;
-        $extencion_action->international_description = $request->international_description;
+        // $extencion_action->international_description = $request->international_description;
         $extencion_action->save();
         
         return $extencion_action;

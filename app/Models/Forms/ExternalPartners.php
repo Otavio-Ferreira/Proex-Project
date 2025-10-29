@@ -12,12 +12,12 @@ class ExternalPartners extends Model
 {
     use HasFactory, HasUuids, LogsActivity;
 
-    protected $fillable = ["response_forms_id", "name_partner", "institution_type", "partnership_type"];
+    protected $fillable = ["response_forms_id", "name_partner", "institution_type", "partnership_type", "its_international"];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(["response_forms_id", "name_partner", "institution_type", "partnership_type"])
+            ->logOnly(["response_forms_id", "name_partner", "institution_type", "partnership_type", "its_international"])
             ->useLogName('external_partners_params')
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

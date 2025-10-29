@@ -26,7 +26,8 @@ class StoreRequest extends FormRequest
         return [
             'name_partner' => 'required|string',
             'institution_type' => 'required|string|in:Movimento Social Organizado (MSO),Privado (PR),Público Municipal (PM),Público Estadual (PE),Público Federal (PF)',
-            'partnership_type' => 'required|string|in:Cooperação (CP),Convênio (CV),Contrato (CT),Não Oficial'
+            'partnership_type' => 'required|string|in:Cooperação (CP),Convênio (CV),Contrato (CT),Não Oficial',
+            'its_international' => 'required|in:0,1'
         ];
     }
 
@@ -43,6 +44,9 @@ class StoreRequest extends FormRequest
             "partnership_type.required" => "É necessário inserir um tipo de parceria.",
             "partnership_type.string" => "O campo tipo de parceria precisa ser um texto.",
             "partnership_type.in" => "O campo tipo de parceria precisa ser válido.",
+
+            "its_international.required" => "Responda se a parceria é internacional ou não.",
+            "its_international.in" => "Responda se a parceria é internacional ou não.",
         ];
     }
 }

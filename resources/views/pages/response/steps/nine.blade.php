@@ -244,7 +244,9 @@
               Voltar</a>
             @if (isset($response))
               @if ($response->images->count() >= 3)
-                <a href="{{ route('forms.advance', [$response->id, 10]) }}" class="btn btn-info">Avançar</a>
+                <a href="{{ route('forms.advance', [$response->id, 10]) }}" class="btn btn-outline-info ms-2">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
               @endif
             @endif
           </div>

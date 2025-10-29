@@ -105,6 +105,13 @@
                   <option value="Não Oficial">Não Oficial</option>
                 </x-slot:options>
               </x-form-elements.select.select>
+              <x-form-elements.select.select title="Parceria internacional?" id="role" name="its_international">
+                <x-slot:options>
+                  <option value="" selected disabled>Selecione</option>
+                  <option value="1">Sim</option>
+                  <option value="0">Não</option>
+                </x-slot:options>
+              </x-form-elements.select.select>
             </x-slot:content>
           </x-modal.modal>
 
@@ -120,6 +127,7 @@
                     <th>Nome do parceiro</th>
                     <th>Tipo de instituição</th>
                     <th>Tipo de parceria</th>
+                    <th>Parceria internacional?</th>
                     <th width="5%"></th>
                     <th width="5%"></th>
                   </x-slot:ths>
@@ -129,6 +137,7 @@
                         <td>{{ $externalPartner->name_partner }}</td>
                         <td>{{ $externalPartner->institution_type }}</td>
                         <td>{{ $externalPartner->partnership_type }}</td>
+                        <td>{{ $externalPartner->its_international == 1 ? 'Sim' : 'Não' }}</td>
                         <td>
                           <button class="btn btn-secondary" data-bs-toggle="modal"
                             data-bs-target="#modal-edit-externalPartner{{ $externalPartner->id }}"><i
@@ -185,6 +194,18 @@
                                     {{ $externalPartner->partnership_type == 'Não Oficial' ? 'selected' : '' }}>
                                     Não Oficial</option>
                                 </x-slot:options>
+
+                                <x-form-elements.select.select title="Parceria internacional?" id="role"
+                                  name="its_international">
+                                  <x-slot:options>
+                                    <option value="" selected disabled>Selecione</option>
+                                    <option value="1"
+                                      {{ $externalPartner->its_international == 1 ? 'selected' : '' }}>Sim</option>
+                                    <option value="0"
+                                      {{ $externalPartner->its_international == 0 ? 'selected' : '' }}>Não</option>
+                                  </x-slot:options>
+                                </x-form-elements.select.select>
+
                               </x-form-elements.select.select>
                             </x-slot:content>
                           </x-modal.modal>
@@ -222,9 +243,9 @@
               <i class="icon ti ti-chevron-left"></i>
               Voltar</a>
             @if (isset($response))
-              {{-- @if ($response->external_partners->count() > 0) --}}
-                <a href="{{ route('forms.advance', [$response->id, 6]) }}" class="btn btn-info ms-auto">Avançar</a>
-              {{-- @endif --}}
+              <a href="{{ route('forms.advance', [$response->id, 6]) }}" class="btn btn-outline-info">
+                Avançar
+                <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
             @endif
           </div>
         </div>
