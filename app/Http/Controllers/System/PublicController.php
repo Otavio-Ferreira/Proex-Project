@@ -184,8 +184,12 @@ class PublicController extends Controller
             ];
         });
 
+        $projects = $data->map(function($project){
+            return Projects::find(FormsResponse::find($project->response_forms_id)->project_id);
+        });
+
         $this->data['markers'] = $markers;
-        $this->data['projects'] = Projects::whereIn('status', [1,2])->get();
+        $this->data['projects'] = $projects;
 
         return view('templates.map', $this->data);
     }
