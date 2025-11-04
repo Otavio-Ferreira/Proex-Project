@@ -31,6 +31,8 @@ class StoreRequest extends FormRequest
             'place_id' => 'required|string',
             'date' => 'required|date',
             'description' => 'required|string',
+            'addressChose' => 'nullable|string',
+            "addressChose.string" => "O campo nome do local deve ser um texto."
         ];
     }
 

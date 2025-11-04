@@ -26,7 +26,7 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 
@@ -73,15 +73,17 @@
       <div class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step mb-3">
         <div class="card">
           <div class="card-body">
-            <form action="{{ route('images.store', $response->id) }}" method="post" class="row" enctype="multipart/form-data">
+            <form action="{{ route('images.store', $response->id) }}" method="post" class="row"
+              enctype="multipart/form-data">
               @csrf
               @include('components.form-elements.input.input', [
-                  'title' => 'Imagem',
+                  'title' => 'Imagem (Max: 2mb)',
                   'type' => 'file',
                   'class' => 'mb-3 col-12 col-md-6',
                   'name' => 'image',
                   'required' => 'true',
                   'accept' => 'jpeg, .jpg, .png',
+                  'id' => 'inputFile',
               ])
               @include('components.form-elements.input.input', [
                   'title' => 'Data',
@@ -100,11 +102,25 @@
                   'placeholder' => 'Digite a descrição da atividade',
               ])
               <div class="mb-3">
-                <label class="form-label">Digite o local ou procure no mapa</label>
-                <div class="d-flex gap-2">
+                <div class="d-flex justify-content-between">
+                  <label class="form-label required">
+                    Digite o local ou procure no mapa
+                  </label>
+                  <a class="text-decoration-none" onclick="chose()" href="#">
+                    Não encontrou seu local?
+                  </a>
+                </div>
+                <div class="gap-2" id="div-select-local">
                   <select class="form-select" id="select-local" id="address" name="address" required>
                     <option value="" selected>Pesquisar</option>
                   </select>
+                </div>
+                <div class="d-none" id="div-chose">
+                  <input type="text" class="form-control" id="input-local" name="addressChose"
+                    placeholder="Digite o nome do local">
+                  <p class="text-red mb-0">
+                    Selecione no mapa o local onde foi realizado.
+                  </p>
                 </div>
               </div>
               <div id="map"></div>
@@ -152,8 +168,9 @@
                             data-bs-target="#modal-edit-image{{ $image->id }}"><i class="ti ti-edit"></i></button>
                           <x-modal.modal route="{{ route('images.update', $image->id) }}"
                             id="modal-edit-image{{ $image->id }}" class="modal-dialog-centered"
-                            title="Editar atividade" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
-                            typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
+                            title="Editar atividade" typeBtnClose="button" classBtnClose="me-auto"
+                            textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary"
+                            textBtnSave="Salvar">
                             <x-slot:content>
                               @include('components.form-elements.input.input', [
                                   'title' => 'Imagem',
@@ -196,7 +213,8 @@
                         </td>
                         <td>
                           <button class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#modal-delete-image{{ $image->id }}"><i class="ti ti-trash"></i></button>
+                            data-bs-target="#modal-delete-image{{ $image->id }}"><i
+                              class="ti ti-trash"></i></button>
 
                           <x-modal.modal-alert route="{{ route('images.destroy', $image->id) }}"
                             id="modal-delete-image{{ $image->id }}" class="modal-dialog-centered modal-sm"
@@ -226,7 +244,9 @@
               Voltar</a>
             @if (isset($response))
               @if ($response->images->count() >= 3)
-                <a href="{{ route('forms.advance', [$response->id, 10]) }}" class="btn btn-info">Avançar</a>
+                <a href="{{ route('forms.advance', [$response->id, 10]) }}" class="btn btn-outline-info ms-2">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
               @endif
             @endif
           </div>
@@ -239,6 +259,7 @@
   <script src="{{ asset('assets/libs/tom-select/dist/js/tom-select.base.min.js') }}" defer></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
+      const cearaViewbox = "-41.4,-2.7,-37.2,-7.8";
       var map = L.map('map').setView([-7.2287, -39.3126], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
       var marker;
@@ -262,7 +283,9 @@
         preload: false,
         load: function(query, callback) {
           if (!query.length) return callback();
-          fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+          fetch(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=${cearaViewbox}`
+            )
             .then(res => res.json())
             .then(json => {
               json.forEach(item => item.display_name = resumirNome(item.display_name));
@@ -334,5 +357,43 @@
         return nomeCompleto.trim();
       }
     });
+  </script>
+  <script>
+    const fileInput = document.getElementById('inputFile');
+    fileInput.addEventListener('change', event => {
+      const files = fileInput.files;
+      const maxFileSizeInMB = 2;
+      const maxFileSizeInBytes = maxFileSizeInMB * 1024 * 1024;
+
+      for (const file of files) {
+        if (file.size > maxFileSizeInBytes) {
+          alert(`A imagem "${file.name}" é muito pesada. a imagem deve ter no máximo ${maxFileSizeInMB}MB.`);
+          event.target.value = null;
+          return;
+        }
+      }
+    });
+  </script>
+  <script>
+    var set = 0
+
+    function chose() {
+      var div = document.getElementById('div-chose')
+      var input = document.getElementById('input-local')
+      var select = document.getElementById('div-select-local')
+
+      if (set == 0) {
+        div.classList.remove('d-none')
+        select.classList.add('d-none')
+        input.setAttribute('required', '')
+        set = 1
+      } else {
+        div.classList.add('d-none')
+        select.classList.remove('d-none')
+        input.removeAttribute('required')
+        input.value = null
+        set = 0
+      }
+    }
   </script>
 @endsection

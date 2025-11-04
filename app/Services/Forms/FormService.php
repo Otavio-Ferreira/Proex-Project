@@ -22,13 +22,18 @@ class FormService
     {
         try {
             $form = $this->formRepository->set($request);
-            $active_projects = Projects::where('status', 1)->get();
-            foreach ($active_projects as $project) {
-                FormsResponse::create([
-                    'forms_id' => $form->id,
-                    'user_id' => $project->coordinator,
-                    'project_id' => $project->id,
-                ]);
+
+            foreach($request->modalities as $modality){
+                $active_projects = Projects::where(['status' => 1, 'modality' => $modality])->get();
+                foreach ($active_projects as $project) {
+                    if($project->coordinator){
+                        FormsResponse::create([
+                            'forms_id' => $form->id,
+                            'user_id' => $project->coordinator,
+                            'project_id' => $project->id,
+                        ]);
+                    }
+                }
             }
             return redirect()->back()->with("toast_success", "Cadastro de formulário feito com sucesso.");
         } catch (\Throwable $th) {

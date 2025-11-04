@@ -27,9 +27,15 @@ class UpdateRequest extends FormRequest
             'status' => 'required|integer|in:2,4',
         ];
 
-        if (request()->input('status') == 1) {
-            $rules['input_comment'] = ['required', 'string'];
+        if (request()->input('status') == 2) {
+            $rules['comment'] = ['required', 'string'];
         }
+
+        if (request()->input('status') == 4) {
+            $rules['finished'] = ['required', 'in:0,1'];
+        }
+
+
 
         return $rules;
     }
@@ -41,8 +47,11 @@ class UpdateRequest extends FormRequest
             'status.integer' => 'O campo status precisa ser um número.',
             'status.in' => 'O campo status precis ser 2 ou 4.',
 
-            'input_comment.required' => 'O campo do comentário é obrigatório.',
-            'input_comment.string' => 'O campo do comentário deve ser uma string.',
+            'comment.required' => 'O campo do comentário é obrigatório.',
+            'comment.string' => 'O campo do comentário deve ser uma string.',
+
+            'finished.required' => 'É obrigatório escolher finalizar ou não a ação.',
+            'finished.in' => 'É obrigatório escolher finalizar ou não a ação aaaaa.',
         ];
     }
 }

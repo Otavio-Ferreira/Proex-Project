@@ -23,6 +23,15 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->integer('status')->nullable();
+
+            $table->text('id_atividade')->nullable();
+            $table->text('id_projeto')->nullable();
+            $table->integer('year')->nullable();
+            $table->text('thematic_area')->nullable();
+
+            $table->string('type_submit');
+            $table->uuid('id_submit');
+
             $table->timestamps();
             $table->softDeletes();
         });

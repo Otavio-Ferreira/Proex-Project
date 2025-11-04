@@ -17,6 +17,7 @@
           </h2>
         </div>
         <div class="d-flex align-items-center col-sm-12 col-md-auto">
+          <a href="{{ route('forms.show', $response->forms_id) }}" class="btn btn-cyan">Voltar</a>
         </div>
       </div>
     </div>
@@ -25,20 +26,38 @@
     <div class="col-12 col-md-9 mb-3 mb-md-0 overflow-auto" style="height: calc(100vh - 300px);">
       <div class="card border-top-0 border-end-0 border-bottom-0 border-4 border-primary mb-3">
         <div class="card-header">
-          <h3 class="p-0 m-0">Título da ação de extensão</h3>
+          <h3 class="p-0 m-0">Detalhes da ação de extensão</h3>
         </div>
         <div class="card-body">
           <div class="">
             <h4 class="mb-0">Título da ação</h4>
-            <p>{{ $response->action->title ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->title ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Tipo da ação</h4>
-            <p>{{ $response->type_action ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->type ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Modalidade da ação</h4>
-            <p>{{ $response->action_modality ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->modality ?? 'Não enviado' }}</p>
+          </div>
+          <div class="">
+            <h4 class="mb-0">Área temática</h4>
+            <p>{{ $response->project->thematic_area ?? 'Não enviado' }}</p>
+          </div>
+          <div class="">
+            <h4 class="mb-0">Centro/Departamento</h4>
+            <p>{{ $response->project->course_name->name ?? 'Não enviado' }}</p>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <h4 class="mb-0">Id da atividade</h4>
+              <p>{{ $response->project->id_atividade ?? 'Não enviado' }}</p>
+            </div>
+            <div class="col-12 col-md-6">
+              <h4 class="mb-0">Id do projeto</h4>
+              <p>{{ $response->project->id_projeto ?? 'Não enviado' }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -50,19 +69,19 @@
         <div class="card-body">
           <div class="">
             <h4 class="mb-0">Nome</h4>
-            <p>{{ $response->coordinator_name ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_name ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Perfil</h4>
-            <p>{{ $response->coordinator_profile ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_profile ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">SIAPE</h4>
-            <p>{{ $response->coordinator_siape ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_siape ?? 'Não enviado' }}</p>
           </div>
           <div class="">
             <h4 class="mb-0">Curso</h4>
-            <p>{{ $response->course->name ?? 'Não enviado' }}</p>
+            <p>{{ $response->project->user->persons->coordinator_course ?? 'Não enviado' }}</p>
           </div>
         </div>
       </div>
@@ -152,6 +171,7 @@
                 <th>Nome do parceiro</th>
                 <th>Tipo de instituição</th>
                 <th>Tipo de parceria</th>
+                <th>Parceria internacional?</th>
               </x-slot:ths>
               <x-slot:trs>
                 @foreach ($response->external_partners as $externalPartner)
@@ -159,6 +179,7 @@
                     <td>{{ $externalPartner->name_partner }}</td>
                     <td>{{ $externalPartner->institution_type }}</td>
                     <td>{{ $externalPartner->partnership_type }}</td>
+                    <td>{{ $externalPartner->its_international == 1 ? 'Sim' : 'Não' }}</td>
                   </tr>
                 @endforeach
               </x-slot:trs>
@@ -177,14 +198,14 @@
               <x-slot:ths>
                 <th>Ação</th>
                 <th>Escolas públicas?</th>
-                <th>Descrição internacional</th>
+                {{-- <th>Descrição internacional</th> --}}
               </x-slot:ths>
               <x-slot:trs>
                 @foreach ($response->extension_actions as $extensionActions)
                   <tr>
                     <td>{{ $extensionActions->title_action }}</td>
                     <td>{{ $extensionActions->its_for_public_schools == 1 ? 'Sim' : 'Não' }}</td>
-                    <td>{{ $extensionActions->international_description }}</td>
+                    {{-- <td>{{ $extensionActions->international_description }}</td> --}}
                   </tr>
                 @endforeach
               </x-slot:trs>
@@ -292,6 +313,22 @@
                   </option>
                 </x-slot:options>
               </x-form-elements.select.select>
+              <div id="finished" style="display: none;">
+                <x-form-elements.select.select title="Finalizar ação?" id="action" name="finished">
+                  <x-slot:options>
+                    <option value="" selected disabled>Selecione</option>
+                    <option value="1">
+                      Sim</option>
+                    <option value="0">
+                      Não
+                    </option>
+                  </x-slot:options>
+                </x-form-elements.select.select>
+                <p class="m-0"><strong class="text-red">Ano do início da ação:
+                  </strong>{{ date('Y', strtotime($response->project->start_date)) }}</p>
+                <p class="m-0"><strong class="text-red">Ano do fim da ação:
+                  </strong>{{ date('Y', strtotime($response->project->end_date)) }}</p>
+              </div>
               <div id="comment" style="display: none;">
                 @include('components.form-elements.textarea.textarea', [
                     'title' => 'Comentário',
@@ -316,15 +353,26 @@
 @endsection
 @section('scripts')
   <script>
+    var inputAction = document.getElementById('action');
+    inputAction.removeAttribute('required');
+
     document.getElementById('role').addEventListener('change', function() {
       var commentDiv = document.getElementById('comment');
       var roleValue = this.value;
       var textarea = document.getElementById('input_comment');
 
+      var finishedDiv = document.getElementById('finished');
+
       if (roleValue == '2') {
         commentDiv.style.display = 'block';
         textarea.setAttribute('required', 'true');
+
+        finishedDiv.style.display = 'none';
+        inputAction.removeAttribute('required');
       } else {
+        inputAction.setAttribute('required', 'true');
+        finishedDiv.style.display = 'block';
+
         commentDiv.style.display = 'none';
         textarea.removeAttribute('required');
       }
@@ -333,6 +381,10 @@
     if (document.getElementById('role').value == '2') {
       document.getElementById('comment').style.display = 'block';
       document.getElementById('input_comment').setAttribute('required', 'true');
+    }
+    else{
+        document.getElementById('finished').style.display = 'block';
+        document.getElementById('action').setAttribute('required', 'true');
     }
   </script>
 @endsection

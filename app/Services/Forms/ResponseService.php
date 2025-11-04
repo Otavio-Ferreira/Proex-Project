@@ -4,6 +4,7 @@ namespace App\Services\Forms;
 
 use App\Models\Forms\Comments;
 use App\Models\Forms\FormsResponse;
+use App\Models\Parameters\Projects;
 use App\Repositories\Forms\Form\FormRepository;
 use App\Repositories\Forms\Response\ResponseRepository;
 
@@ -60,6 +61,17 @@ class ResponseService
                 }
             }
 
+            if($request->status == 4 && $request->has('finished')){
+                $project = Projects::find($form_response->project_id);
+                if($request->finished == 1){
+                    $project->status = 2;
+                }
+                else{
+                    $project->status = 1;
+                }
+                $project->save();
+            }
+
             return redirect()->back()->with("toast_success", "Avaliação enviada com sucesso.");
         } catch (\Throwable $th) {
             return redirect()->back()->with("toast_error", "Erro ao fazer avaliação, tente novamente em alguns instantes.")->withInput();
@@ -72,7 +84,7 @@ class ResponseService
             $response = FormsResponse::find($uuid);
             $this->responseRepository->finish($response);
 
-            return redirect()->back()->with("toast_success", "Formulário finalizado com sucesso.");
+            return to_route('response.index', $uuid)->with("toast_success", "Formulário finalizado com sucesso.");
         } catch (\Throwable $th) {
             return redirect()->back()->with("toast_error", "Erro ao finalizar formulário, tente novamente em alguns instantes.")->withInput();
         }

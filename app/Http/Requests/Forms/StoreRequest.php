@@ -25,8 +25,9 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'date' => 'required|date|after_or_equal:today',
-            'status' => 'required|integer|in:0,1'
+            'date' => 'required|date',
+            'status' => 'required|integer|in:0,1',
+            // 'modalities' => 'required|array'
         ];
     }
 
@@ -37,10 +38,12 @@ class StoreRequest extends FormRequest
             "title.text" => "O campo title precisa ser um texto.",
             "date.required" => "É necessário inserir uma data.",
             "date.data" => "O campo data precisa ser válido .",
-            "date.after_or_equal" => "O campo data precisa ser hoje ou posterior a data de hoje.",
+            // "date.after_or_equal" => "O campo data precisa ser hoje ou posterior a data de hoje.",
             "status.required" => "É necessário escolher um status",
             "status.integer" => "O campo status precisa ser válido.",
             "status.in" => "O campo status deve ser 0 ou 1.",
+            // "modalities.required" => "É necessário escolher uma modalidade",
+            // "modalities.array" => "É necessário escolher uma modalidade válida",
         ];
     }
 }

@@ -15,7 +15,7 @@ class EloquentActivityRepository implements ActivityRepository
         Activitys::create([
             "response_forms_id" => $response_forms_id,
             "activity" => $request->activity,
-            "address" => $request->address,
+            "address" => $request->addressChose ? $request->addressChose : $request->address,
             "latitude" => $request->latitude, 
             "longitude" => $request->longitude, 
             "place_id" => $request->place_id

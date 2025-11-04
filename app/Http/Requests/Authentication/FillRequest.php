@@ -29,7 +29,7 @@ class FillRequest extends FormRequest
                 "required",
                 "email",
                 "regex:/^[a-zA-Z0-9._%+-]+@ufca\.edu\.br$/",
-                "unique:users,email",
+                // "unique:users,email",
             ]
         ];
     }
@@ -45,7 +45,7 @@ class FillRequest extends FormRequest
             "email.required" => "O e-mail é obrigatório.",
             "email.email" => "Insira um e-mail válido.",
             "email.regex" => "O e-mail deve pertencer ao domínio @ufca.edu.br.",
-            "email.unique" => "Este e-mail já está cadastrado.",
+            // "email.unique" => "Este e-mail já está cadastrado.",
         ];
     }
 }

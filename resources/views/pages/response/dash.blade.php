@@ -118,8 +118,20 @@
             <p>{{ $response->project->type ?? 'Não enviado' }}</p>
           </div>
           <div class="col-12 col-md-6">
+            <h4 class="mb-0">Área temática</h4>
+            <p>{{ $response->project->thematic_area ?? 'Não enviado' }}</p>
+          </div>
+          <div class="col-12 col-md-12">
             <h4 class="mb-0">Modalidade da ação</h4>
             <p>{{ $response->project->modality ?? 'Não enviado' }}</p>
+          </div>
+          <div class="col-12 col-md-6">
+            <h4 class="mb-0">Id da atividade</h4>
+            <p>{{ $response->project->id_atividade ?? 'Não enviado' }}</p>
+          </div>
+          <div class="col-12 col-md-6">
+            <h4 class="mb-0">Id do projeto</h4>
+            <p>{{ $response->project->id_projeto ?? 'Não enviado' }}</p>
           </div>
           <hr class="mb-3">
           <div class="col-12 col-md-6">
@@ -208,6 +220,7 @@
                   <th>Nome do parceiro</th>
                   <th>Tipo de instituição</th>
                   <th>Tipo de parceria</th>
+                  <th>Parceria internacional?</th>
                 </x-slot:ths>
                 <x-slot:trs>
                   @foreach ($response->external_partners as $externalPartner)
@@ -215,6 +228,7 @@
                       <td>{{ $externalPartner->name_partner }}</td>
                       <td>{{ $externalPartner->institution_type }}</td>
                       <td>{{ $externalPartner->partnership_type }}</td>
+                      <td>{{ $externalPartner->its_international == 1 ? 'Sim' : 'Não' }}</td>
                     </tr>
                   @endforeach
                 </x-slot:trs>
@@ -227,20 +241,20 @@
           </div>
           <hr class="mb-3">
           <div class="col-12">
-            <h4 class="mb-0">Ações vinculadas ao programa de extensão</h4>
+            <h4 class="mb-0">Ações vinculadas ao {{strtolower($response->project->type)}} de extensão</h4>
             @if ($response->extension_actions->count() > 0)
               <x-table.table tableClass="table-vcenter card-table table-striped">
                 <x-slot:ths>
                   <th>Ação</th>
                   <th>Escolas públicas?</th>
-                  <th>Descrição internacional</th>
+                  {{-- <th>Descrição internacional</th> --}}
                 </x-slot:ths>
                 <x-slot:trs>
                   @foreach ($response->extension_actions as $extensionActions)
                     <tr>
                       <td>{{ $extensionActions->title_action }}</td>
                       <td>{{ $extensionActions->its_for_public_schools == 1 ? 'Sim' : 'Não' }}</td>
-                      <td>{{ $extensionActions->international_description }}</td>
+                      {{-- <td>{{ $extensionActions->international_description }}</td> --}}
                     </tr>
                   @endforeach
                 </x-slot:trs>
@@ -325,7 +339,7 @@
 
       circles.forEach(function(circle) {
         let value = parseInt(circle.getAttribute('data-value')) || 0;
-        let maxValue = 10; // Defina o valor máximo
+        let maxValue = 8; // Defina o valor máximo
         let percentage = (value / maxValue) * 100; // Converte para percentual
 
         // Aplica o progresso ao estilo de background

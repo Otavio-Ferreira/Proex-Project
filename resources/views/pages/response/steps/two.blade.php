@@ -18,7 +18,7 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 
@@ -75,7 +75,7 @@
                 'class' => 'mb-3',
                 'name' => 'qtd_internal_audience',
                 'required' => 'true',
-                'placeholder' => 'Digite o seu nome',
+                'placeholder' => 'Digite o total',
                 'value' => isset($response->qtd_internal_audience) ? $response->qtd_internal_audience : '',
             ])
             @include('components.form-elements.input.input', [
@@ -84,7 +84,7 @@
                 'class' => 'mb-3',
                 'name' => 'qtd_external_audience',
                 'required' => 'true',
-                'placeholder' => 'Digite o seu nome',
+                'placeholder' => 'Digite o total',
                 'value' => isset($response->qtd_external_audience) ? $response->qtd_external_audience : '',
             ])
 
@@ -92,10 +92,13 @@
               <a href="{{ route('forms.return', [$response->id, 1]) }}" type="submit" class="btn btn-outline-info">
                 <i class="icon ti ti-chevron-left"></i>
                 Voltar</a>
+              <button type="submit" class="btn btn-green ms-auto">Salvar</button>
+
               @if (isset($response->qtd_external_audience) && isset($response->qtd_internal_audience))
-                <a href="{{ route('forms.advance', [$response->id, 3]) }}" class="btn btn-info ms-auto">Avançar</a>
-              @else
-                <button type="submit" class="btn btn-info ms-auto">Avançar</button>
+                <a href="{{ route('forms.advance', [$response->id, 3]) }}" class="btn btn-outline-info ms-2">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i>
+                </a>
               @endif
             </div>
           </form>

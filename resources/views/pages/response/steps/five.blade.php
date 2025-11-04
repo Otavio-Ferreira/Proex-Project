@@ -18,11 +18,11 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 
-            <x-modal.modal-alert route="{{ route('forms.finish') }}" id="modal-finish-response"
+            <x-modal.modal-alert route="{{ route('forms.finish', $response->id) }}" id="modal-finish-response"
               class="modal-dialog-centered modal-sm" background="bg-success" classBody="text-center py-4"
               title="Finalizar formulário" typeBtnClose="button" classBtnClose="me-auto w-100" textBtnClose="Cancelar"
               typeBtnSave="submit" classBtnSave="btn-success w-100" textBtnSave="Finalizar">
@@ -102,6 +102,14 @@
                   <option value="Cooperação (CP)">Cooperação (CP)</option>
                   <option value="Convênio (CV)">Convênio (CV)</option>
                   <option value="Contrato (CT)">Contrato (CT)</option>
+                  <option value="Não Oficial">Não Oficial</option>
+                </x-slot:options>
+              </x-form-elements.select.select>
+              <x-form-elements.select.select title="Parceria internacional?" id="role" name="its_international">
+                <x-slot:options>
+                  <option value="" selected disabled>Selecione</option>
+                  <option value="1">Sim</option>
+                  <option value="0">Não</option>
                 </x-slot:options>
               </x-form-elements.select.select>
             </x-slot:content>
@@ -119,6 +127,7 @@
                     <th>Nome do parceiro</th>
                     <th>Tipo de instituição</th>
                     <th>Tipo de parceria</th>
+                    <th>Parceria internacional?</th>
                     <th width="5%"></th>
                     <th width="5%"></th>
                   </x-slot:ths>
@@ -128,6 +137,7 @@
                         <td>{{ $externalPartner->name_partner }}</td>
                         <td>{{ $externalPartner->institution_type }}</td>
                         <td>{{ $externalPartner->partnership_type }}</td>
+                        <td>{{ $externalPartner->its_international == 1 ? 'Sim' : 'Não' }}</td>
                         <td>
                           <button class="btn btn-secondary" data-bs-toggle="modal"
                             data-bs-target="#modal-edit-externalPartner{{ $externalPartner->id }}"><i
@@ -180,7 +190,22 @@
                                   <option value="Contrato (CT)"
                                     {{ $externalPartner->partnership_type == 'Contrato (CT)' ? 'selected' : '' }}>
                                     Contrato (CT)</option>
+                                  <option value="Não Oficial"
+                                    {{ $externalPartner->partnership_type == 'Não Oficial' ? 'selected' : '' }}>
+                                    Não Oficial</option>
                                 </x-slot:options>
+
+                                <x-form-elements.select.select title="Parceria internacional?" id="role"
+                                  name="its_international">
+                                  <x-slot:options>
+                                    <option value="" selected disabled>Selecione</option>
+                                    <option value="1"
+                                      {{ $externalPartner->its_international == 1 ? 'selected' : '' }}>Sim</option>
+                                    <option value="0"
+                                      {{ $externalPartner->its_international == 0 ? 'selected' : '' }}>Não</option>
+                                  </x-slot:options>
+                                </x-form-elements.select.select>
+
                               </x-form-elements.select.select>
                             </x-slot:content>
                           </x-modal.modal>
@@ -218,9 +243,9 @@
               <i class="icon ti ti-chevron-left"></i>
               Voltar</a>
             @if (isset($response))
-              @if ($response->external_partners->count() > 0)
-                <a href="{{ route('forms.advance', [$response->id, 6]) }}" class="btn btn-info ms-auto">Avançar</a>
-              @endif
+              <a href="{{ route('forms.advance', [$response->id, 6]) }}" class="btn btn-outline-info">
+                Avançar
+                <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
             @endif
           </div>
         </div>

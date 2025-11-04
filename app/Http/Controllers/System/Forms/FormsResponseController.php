@@ -41,16 +41,16 @@ class FormsResponseController extends Controller
         $user = auth()->user();
 
         $steps = [
-            "1" => isset($response->activitys) && count($response->activitys) > 0,
-            "2" => isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
-            "3" => isset($response->advances_extensionist_action),
-            "4" => isset($response->internal_partners) && count($response->internal_partners) > 0,
-            "5" => isset($response->external_partners) && count($response->external_partners) > 0,
-            "6" => isset($response->extension_actions) && count($response->extension_actions) > 0,
-            "7" => isset($response->social_technology_development),
-            "8" => isset($response->social_medias) && count($response->social_medias) > 0,
-            "9" => isset($response->images) && count($response->images) > 0,
-            "10" => isset($response->instrument_avaliation),
+            isset($response->activitys) && count($response->activitys) > 0,
+            isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
+            isset($response->advances_extensionist_action),
+            // isset($response->internal_partners) && count($response->internal_partners) > 0,
+            // isset($response->external_partners) && count($response->external_partners) > 0,
+            isset($response->extension_actions) && count($response->extension_actions) > 0,
+            isset($response->social_technology_development),
+            isset($response->social_medias) && count($response->social_medias) > 0,
+            isset($response->images) && count($response->images) > 0,
+            isset($response->instrument_avaliation),
         ];
         $this->data['form'] = $form;
         $this->data['response'] = $response;
@@ -178,11 +178,24 @@ class FormsResponseController extends Controller
             "9" => isset($response->images) && count($response->images) > 0,
             "10" => isset($response->instrument_avaliation),
         ];
+
+        $steps_count = [
+            isset($response->activitys) && count($response->activitys) > 0,
+            isset($response->qtd_internal_audience) && isset($response->qtd_external_audience),
+            isset($response->advances_extensionist_action),
+            // isset($response->internal_partners) && count($response->internal_partners) > 0,
+            // isset($response->external_partners) && count($response->external_partners) > 0,
+            isset($response->extension_actions) && count($response->extension_actions) > 0,
+            isset($response->social_technology_development),
+            isset($response->social_medias) && count($response->social_medias) > 0,
+            isset($response->images) && count($response->images) > 0,
+            isset($response->instrument_avaliation),
+        ];
         $this->data['form'] = $form;
         $this->data['response'] = $response;
         $this->data['steps'] = $steps;
         $this->data['base_projects'] = Projects::where('status', 1)->get();
-        $this->data['progress'] = collect($steps)->filter()->count();
+        $this->data['progress'] = collect($steps_count)->filter()->count();
 
         if ($session == 1) {
             return view('pages.response.steps.one', $this->data);

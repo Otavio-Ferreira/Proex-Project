@@ -29,9 +29,9 @@ class StoreRequest extends FormRequest
             'its_for_public_schools' => 'required|integer|in:0,1',
         ];
 
-        if (request()->input('its_for_public_schools') == 1) {
-            $rules['international_description'] = ['required', 'string'];
-        }
+        // if (request()->input('its_for_public_schools') == 1) {
+        //     $rules['international_description'] = ['required', 'string'];
+        // }
 
         return $rules;
     }
@@ -46,8 +46,8 @@ class StoreRequest extends FormRequest
             "its_for_public_schools.integer" => "O campo ação é voltada para as escolas públicas precisa ser válido.",
             "its_for_public_schools.in" => "O campo ação é voltada para as escolas públicas precisa ser 0 ou 1.",
 
-            "international_description.required" => "O necessário inserir uma descrição.",
-            "international_description.string" => "O campo descrição deve ser um texto.",
+            // "international_description.required" => "O necessário inserir uma descrição.",
+            // "international_description.string" => "O campo descrição deve ser um texto.",
         ];
     }
 }

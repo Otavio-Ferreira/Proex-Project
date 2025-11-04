@@ -4,6 +4,7 @@ use App\Http\Controllers\Authentication\LoginController;
 use App\Http\Controllers\Data\CourseController;
 use App\Http\Controllers\Data\ProjectsController;
 use App\Http\Controllers\Reports\FormReportController;
+use App\Http\Controllers\Settings\LogsController;
 use App\Http\Controllers\Settings\PermissionsController;
 use App\Http\Controllers\Settings\RolesController;
 use App\Http\Controllers\Settings\UsersController;
@@ -66,7 +67,7 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::post('/home', [HomeController::class, 'index']);
 
     Route::group(['middleware' => ['auth', 'permission:adicionar_grupo']], function () {
-        Route::get('gupos', [RolesController::class, 'index'])->name('roles.index');
+        Route::get('grupos', [RolesController::class, 'index'])->name('roles.index');
         Route::post('grupos/adicionar', [RolesController::class, 'store'])->name('roles.store');
         Route::post('grupos/atualizar/{id}', [RolesController::class, 'update'])->name('roles.update');
     });
@@ -93,9 +94,13 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::group(['middleware' => ['auth', 'permission:adicionar_projetos']], function () {
         Route::get('projetos', [ProjectsController::class, 'index'])->name('projects.index');
         Route::get('projetos/adicionar', [ProjectsController::class, 'create'])->name('projects.create');
+        Route::get('projetos/importar', [ProjectsController::class, 'import'])->name('projects.import');
         Route::post('projetos/adicionar', [ProjectsController::class, 'store'])->name('projects.store');
+        Route::post('projetos/importarDados', [ProjectsController::class, 'storeImport'])->name('projects.storeImport');
         Route::get('projetos/ver/{uuid}', [ProjectsController::class, 'edit'])->name('projects.edit');
         Route::post('projetos/atualizar/{uuid}', [ProjectsController::class, 'update'])->name('projects.update');
+        Route::get('projetos/importar/analisar/{uuid}', [ProjectsController::class, 'analysis'])->name('projects.analysis');
+        Route::delete('projetos/deletar/{uuid}', [ProjectsController::class, 'destroy'])->name('projects.destroy');
     });
 
     Route::group(['middleware' => ['auth', 'permission:adicionar_formulário']], function () {
@@ -103,12 +108,13 @@ Route::middleware(Authenticate::class)->group(function () {
 
         Route::get('formulario/cadastro', [FormsController::class, 'create'])->name('forms.create');
         Route::get('formulario/detalhes/{id}', [FormsController::class, 'show'])->name('forms.show');
+        Route::post('formulario/atualizar/projetos/{id}', [FormsController::class, 'store'])->name('forms.update.projects');
         Route::post('formulario/adicionar', [FormsController::class, 'store'])->name('forms.store');
         Route::post('formulario/editar/{id}', [FormsController::class, 'update'])->name('forms.update');
         Route::get('resposta/relatórios/{id}', [FormsController::class, 'reports'])->name('forms.reports');
         Route::get('resposta/editar/{id}', [FormsResponseController::class, 'edit'])->name('response.edit');
         Route::post('resposta/editar/{id}', [FormsResponseController::class, 'update'])->name('response.update');
-        Route::get('resposta/disponibilizar/{id}', [FormsController::class, 'makeAvailable'])->name('forms.makeAvailable');
+        Route::post('resposta/disponibilizar/{id}', [FormsController::class, 'makeAvailable'])->name('forms.makeAvailable');
         Route::post('relatorio/{id}', [FormReportController::class, 'generate'])->name('form.report');
     });
 
@@ -167,7 +173,14 @@ Route::middleware(Authenticate::class)->group(function () {
         Route::get('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::post('dashboard/', [DashboardController::class, 'index'])->name('dashboard.index');
     });
+
+    Route::group(['middleware' => ['auth', 'permission:ver_logs']], function () {
+        Route::get('logs/', [LogsController::class, 'index'])->name('logs.index');
+    });
+
+
     Route::get('users/sair', [UsersController::class, 'logout'])->name('logout');
     Route::get('perfil', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('perfil', [ProfileController::class, 'store'])->name('profile.store');
+    Route::get('portal/{portal}', [UsersController::class, 'changePortal'])->name('portal.change');
 });

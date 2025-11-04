@@ -6,13 +6,24 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Activitys extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, LogsActivity;
     protected $fillable = ["response_forms_id", "activity", "address", "latitude", "longitude", "place_id"];
 
     public function response() : BelongsTo{
         return $this->belongsTo(FormsResponse::class, 'id', 'response_forms_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(["response_forms_id", "activity", "address", "latitude", "longitude", "place_id"])
+            ->useLogName('activitys_params')
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

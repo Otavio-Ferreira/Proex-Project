@@ -18,7 +18,7 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 
@@ -65,7 +65,7 @@
       <div class="border-top-0 border-end-0 border-bottom-0 border-4 border-primary card p-0 card-form-step"
         id="card-8">
         <div class="card-header">
-          <h3 class="p-0 m-0">Ações vinculadas ao programa de extensão</h3>
+          <h3 class="p-0 m-0">Ações vinculadas ao {{ strtolower($response->project->type) }} de extensão</h3>
         </div>
         <div class="card-body">
           <a href="#" class="btn btn-primary d-sm-inline-block" data-bs-toggle="modal"
@@ -77,8 +77,8 @@
             class="modal-dialog-centered" title="Adicionar ação" typeBtnClose="button" classBtnClose="me-auto"
             textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
             <x-slot:content>
-              @include('components.form-elements.input.input', [
-                  'title' => 'Ação que se articula ao programa de extensão',
+              @include('components.form-elements.textarea.textarea', [
+                  'title' => 'Ação que se articula ao ' . strtolower($response->project->type) . ' de extensão',
                   'type' => 'text',
                   'class' => 'mb-3',
                   'name' => 'title_action',
@@ -94,14 +94,14 @@
                   <option value="0">Não</option>
                 </x-slot:options>
               </x-form-elements.select.select>
-              @include('components.form-elements.textarea.textarea', [
+              {{-- @include('components.form-elements.textarea.textarea', [
                   'title' => 'A ação estabeleceu parceria internacional? Se sim, descreva',
                   'type' => 'text',
                   'class' => 'mb-3',
                   'name' => 'international_description',
                   'required' => 'false',
                   'placeholder' => 'Descrição',
-              ])
+              ]) --}}
             </x-slot:content>
           </x-modal.modal>
 
@@ -116,7 +116,7 @@
                   <x-slot:ths>
                     <th>Ação</th>
                     <th>Escolas públicas?</th>
-                    <th>Descrição internacional</th>
+                    {{-- <th>Descrição internacional</th> --}}
                     <th width="5%"></th>
                     <th width="5%"></th>
                   </x-slot:ths>
@@ -125,7 +125,7 @@
                       <tr>
                         <td>{{ $extensionActions->title_action }}</td>
                         <td>{{ $extensionActions->its_for_public_schools == 1 ? 'Sim' : 'Não' }}</td>
-                        <td>{{ $extensionActions->international_description }}</td>
+                        {{-- <td>{{ $extensionActions->international_description }}</td> --}}
                         <td>
                           <button class="btn btn-secondary" data-bs-toggle="modal"
                             data-bs-target="#modal-edit-extensionActions{{ $extensionActions->id }}"><i
@@ -135,12 +135,17 @@
                             title="Editar atividade" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
                             typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
                             <x-slot:content>
-                              @include('components.form-elements.input.input', [
-                                  'title' => 'Liste os títulos das Ações que se articulam ao Programa de Extensão',
+
+                              @include('components.form-elements.textarea.textarea', [
+                                  'title' =>
+                                      'Ação que se articula ao ' .
+                                      strtolower($response->project->type) .
+                                      ' de extensão',
                                   'type' => 'text',
                                   'class' => 'mb-3',
                                   'name' => 'title_action',
                                   'required' => 'true',
+                                  'placeholder' => 'Digite a ação',
                                   'value' => $extensionActions->title_action,
                               ])
 
@@ -156,14 +161,14 @@
                                   </option>
                                 </x-slot:options>
                               </x-form-elements.select.select>
-                              @include('components.form-elements.textarea.textarea', [
+                              {{-- @include('components.form-elements.textarea.textarea', [
                                   'title' => 'A Ação estabeleceu parceria internacional? Se sim, descreva',
                                   'type' => 'text',
                                   'class' => 'mb-3',
                                   'name' => 'international_description',
                                   'required' => 'false',
                                   'value' => $extensionActions->international_description,
-                              ])
+                              ]) --}}
                             </x-slot:content>
                           </x-modal.modal>
                         </td>
@@ -201,7 +206,9 @@
               Voltar</a>
             @if (isset($response))
               @if ($response->extension_actions->count() > 0)
-                <a href="{{ route('forms.advance', [$response->id, 7]) }}" class="btn btn-info ms-auto">Avançar</a>
+                <a href="{{ route('forms.advance', [$response->id, 7]) }}" class="btn btn-outline-info ms-2">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
               @endif
             @endif
           </div>

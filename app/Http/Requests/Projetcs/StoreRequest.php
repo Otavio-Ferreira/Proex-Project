@@ -21,17 +21,19 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'title' => 'required|string',
-            'type' => 'required|string|in:Programa,Projeto',
-            'modality' => 'required|string|in:UFCA Itinerante,Ampla Concorrência,PROPE',
-
+            'id_atividade' => 'required|string',
+            'id_projeto' => 'required|string',
+            'year' => 'required|integer',
+            'type' => 'required|string|exists:parameters,value',
+            'modality' => 'required|string|exists:parameters,value',
+            'thematic_area' => 'required|string|exists:parameters,value',
             'course' => 'required|uuid|exists:courses,id',
             'teacher' => 'required|uuid|exists:users,id',
-
             'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
-
             'status' => 'required|integer|in:0,1,2',
         ];
     }
@@ -42,13 +44,26 @@ class StoreRequest extends FormRequest
             'title.required' => 'O campo título é obrigatório.',
             'title.string' => 'O título deve ser um texto.',
 
+            'id_atividade.required' => 'O campo id da atividade é obrigatório.',
+            'id_atividade.string' => 'O id da atividade deve ser um texto.',
+
+            'id_projeto.required' => 'O campo id do projeto é obrigatório.',
+            'id_projeto.string' => 'O id do projeto deve ser um texto.',
+
+            'year.required' => 'O ano é obrigatório.',
+            'year.integer' => 'O ano deve ser um número inteiro.',
+
             'type.required' => 'O campo tipo é obrigatório.',
             'type.string' => 'O tipo deve ser um texto.',
-            'type.in' => 'O tipo deve ser Programa ou Projeto.',
+            'type.exists' => 'O tipo deve existir na nossa base de dados.',
 
             'modality.required' => 'O campo modalidade é obrigatório.',
             'modality.string' => 'A modalidade deve ser um texto.',
-            'modality.in' => 'A modalidade deve ser UFCA Itinerante, Ampla Concorrência ou PROPE.',
+            'modality.exists' => 'A modalidade deve existir na nossa base de dados.',
+
+            'thematic_area.required' => 'O campo área temática é obrigatório.',
+            'thematic_area.string' => 'A área temática deve ser um texto.',
+            'thematic_area.exists' => 'A área temática deve existir na nossa base de dados.',
 
             'course.required' => 'O curso é obrigatório.',
             'course.uuid' => 'O curso deve ser um UUID válido.',

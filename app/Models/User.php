@@ -11,11 +11,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasUuids, HasRoles, HasApiTokens, SoftDeletes;
+    use HasFactory, Notifiable, HasUuids, HasRoles, HasApiTokens, SoftDeletes, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -27,9 +30,20 @@ class User extends Authenticatable
         'email',
         'password',
         'status',
+        'int_id',
+        'active_role'
     ];
+    protected $primaryKey = 'id';
 
-    /**
+    /**public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['email', 'name', 'status', 'active_role'])
+            ->useLogName('user_params')
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
@@ -52,5 +66,30 @@ class User extends Authenticatable
     public function persons()
     {
         return $this->hasOne(Persons::class, 'user_id');
+    }
+
+    public function activeRoleHasPermission(string $permission): bool
+    {
+        if (!$this->active_role) {
+            return false;
+        }
+
+        $role = Role::findByName($this->active_role);
+
+        return $role ? $role->hasPermissionTo($permission) : false;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['email', 'name', 'status', 'active_role'])
+            ->useLogName('user_params')
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    public function getActivitylogSubjectId()
+    {
+        return $this->id; // força a usar o ID como subject_id
     }
 }

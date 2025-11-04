@@ -21,7 +21,7 @@ class EloquentFormRepository implements FormRepository
             });
         }
 
-        return $query->orderBy('created_at', 'desc')->paginate(5);
+        return $query->orderBy('created_at', 'desc')->paginate(20);
     }
 
 

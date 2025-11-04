@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('name_partner')->nullable();
             $table->text('institution_type')->nullable();
             $table->text('partnership_type')->nullable();
+            $table->boolean('its_international')->nullable();
             $table->foreign('response_forms_id')->references('id')->on('forms_responses')->onDelete('cascade');
             $table->timestamps();
         });

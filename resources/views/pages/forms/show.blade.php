@@ -120,7 +120,6 @@
                   class="text-decoration-none card alert border-0 alert-{{ $column['COR'] }} p-2">
                   <div class="row">
                     <div class="col-8">
-                      {{-- <p class="m-0 fs-3 text-dark">{{ $item['RESPONSE']->user->name }}</p> --}}
                       <p class="m-0 text-muted">
                         {{ \Illuminate\Support\Str::limit($item['RESPONSE']->project->title, 45, '...') }}</p>
                     </div>
@@ -136,9 +135,7 @@
                   <div>
                     <div class="d-flex mb-1">
                       <span class="badge bg-blue-lt w-100">
-                        {{ $item['RESPONSE']->user->name }}
-                        {{-- R$ {{ number_format($soma, 2, ',', '.') }} /
-                        R$ {{ number_format($item->CARTEIRA, 2, ',', '.') }} --}}
+                        {{ \Illuminate\Support\Str::limit($item['RESPONSE']->user->name, 15) }}
                       </span>
                     </div>
                     <span class="badge bg-dark-lt w-100">
@@ -199,7 +196,7 @@
 
       circles.forEach(function(circle) {
         let value = parseInt(circle.getAttribute('data-value')) || 0;
-        let maxValue = 10; // Defina o valor máximo
+        let maxValue = 8; // Defina o valor máximo
         let percentage = (value / maxValue) * 100; // Converte para percentual
 
         // Aplica o progresso ao estilo de background

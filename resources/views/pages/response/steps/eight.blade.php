@@ -18,7 +18,7 @@
         </div>
         <div class="col-auto ms-auto">
           <a href="{{ route('response.index', $response->id) }}" class="btn btn-cyan">Voltar</a>
-          @if (($progress == 10 && $response->was_finished == 0) || $response->was_finished == 2)
+          @if (($progress == 8 && $response->was_finished == 0) || $response->was_finished == 2)
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-finish-response"><i
                 class="icon ti ti-check"></i>Finalizar Formulário</button>
 
@@ -72,9 +72,9 @@
             data-bs-target="#modal-add-socialMedia">
             Adicionar rede social
           </a>
-          <x-modal.modal route="{{ route('socialMedia.store', $response->id) }}" id="modal-add-socialMedia" class="modal-dialog-centered"
-            title="Adicionar rede social" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
-            typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
+          <x-modal.modal route="{{ route('socialMedia.store', $response->id) }}" id="modal-add-socialMedia"
+            class="modal-dialog-centered" title="Adicionar rede social" typeBtnClose="button" classBtnClose="me-auto"
+            textBtnClose="Cancelar" typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
             <x-slot:content>
               @include('components.form-elements.input.input', [
                   'title' => 'Nome da rede social',
@@ -178,7 +178,9 @@
               Voltar</a>
             @if (isset($response))
               @if ($response->social_medias->count() > 0)
-                <a href="{{ route('forms.advance', [$response->id, 9]) }}" class="btn btn-info ms-auto">Avançar</a>
+                <a href="{{ route('forms.advance', [$response->id, 9]) }}" class="btn btn-outline-info ms-2">
+                  Avançar
+                  <i class="icon ms-2 me-0 ti ti-chevron-right"></i></a>
               @endif
             @endif
           </div>
