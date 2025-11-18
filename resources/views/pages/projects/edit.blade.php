@@ -8,11 +8,11 @@
       <div class="row g-2 align-items-center">
         <div class="col">
           <div class="page-pretitle">
-            <a href="{{ route('projects.index') }}">Trabalhos</a>/
+            <a href="{{ route('projects.index') }}">Ações</a>/
             <a href="{{ route('projects.edit', $project->id) }}">Editar</a>
           </div>
           <h2 class="page-title">
-            Editar trabalho
+            Editar ação
           </h2>
         </div>
         <div class="col-auto ms-auto">
@@ -152,7 +152,7 @@
               </div>
 
               <div class="mb-3">
-                <label class="form-label required">Curso/Departamento</label>
+                <label class="form-label required">Centro/Departamento</label>
                 <select class="form-select" id="select-courses" name="course" required>
                   <option value="">Selecione</option>
                   @foreach ($courses as $base_course)

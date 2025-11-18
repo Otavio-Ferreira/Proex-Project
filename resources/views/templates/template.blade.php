@@ -133,7 +133,7 @@
 
                     {{-- @can('adicionar_cursos') --}}
                     @if (Auth::user()?->activeRoleHasPermission('adicionar_cursos'))
-                      <a class="dropdown-item" href="{{ route('courses.index') }}">Cursos/Departamentos</a>
+                      <a class="dropdown-item" href="{{ route('courses.index') }}">Centros/Departamentos</a>
                     @endif
                     {{-- @endcan --}}
 

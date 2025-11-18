@@ -1,6 +1,6 @@
 services:
     # image project
-    repoex:
+    laravel.repoex:
         build:
             context: './vendor/laravel/sail/runtimes/8.4'
             dockerfile: Dockerfile
@@ -10,7 +10,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '8081:80'
+            - '80:80'
             - '5174:5173'
         environment:
             WWWUSER: '${WWWUSER}'
@@ -20,14 +20,21 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
+        labels:
+           - "traefik.enable=true"
+           - "traefik.http.routers.proex.rule=Host(`proex.yokoapps.com.br`)"
+           - "traefik.http.routers.proex.tls=true"
+           - "traefik.http.routers.proex.tls.certresolver=certificado"
+           - "traefik.http.routers.proex.entrypoints=websecure"
         networks:
             - sail-repoex
         depends_on:
             - redis
             - mysql_repoex
         dns:
-          - 8.8.8.8
-          - 1.1.1.1
+            - 8.8.8.8
+            - 1.1.1.1
+
     # nginx
     nginx:
         image: nginx:alpine
@@ -54,7 +61,7 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - 'sail-mysql-repoex:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'      
+            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.>'
         networks:
             - sail-repoex
         healthcheck:
