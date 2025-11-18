@@ -110,18 +110,18 @@ class HomeController extends Controller
             }
             $this->data['tasks'] = $tasks;
         } elseif ($role == "Administrador") {
-            $users_to_check = User::whereHas('persons', function ($q) {
-                $q->where('coordinator_profile', 'Técnico Administrativo');
-            })->whereHas('roles', function ($q) {
-                $q->where('name', 'Visitante');
-            })->get();
-            $tasks = [];
-            foreach ($users_to_check as $key => $user) {
-                $tasks[$key]['type'] = 2;
-                $tasks[$key]['description'] = "Mudar o grupo desse usuário para técnico administrativo.";
-                $tasks[$key]['user'] = $user;
-            }
-            $this->data['tasks'] = $tasks;
+            // $users_to_check = User::whereHas('persons', function ($q) {
+            //     $q->where('coordinator_profile', 'Técnico Administrativo');
+            // })->whereHas('roles', function ($q) {
+            //     $q->where('name', 'Visitante');
+            // })->get();
+            // $tasks = [];
+            // foreach ($users_to_check as $key => $user) {
+            //     $tasks[$key]['type'] = 2;
+            //     $tasks[$key]['description'] = "Mudar o grupo desse usuário para técnico administrativo.";
+            //     $tasks[$key]['user'] = $user;
+            // }
+            // $this->data['tasks'] = $tasks;
         }
 
         return view('pages.home.index', $this->data);

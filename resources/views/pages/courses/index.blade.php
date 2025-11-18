@@ -26,10 +26,10 @@
         <div class="col">
           <div class="col">
             <div class="page-pretitle">
-              <a href="{{ route('courses.index') }}">Cursos/Departamentos</a>
+              <a href="{{ route('courses.index') }}">Centros/Departamentos</a>
             </div>
             <h2 class="page-title">
-              Cursos/Departamentos
+              Centros/Departamentos
             </h2>
           </div>
         </div>
@@ -48,16 +48,16 @@
               </div>
             </div>
             <x-modal.modal route="{{ route('courses.store') }}" id="modal-add-course" class="modal-dialog-centered"
-              title="Adicionar curso/departamento" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
+              title="Adicionar centro/departamento" typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar"
               typeBtnSave="submit" classBtnSave="btn-primary" textBtnSave="Salvar">
               <x-slot:content>
                 @include('components.form-elements.input.input', [
-                    'title' => 'Nome do curso',
+                    'title' => 'Nome do centro/departamento',
                     'type' => 'text',
                     'class' => 'mb-3',
                     'name' => 'name',
                     'required' => 'true',
-                    'placeholder' => 'Digite o nome do curso',
+                    'placeholder' => 'Digite o nome do centro/departamento',
                 ])
               </x-slot:content>
             </x-modal.modal>
@@ -94,12 +94,12 @@
                   <button class="btn btn-secondary" data-bs-toggle="modal"
                     data-bs-target="#modal-edit-course{{ $course->id }}"><i class="ti ti-edit"></i></button>
                   <x-modal.modal route="{{ route('courses.update', $course->id) }}"
-                    id="modal-edit-course{{ $course->id }}" class="modal-dialog-centered" title="Editar curso"
+                    id="modal-edit-course{{ $course->id }}" class="modal-dialog-centered" title="Editar centro/departamento"
                     typeBtnClose="button" classBtnClose="me-auto" textBtnClose="Cancelar" typeBtnSave="submit"
                     classBtnSave="btn-primary" textBtnSave="Salvar">
                     <x-slot:content>
                       @include('components.form-elements.input.input', [
-                          'title' => 'Nome do curso',
+                          'title' => 'Nome do centro/departamento',
                           'type' => 'text',
                           'class' => 'mb-3',
                           'name' => 'name',

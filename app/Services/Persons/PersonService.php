@@ -31,20 +31,20 @@ class PersonService {
 
             if($person){
                 $this->personRepository->update($request, $user->id);
-                if($request->coordinator_profile == "Docente" && $person->coordinator_profile == null){
-                    $this->rolesRepository->updateUserRole($user, 'Coordenador');
+                // if($request->coordinator_profile == "Docente" && $person->coordinator_profile == null){
+                //     $this->rolesRepository->updateUserRole($user, 'Coordenador');
                     
-                    $userActive->active_role = 'Coordenador';
-                    $userActive->save();
-                }
+                //     $userActive->active_role = 'Coordenador';
+                //     $userActive->save();
+                // }
             }
             else{
                 $this->personRepository->set($request, $user->id);
-                if($request->coordinator_profile == "Docente"){
-                    $this->rolesRepository->updateUserRole($user, 'Coordenador');
-                    $userActive->active_role = 'Coordenador';
-                    $userActive->save();
-                }
+                // if($request->coordinator_profile == "Docente"){
+                //     $this->rolesRepository->updateUserRole($user, 'Coordenador');
+                //     $userActive->active_role = 'Coordenador';
+                //     $userActive->save();
+                // }
             }
 
             return redirect()->back()->with("toast_success", "Informações adicionadas com sucesso.");

@@ -26,10 +26,10 @@
         <div class="col">
           <div class="col">
             <div class="page-pretitle">
-              <a href="{{ route('projects.index') }}">Trabalhos</a>
+              <a href="{{ route('projects.index') }}">Ações</a>
             </div>
             <h2 class="page-title">
-              Trabalhos
+              Ações
             </h2>
           </div>
         </div>
@@ -114,7 +114,7 @@
             {{ $project->modality ?? 'Vazio' }}</li>
           <li class="list-group-item {{ $project->thematic_area ?? 'text-danger' }}"><strong>Área temática:</strong>
             {{ $project->thematic_area ?? 'Vazio' }}</li>
-          <li class="list-group-item {{ $project->course_name->name ?? 'text-danger' }}"><strong>Curso:</strong>
+          <li class="list-group-item {{ $project->course_name->name ?? 'text-danger' }}"><strong>Centro/Departamento:</strong>
             {{ $project->course_name->name ?? 'Vazio' }}</li>
           <li class="list-group-item {{ $project->user->name ?? 'text-danger' }}"><strong>Coordenador:</strong>
             {{ $project->user->name ?? 'Vazio' }}</li>
